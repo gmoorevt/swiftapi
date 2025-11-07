@@ -1,14 +1,7 @@
 /**
- * Vitest Global Setup
- * Runs before all tests
+ * Test Setup
+ *
+ * Global test configuration for Vitest
  */
 
-import { afterEach } from 'vitest';
-
-// Cleanup after each test
-afterEach(() => {
-  // Add cleanup logic here if needed
-});
-
-// Custom matchers can be added here
-// Example: expect.extend({ ... })
+import '@testing-library/jest-dom/vitest';
