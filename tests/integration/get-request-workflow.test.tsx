@@ -20,7 +20,6 @@ import { BodyViewer } from '../../src/renderer/components/ResponseViewer/BodyVie
 
 // Mock axios
 vi.mock('axios');
-const mockedAxios = vi.mocked(axios, true);
 
 // Simple test app component
 function TestApp(): React.ReactElement {

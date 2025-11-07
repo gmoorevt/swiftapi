@@ -6,7 +6,7 @@
  * @see specs/001-basic-request-builder/contracts/store.ts
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { useRequestStore } from './requestStore';
 import { HttpMethod, BodyType } from '../../types/request.types';
 import type { Response } from '../../models/Response';

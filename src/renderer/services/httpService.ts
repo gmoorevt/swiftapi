@@ -189,7 +189,7 @@ export class HttpService {
       if (!axiosError.response) {
         return {
           message: axiosError.message || 'Network error occurred',
-          code: axiosError.code,
+          ...(axiosError.code ? { code: axiosError.code } : {}),
           isNetworkError: true,
           isTimeout: false,
           isCancelled: false,
@@ -199,7 +199,7 @@ export class HttpService {
       // HTTP error with response
       return {
         message: axiosError.message,
-        code: axiosError.code,
+        ...(axiosError.code ? { code: axiosError.code } : {}),
         statusCode: axiosError.response.status,
         isNetworkError: false,
         isTimeout: false,

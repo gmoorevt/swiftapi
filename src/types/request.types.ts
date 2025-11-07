@@ -7,6 +7,8 @@
  * @see data-model.md for detailed entity documentation
  */
 
+import type { Response as ResponseClass } from '../models/Response';
+
 /**
  * HTTP methods supported by the request builder
  */
@@ -158,5 +160,5 @@ export interface HttpServiceOptions {
  * Result of sending an HTTP request
  */
 export type HttpResult =
-  | { success: true; response: Response }
+  | { success: true; response: ResponseClass }
   | { success: false; error: HttpError };

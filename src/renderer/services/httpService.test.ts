@@ -14,7 +14,6 @@ import { HttpMethod, BodyType } from '../../types/request.types';
 
 // Mock axios
 vi.mock('axios');
-const mockedAxios = vi.mocked(axios, true);
 
 describe('HttpService', () => {
   let httpService: HttpService;
