@@ -31,7 +31,24 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify alignment with SwiftAPI Constitution (`.specify/memory/constitution.md`):
+
+- [ ] **I. Test-First Development**: Tests will be written before implementation (TDD mandatory)
+- [ ] **II. Cross-Platform Consistency**: Feature works identically on Windows, macOS, and Linux
+- [ ] **III. Simplicity First**: Feature justifies its complexity; simpler alternatives considered
+- [ ] **IV. Performance & Resource Efficiency**: Feature meets performance targets (<3s load, <200MB memory, <100ms overhead)
+- [ ] **V. Code Quality Standards**: Will use TypeScript strict mode, ESLint, 80%+ coverage
+- [ ] **VI. Documentation & Discoverability**: Feature includes user docs and is discoverable in UI
+- [ ] **VII. Open-Source & Community First**: No user tracking without opt-in; respects privacy
+- [ ] **VIII. Local-First Architecture**: Feature works fully offline with no hosted service dependencies
+
+**Testing Requirements** (from Testing Standards):
+- [ ] Unit tests planned (80% coverage minimum)
+- [ ] Integration tests planned (at least one per user story)
+- [ ] Contract tests planned (for all API interactions)
+- [ ] E2E tests planned (for critical paths, all platforms)
+- [ ] Performance tests planned (validate metrics before release)
+- [ ] Offline functionality tested (no network required)
 
 ## Project Structure
 
