@@ -309,6 +309,92 @@ describe('Request Store', () => {
     });
   });
 
+  describe('query params management', () => {
+    it('should initialize with empty query params array', () => {
+      const state = useRequestStore.getState();
+      expect(state.queryParams).toEqual([]);
+    });
+
+    it('should add a new query param', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+
+      const state = useRequestStore.getState();
+      expect(state.queryParams).toHaveLength(1);
+      expect(state.queryParams[0]).toEqual({
+        key: '',
+        value: '',
+        description: '',
+        enabled: true,
+      });
+    });
+
+    it('should update query param key', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'key', 'page');
+
+      const state = useRequestStore.getState();
+      expect(state.queryParams[0]?.key).toBe('page');
+    });
+
+    it('should update query param value', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'value', '1');
+
+      const state = useRequestStore.getState();
+      expect(state.queryParams[0]?.value).toBe('1');
+    });
+
+    it('should update query param description', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'description', 'Page number');
+
+      const state = useRequestStore.getState();
+      expect(state.queryParams[0]?.description).toBe('Page number');
+    });
+
+    it('should toggle query param enabled state', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+      store.actions.toggleQueryParam(0);
+
+      expect(useRequestStore.getState().queryParams[0]?.enabled).toBe(false);
+
+      store.actions.toggleQueryParam(0);
+      expect(useRequestStore.getState().queryParams[0]?.enabled).toBe(true);
+    });
+
+    it('should remove query param', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+      store.actions.addQueryParam();
+
+      expect(useRequestStore.getState().queryParams).toHaveLength(2);
+
+      store.actions.removeQueryParam(0);
+      expect(useRequestStore.getState().queryParams).toHaveLength(1);
+    });
+
+    it('should add multiple query params', () => {
+      const store = useRequestStore.getState();
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'key', 'page');
+      store.actions.updateQueryParam(0, 'value', '1');
+
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(1, 'key', 'limit');
+      store.actions.updateQueryParam(1, 'value', '10');
+
+      const state = useRequestStore.getState();
+      expect(state.queryParams).toHaveLength(2);
+      expect(state.queryParams[0]?.key).toBe('page');
+      expect(state.queryParams[1]?.key).toBe('limit');
+    });
+  });
+
   describe('resetRequest action', () => {
     it('should reset all request fields to defaults', () => {
       const store = useRequestStore.getState();
@@ -318,6 +404,7 @@ describe('Request Store', () => {
       store.actions.setMethod(HttpMethod.POST);
       store.actions.setBody('{"test": "data"}');
       store.actions.addHeader();
+      store.actions.addQueryParam();
 
       // Reset
       store.actions.resetRequest();
@@ -326,6 +413,7 @@ describe('Request Store', () => {
       expect(state.url).toBe('');
       expect(state.method).toBe(HttpMethod.GET);
       expect(state.headers).toEqual([]);
+      expect(state.queryParams).toEqual([]);
       expect(state.body).toBe('');
       expect(state.bodyType).toBe(BodyType.JSON);
       expect(state.response).toBeNull();

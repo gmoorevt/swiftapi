@@ -61,6 +61,21 @@ export interface Header {
 }
 
 /**
+ * URL Query Parameter
+ *
+ * @property key - Parameter key/name
+ * @property value - Parameter value (can be empty string)
+ * @property description - Optional description for documentation
+ * @property enabled - Whether this parameter is active (default: true)
+ */
+export interface QueryParam {
+  key: string;
+  value: string;
+  description?: string;
+  enabled: boolean;
+}
+
+/**
  * HTTP Request to be sent to an API endpoint
  *
  * @property url - Target URL (auto-prepends https:// if no protocol)

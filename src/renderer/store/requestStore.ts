@@ -8,7 +8,7 @@
 
 import { create } from 'zustand';
 import { HttpMethod, BodyType } from '../../types/request.types';
-import type { Header } from '../../types/request.types';
+import type { Header, QueryParam } from '../../types/request.types';
 import type { Response } from '../../models/Response';
 import { Request } from '../../models/Request';
 import { HttpService } from '../services/httpService';
@@ -22,6 +22,7 @@ interface RequestState {
   url: string;
   method: HttpMethod;
   headers: Header[];
+  queryParams: QueryParam[];
   body: string;
   bodyType: BodyType;
   timeout: number;
@@ -47,6 +48,12 @@ interface RequestState {
     updateHeader: (index: number, field: keyof Header, value: string | boolean) => void;
     removeHeader: (index: number) => void;
     toggleHeader: (index: number) => void;
+
+    // Query params management
+    addQueryParam: () => void;
+    updateQueryParam: (index: number, field: keyof QueryParam, value: string | boolean) => void;
+    removeQueryParam: (index: number) => void;
+    toggleQueryParam: (index: number) => void;
 
     // Request execution
     sendRequest: () => Promise<void>;
@@ -77,6 +84,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
   url: '',
   method: HttpMethod.GET,
   headers: [],
+  queryParams: [],
   body: '',
   bodyType: BodyType.JSON,
   timeout: 30000,
@@ -138,6 +146,46 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         return header;
       });
       set({ headers: updatedHeaders });
+    },
+
+    // Query params management
+    addQueryParam: () => {
+      const currentParams = get().queryParams;
+      set({
+        queryParams: [
+          ...currentParams,
+          { key: '', value: '', description: '', enabled: true },
+        ],
+      });
+    },
+
+    updateQueryParam: (index: number, field: keyof QueryParam, value: string | boolean) => {
+      const currentParams = get().queryParams;
+      const updatedParams = currentParams.map((param, i) => {
+        if (i === index) {
+          return { ...param, [field]: value };
+        }
+        return param;
+      });
+      set({ queryParams: updatedParams });
+    },
+
+    removeQueryParam: (index: number) => {
+      const currentParams = get().queryParams;
+      set({
+        queryParams: currentParams.filter((_, i) => i !== index),
+      });
+    },
+
+    toggleQueryParam: (index: number) => {
+      const currentParams = get().queryParams;
+      const updatedParams = currentParams.map((param, i) => {
+        if (i === index) {
+          return { ...param, enabled: !param.enabled };
+        }
+        return param;
+      });
+      set({ queryParams: updatedParams });
     },
 
     // Request execution
@@ -212,6 +260,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       url: '',
       method: HttpMethod.GET,
       headers: [],
+      queryParams: [],
       body: '',
       bodyType: BodyType.JSON,
       timeout: 30000,

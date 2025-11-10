@@ -8,6 +8,7 @@ import { UrlInput } from './components/RequestBuilder/UrlInput';
 import { MethodSelector } from './components/RequestBuilder/MethodSelector';
 import { BodyEditor } from './components/RequestBuilder/BodyEditor';
 import { HeadersEditor } from './components/RequestBuilder/HeadersEditor';
+import { QueryParamsEditor } from './components/RequestBuilder/QueryParamsEditor';
 import { AuthSection } from './components/RequestBuilder/AuthSection';
 import { SendButton } from './components/RequestBuilder/SendButton';
 import { StatusDisplay } from './components/ResponseViewer/StatusDisplay';
@@ -86,6 +87,9 @@ function App(): React.ReactElement {
             <SendButton />
           </div>
         </div>
+
+        {/* Query Parameters Editor */}
+        <QueryParamsEditor />
 
         {/* Body Editor (shown for POST/PUT/DELETE) */}
         <BodyEditor />
