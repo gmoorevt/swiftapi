@@ -39,7 +39,7 @@
     "test:performance": "vitest run --dir tests/performance",
     "coverage": "vitest run --coverage",
     "electron:dev": "concurrently \"npm run dev\" \"electron .\"",
-    "electron:build": "npm run build && electron-builder",
+    "electron:build": "npm run build:main && npm run build:renderer && electron-builder",
     "prepare": "husky install"
   },
   "dependencies": {
