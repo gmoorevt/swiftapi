@@ -1,14 +1,23 @@
 /**
  * BodyViewer Component Tests
  *
- * Tests for response body viewer component
+ * Tests for response body viewer component with Monaco Editor
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BodyViewer } from './BodyViewer';
 import { useRequestStore } from '../../store/requestStore';
 import { Response } from '../../../models/Response';
+
+// Mock MonacoWrapper to avoid loading Monaco Editor in tests
+vi.mock('./MonacoWrapper', () => ({
+  MonacoWrapper: ({ content, language }: { content: string; language: string }) => (
+    <div data-testid="monaco-wrapper" data-language={language}>
+      {content}
+    </div>
+  ),
+}));
 
 describe('BodyViewer', () => {
   beforeEach(() => {
@@ -63,7 +72,7 @@ describe('BodyViewer', () => {
     expect(screen.getByText(/success/)).toBeInTheDocument();
   });
 
-  it('should render in a scrollable container', () => {
+  it('should use MonacoWrapper for displaying response', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
@@ -78,18 +87,21 @@ describe('BodyViewer', () => {
     store.actions.setResponse(mockResponse);
 
     render(<BodyViewer />);
-    const container = screen.getByText('Response body content').closest('div');
-    expect(container).toHaveStyle({ overflowY: 'auto' });
+    const monacoWrapper = screen.getByTestId('monaco-wrapper');
+    expect(monacoWrapper).toBeInTheDocument();
+    expect(monacoWrapper).toHaveTextContent('Response body content');
   });
 
-  it('should use monospace font for body content', () => {
+  it('should use correct language for JSON responses', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [],
-      body: 'Test content',
+      headers: [
+        { name: 'content-type', value: 'application/json', enabled: true },
+      ],
+      body: '{"test": "value"}',
       responseTime: 100,
-      size: 12,
+      size: 17,
       timestamp: '2025-11-07T10:00:00Z',
     });
 
@@ -97,10 +109,28 @@ describe('BodyViewer', () => {
     store.actions.setResponse(mockResponse);
 
     render(<BodyViewer />);
-    const container = screen.getByText('Test content').closest('pre');
-    // Check that fontFamily includes one of the monospace fonts
-    const style = container && window.getComputedStyle(container);
-    const fontFamily = style?.fontFamily.toLowerCase() || '';
-    expect(fontFamily).toContain('monaco');
+    const monacoWrapper = screen.getByTestId('monaco-wrapper');
+    expect(monacoWrapper).toHaveAttribute('data-language', 'json');
+  });
+
+  it('should use correct language for plain text responses', () => {
+    const mockResponse = new Response({
+      statusCode: 200,
+      statusText: 'OK',
+      headers: [
+        { name: 'content-type', value: 'text/plain', enabled: true },
+      ],
+      body: 'Plain text content',
+      responseTime: 100,
+      size: 18,
+      timestamp: '2025-11-07T10:00:00Z',
+    });
+
+    const store = useRequestStore.getState();
+    store.actions.setResponse(mockResponse);
+
+    render(<BodyViewer />);
+    const monacoWrapper = screen.getByTestId('monaco-wrapper');
+    expect(monacoWrapper).toHaveAttribute('data-language', 'plaintext');
   });
 });

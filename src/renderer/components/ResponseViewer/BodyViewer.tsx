@@ -1,13 +1,18 @@
 /**
  * BodyViewer Component
  *
- * Displays response body content in a scrollable area
- * with automatic formatting for JSON, XML, HTML
+ * Displays response body content with Monaco Editor
+ * for professional syntax highlighting (JSON, XML, HTML, text)
+ *
+ * Constitutional requirements:
+ * - Performance: Monaco Editor lazy loaded via MonacoWrapper
+ * - Simplicity: Automatic content-type detection
  */
 
 import React, { useMemo } from 'react';
 import { useRequestStore } from '../../store/requestStore';
 import { FormatService } from '../../services/formatService';
+import { MonacoWrapper } from './MonacoWrapper';
 
 // Create singleton instance
 const formatService = new FormatService();
@@ -47,29 +52,25 @@ export function BodyViewer(): React.ReactElement {
     );
   }
 
+  // Map content type to Monaco language
+  const monacoLanguage =
+    formattedContent.contentType === 'text'
+      ? 'plaintext'
+      : formattedContent.contentType;
+
   return (
     <div
       style={{
-        height: '400px',
-        overflowY: 'auto',
-        backgroundColor: '#f8f9fa',
         border: '1px solid #ddd',
         borderRadius: '4px',
+        overflow: 'hidden',
       }}
     >
-      <pre
-        style={{
-          margin: 0,
-          padding: '16px',
-          fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-          fontSize: '13px',
-          lineHeight: '1.5',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-        }}
-      >
-        {formattedContent.content}
-      </pre>
+      <MonacoWrapper
+        content={formattedContent.content}
+        language={monacoLanguage}
+        height="400px"
+      />
     </div>
   );
 }

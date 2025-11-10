@@ -23,6 +23,13 @@ import { HttpMethod, BodyType } from '../../src/types/request.types';
 // Mock axios
 vi.mock('axios');
 
+// Mock MonacoWrapper to avoid loading Monaco Editor in integration tests
+vi.mock('../../src/renderer/components/ResponseViewer/MonacoWrapper', () => ({
+  MonacoWrapper: ({ content }: { content: string }) => (
+    <div data-testid="monaco-wrapper">{content}</div>
+  ),
+}));
+
 // Test app component with all request builder features
 function TestApp(): React.ReactElement {
   return (
