@@ -37,14 +37,22 @@ export class HistoryEntry {
    * Convert to JSON for storage
    */
   toJSON(): HistoryEntryData {
-    return {
+    const result: HistoryEntryData = {
       id: this.id,
       timestamp: this.timestamp,
       method: this.method,
       url: this.url,
-      statusCode: this.statusCode,
-      responseTime: this.responseTime,
     };
+
+    // Only include optional fields if they're defined
+    if (this.statusCode !== undefined) {
+      result.statusCode = this.statusCode;
+    }
+    if (this.responseTime !== undefined) {
+      result.responseTime = this.responseTime;
+    }
+
+    return result;
   }
 
   /**
