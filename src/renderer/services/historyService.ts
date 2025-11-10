@@ -7,8 +7,8 @@
  * Constitutional requirement: Local-First Architecture
  */
 
-import Store from 'electron-store';
 import { HistoryEntry, HistoryEntryData } from '../../models/HistoryEntry';
+import { createStorageAdapter } from './storageAdapter';
 
 const MAX_HISTORY_ENTRIES = 50;
 
@@ -17,15 +17,10 @@ interface HistorySchema {
 }
 
 export class HistoryService {
-  private store: Store<HistorySchema>;
+  private store: ReturnType<typeof createStorageAdapter>;
 
   constructor() {
-    this.store = new Store<HistorySchema>({
-      name: 'swiftapi-history',
-      defaults: {
-        history: [],
-      },
-    });
+    this.store = createStorageAdapter('swiftapi-history');
   }
 
   /**

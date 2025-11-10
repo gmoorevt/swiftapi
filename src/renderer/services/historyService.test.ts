@@ -9,28 +9,25 @@ import { HistoryService } from './historyService';
 import { HistoryEntry } from '../../models/HistoryEntry';
 import { HttpMethod } from '../../types/request.types';
 
-// Mock electron-store
-vi.mock('electron-store', () => {
+// Mock storageAdapter
+vi.mock('./storageAdapter', () => {
   const mockStore = new Map();
 
   return {
-    default: class MockStore {
-      get(key: string) {
-        return mockStore.get(key);
-      }
-
+    createStorageAdapter: () => ({
+      get(key: string, defaultValue: unknown) {
+        return mockStore.has(key) ? mockStore.get(key) : defaultValue;
+      },
       set(key: string, value: unknown) {
         mockStore.set(key, value);
-      }
-
+      },
       clear() {
         mockStore.clear();
-      }
-
+      },
       has(key: string) {
         return mockStore.has(key);
-      }
-    }
+      },
+    }),
   };
 });
 
