@@ -490,4 +490,84 @@ describe('Request Store', () => {
       expect(state.isLoading).toBe(false);
     });
   });
+
+  describe('restoreFromHistory action', () => {
+    it('should restore complete request from history entry', () => {
+      const store = useRequestStore.getState();
+
+      const mockHistoryEntry = {
+        id: '123',
+        timestamp: '2025-11-10T10:00:00Z',
+        method: HttpMethod.POST,
+        url: 'https://api.example.com/users',
+        statusCode: 201,
+        responseTime: 100,
+        headers: [
+          { name: 'Authorization', value: 'Bearer token123', enabled: true },
+          { name: 'Content-Type', value: 'application/json', enabled: true },
+        ],
+        queryParams: [
+          { key: 'page', value: '2', description: 'Page number', enabled: true },
+          { key: 'limit', value: '20', description: '', enabled: true },
+        ],
+        body: '{"name": "John Doe"}',
+        bodyType: BodyType.JSON,
+        toJSON: () => ({}),
+      } as any;
+
+      store.actions.restoreFromHistory(mockHistoryEntry);
+
+      const state = useRequestStore.getState();
+      expect(state.url).toBe('https://api.example.com/users');
+      expect(state.method).toBe(HttpMethod.POST);
+      expect(state.headers).toHaveLength(2);
+      expect(state.headers[0]).toEqual({ name: 'Authorization', value: 'Bearer token123', enabled: true });
+      expect(state.queryParams).toHaveLength(2);
+      expect(state.queryParams[0]).toEqual({ key: 'page', value: '2', description: 'Page number', enabled: true });
+      expect(state.body).toBe('{"name": "John Doe"}');
+      expect(state.bodyType).toBe(BodyType.JSON);
+      expect(state.response).toBeNull();
+      expect(state.error).toBeNull();
+    });
+
+    it('should clear previous response when restoring from history', () => {
+      const store = useRequestStore.getState();
+
+      // Set some existing response
+      store.actions.setResponse({
+        statusCode: 200,
+        statusText: 'OK',
+        headers: [],
+        body: '{}',
+        responseTime: 50,
+        size: 2,
+        contentType: 'application/json',
+        timestamp: '2025-11-10T10:00:00Z',
+        statusCategory: 'success',
+        formattedSize: '2 bytes',
+        isJson: true,
+        isXml: false,
+        isHtml: false,
+        toJSON: () => ({}),
+      } as any);
+
+      const mockHistoryEntry = {
+        id: '456',
+        timestamp: '2025-11-10T11:00:00Z',
+        method: HttpMethod.GET,
+        url: 'https://api.example.com/test',
+        headers: [],
+        queryParams: [],
+        body: '',
+        bodyType: BodyType.NONE,
+        toJSON: () => ({}),
+      } as any;
+
+      store.actions.restoreFromHistory(mockHistoryEntry);
+
+      const state = useRequestStore.getState();
+      expect(state.response).toBeNull();
+      expect(state.error).toBeNull();
+    });
+  });
 });

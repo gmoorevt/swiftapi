@@ -70,6 +70,7 @@ interface RequestState {
     // State management
     setLoading: (isLoading: boolean) => void;
     resetRequest: () => void;
+    restoreFromHistory: (entry: HistoryEntry) => void;
   };
 }
 
@@ -231,7 +232,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         if (result.success) {
           set({ response: result.response, error: null, isLoading: false });
 
-          // Save to history after successful request
+          // Save complete request to history for restoration
           const historyEntry = new HistoryEntry({
             id: HistoryEntry.generateId(),
             timestamp: new Date().toISOString(),
@@ -239,6 +240,10 @@ export const useRequestStore = create<RequestState>((set, get) => ({
             url: request.url,
             statusCode: result.response?.statusCode,
             responseTime: result.response?.responseTime,
+            headers: state.headers,
+            queryParams: state.queryParams,
+            body: state.body,
+            bodyType: state.bodyType,
           });
           historyService.add(historyEntry);
         } else {
@@ -281,6 +286,18 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       bodyType: BodyType.JSON,
       timeout: 30000,
       auth: Auth.createDefault(),
+      response: null,
+      error: null,
+      isLoading: false,
+    }),
+
+    restoreFromHistory: (entry: HistoryEntry) => set({
+      url: entry.url,
+      method: entry.method,
+      headers: entry.headers,
+      queryParams: entry.queryParams,
+      body: entry.body,
+      bodyType: entry.bodyType,
       response: null,
       error: null,
       isLoading: false,

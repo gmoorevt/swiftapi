@@ -2,10 +2,10 @@
  * HistoryEntry Model
  *
  * Represents a saved request in the history
- * Lightweight snapshot for quick restoration
+ * Complete snapshot for request restoration
  */
 
-import { HttpMethod } from '../types/request.types';
+import { HttpMethod, BodyType, type Header, type QueryParam } from '../types/request.types';
 
 export interface HistoryEntryData {
   id: string;
@@ -14,6 +14,10 @@ export interface HistoryEntryData {
   url: string;
   statusCode?: number;
   responseTime?: number;
+  headers?: Header[];
+  queryParams?: QueryParam[];
+  body?: string;
+  bodyType?: BodyType;
 }
 
 export class HistoryEntry {
@@ -23,6 +27,10 @@ export class HistoryEntry {
   url: string;
   statusCode?: number;
   responseTime?: number;
+  headers: Header[];
+  queryParams: QueryParam[];
+  body: string;
+  bodyType: BodyType;
 
   constructor(data: HistoryEntryData) {
     this.id = data.id;
@@ -31,6 +39,10 @@ export class HistoryEntry {
     this.url = data.url;
     this.statusCode = data.statusCode;
     this.responseTime = data.responseTime;
+    this.headers = data.headers || [];
+    this.queryParams = data.queryParams || [];
+    this.body = data.body || '';
+    this.bodyType = data.bodyType || BodyType.NONE;
   }
 
   /**
@@ -42,6 +54,10 @@ export class HistoryEntry {
       timestamp: this.timestamp,
       method: this.method,
       url: this.url,
+      headers: this.headers,
+      queryParams: this.queryParams,
+      body: this.body,
+      bodyType: this.bodyType,
     };
 
     // Only include optional fields if they're defined
