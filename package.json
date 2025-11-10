@@ -100,6 +100,7 @@
   "build": {
     "appId": "com.swiftapi.app",
     "productName": "SwiftAPI",
+    "publish": null,
     "directories": {
       "output": "release"
     },
