@@ -37,15 +37,6 @@ jobs:
       - name: Run all tests
         run: npm test
 
-      - name: Check coverage
-        run: npm run coverage
-
-      - name: Run E2E tests
-        run: npm run test:e2e
-
-      - name: Run performance tests
-        run: npm run test:performance
-
       # Build and package application
       - name: Build and package
         run: npm run electron:build

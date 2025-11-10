@@ -43,17 +43,21 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "electron-store": "^8.1.0",
+    "@monaco-editor/react": "^4.7.0",
+    "axios": "^1.13.2",
+    "electron-store": "^8.2.0",
     "idb": "^8.0.0",
+    "qs": "^6.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "zustand": "^4.5.0"
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.41.0",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^20.11.0",
+    "@types/qs": "^6.14.0",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
@@ -105,15 +109,13 @@
       "target": [
         "dmg",
         "zip"
-      ],
-      "icon": "build/icon.icns"
+      ]
     },
     "win": {
       "target": [
         "nsis",
         "portable"
-      ],
-      "icon": "build/icon.ico"
+      ]
     },
     "linux": {
       "category": "Development",
@@ -121,8 +123,7 @@
         "AppImage",
         "deb",
         "rpm"
-      ],
-      "icon": "build/icon.png"
+      ]
     }
   }
 }
