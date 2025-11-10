@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { validateUrl, validateTimeout, validateJson } from './validation';
+import { validateUrl, validateTimeout, validateJson, validateHeader } from './validation';
 
 describe('validateUrl', () => {
   it('should prepend https:// to URLs without protocol', () => {
@@ -184,5 +184,106 @@ describe('validateJson', () => {
     expect(result.valid).toBe(false);
     expect(result.error).toBeDefined();
     expect(typeof result.error).toBe('string');
+  });
+});
+
+describe('validateHeader', () => {
+  // T074: validateHeader rejects empty header names
+  it('should reject empty header name', () => {
+    const result = validateHeader({ name: '', value: 'test', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Header name cannot be empty');
+  });
+
+  it('should reject whitespace-only header name', () => {
+    const result = validateHeader({ name: '   ', value: 'test', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Header name cannot be empty');
+  });
+
+  // T075: validateHeader rejects headers with CRLF injection
+  it('should reject header name with carriage return', () => {
+    const result = validateHeader({ name: 'Test\rHeader', value: 'value', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('CRLF');
+  });
+
+  it('should reject header name with newline', () => {
+    const result = validateHeader({ name: 'Test\nHeader', value: 'value', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('CRLF');
+  });
+
+  it('should reject header value with carriage return', () => {
+    const result = validateHeader({ name: 'Authorization', value: 'Bearer\rtoken', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('CRLF');
+  });
+
+  it('should reject header value with newline', () => {
+    const result = validateHeader({ name: 'Authorization', value: 'Bearer\ntoken', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('CRLF');
+  });
+
+  it('should reject header with CRLF sequence in name', () => {
+    const result = validateHeader({ name: 'Test\r\nHeader', value: 'value', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('CRLF');
+  });
+
+  it('should reject header with CRLF sequence in value', () => {
+    const result = validateHeader({ name: 'Content-Type', value: 'text/html\r\nX-Injected: malicious', enabled: true });
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('CRLF');
+  });
+
+  it('should accept valid header with standard name', () => {
+    const result = validateHeader({ name: 'Content-Type', value: 'application/json', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept valid header with custom name', () => {
+    const result = validateHeader({ name: 'X-Custom-Header', value: 'custom-value', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept header with Authorization token', () => {
+    const result = validateHeader({ name: 'Authorization', value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept header with empty value', () => {
+    const result = validateHeader({ name: 'X-Empty-Header', value: '', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept header with special characters in value', () => {
+    const result = validateHeader({ name: 'Accept', value: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept header with hyphenated name', () => {
+    const result = validateHeader({ name: 'X-Request-ID', value: '123-456-789', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept header with numbers in name', () => {
+    const result = validateHeader({ name: 'X-Rate-Limit-Remaining', value: '100', enabled: true });
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept header regardless of enabled status', () => {
+    const result1 = validateHeader({ name: 'Test', value: 'value', enabled: true });
+    const result2 = validateHeader({ name: 'Test', value: 'value', enabled: false });
+    expect(result1.valid).toBe(true);
+    expect(result2.valid).toBe(true);
   });
 });

@@ -7,6 +7,7 @@ import React from 'react';
 import { UrlInput } from './components/RequestBuilder/UrlInput';
 import { MethodSelector } from './components/RequestBuilder/MethodSelector';
 import { BodyEditor } from './components/RequestBuilder/BodyEditor';
+import { HeadersEditor } from './components/RequestBuilder/HeadersEditor';
 import { SendButton } from './components/RequestBuilder/SendButton';
 import { StatusDisplay } from './components/ResponseViewer/StatusDisplay';
 import { BodyViewer } from './components/ResponseViewer/BodyViewer';
@@ -86,6 +87,9 @@ function App(): React.ReactElement {
 
         {/* Body Editor (shown for POST/PUT/DELETE) */}
         <BodyEditor />
+
+        {/* Headers Editor */}
+        <HeadersEditor />
       </section>
 
       {/* Response Viewer Section */}

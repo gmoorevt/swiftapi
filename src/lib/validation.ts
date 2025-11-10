@@ -7,6 +7,8 @@
  * @see specs/001-basic-request-builder/data-model.md
  */
 
+import type { Header } from '../types/request.types';
+
 export interface ValidationResult {
   valid: boolean;
   url?: string;
@@ -100,4 +102,48 @@ export function validateJson(input: string): ValidationResult {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return { valid: false, error: `Invalid JSON: ${errorMessage}` };
   }
+}
+
+/**
+ * Validate HTTP header for security issues
+ *
+ * @param header - Header object to validate
+ * @returns Validation result
+ *
+ * Security check: Prevents CRLF injection attacks (T075)
+ * Business rule: Header name cannot be empty (T074)
+ *
+ * @example
+ * validateHeader({ name: 'Content-Type', value: 'application/json', enabled: true })
+ *   // { valid: true }
+ * validateHeader({ name: '', value: 'test', enabled: true })
+ *   // { valid: false, error: 'Header name cannot be empty' }
+ * validateHeader({ name: 'Test\r\nInjected', value: 'value', enabled: true })
+ *   // { valid: false, error: 'Header contains CRLF...' }
+ */
+export function validateHeader(header: Header): ValidationResult {
+  const trimmedName = header.name.trim();
+
+  // Check for empty header name (T074)
+  if (!trimmedName) {
+    return { valid: false, error: 'Header name cannot be empty' };
+  }
+
+  // Check for CRLF injection in header name (T075)
+  if (/[\r\n]/.test(header.name)) {
+    return {
+      valid: false,
+      error: 'Header name contains CRLF characters (potential security risk)',
+    };
+  }
+
+  // Check for CRLF injection in header value (T075)
+  if (/[\r\n]/.test(header.value)) {
+    return {
+      valid: false,
+      error: 'Header value contains CRLF characters (potential security risk)',
+    };
+  }
+
+  return { valid: true };
 }
