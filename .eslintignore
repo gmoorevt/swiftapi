@@ -1,0 +1,7 @@
+**/*.test.ts
+**/*.test.tsx
+tests/
+dist/
+release/
+node_modules/
+coverage/
