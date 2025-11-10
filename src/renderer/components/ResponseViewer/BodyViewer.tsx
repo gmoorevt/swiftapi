@@ -2,16 +2,34 @@
  * BodyViewer Component
  *
  * Displays response body content in a scrollable area
+ * with automatic formatting for JSON, XML, HTML
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useRequestStore } from '../../store/requestStore';
+import { FormatService } from '../../services/formatService';
+
+// Create singleton instance
+const formatService = new FormatService();
 
 export function BodyViewer(): React.ReactElement {
   const response = useRequestStore((state) => state.response);
 
+  // Format the response body using FormatService
+  const formattedContent = useMemo(() => {
+    if (!response) return null;
+
+    // Get content-type from response headers
+    const contentTypeHeader = response.headers.find(
+      (h) => h.name.toLowerCase() === 'content-type'
+    )?.value;
+
+    // Format the response
+    return formatService.formatResponse(response.body, contentTypeHeader);
+  }, [response]);
+
   // Show empty state
-  if (!response) {
+  if (!response || !formattedContent) {
     return (
       <div
         style={{
@@ -50,7 +68,7 @@ export function BodyViewer(): React.ReactElement {
           wordBreak: 'break-word',
         }}
       >
-        {response.body}
+        {formattedContent.content}
       </pre>
     </div>
   );
