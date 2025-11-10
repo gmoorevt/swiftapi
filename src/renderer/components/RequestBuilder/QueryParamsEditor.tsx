@@ -15,6 +15,13 @@ export function QueryParamsEditor(): React.ReactElement {
   const updateQueryParam = useRequestStore((state) => state.actions.updateQueryParam);
   const removeQueryParam = useRequestStore((state) => state.actions.removeQueryParam);
   const toggleQueryParam = useRequestStore((state) => state.actions.toggleQueryParam);
+  const syncUrlWithParams = useRequestStore((state) => state.actions.syncUrlWithParams);
+  const syncParamsWithUrl = useRequestStore((state) => state.actions.syncParamsWithUrl);
+
+  // Sync URL when params change
+  React.useEffect(() => {
+    syncUrlWithParams();
+  }, [queryParams, syncUrlWithParams]);
 
   return (
     <div style={{ marginTop: '16px' }}>
@@ -35,22 +42,41 @@ export function QueryParamsEditor(): React.ReactElement {
         >
           Query Parameters
         </label>
-        <button
-          onClick={addQueryParam}
-          className="add-query-param-button"
-          style={{
-            padding: '6px 12px',
-            fontSize: '13px',
-            fontWeight: 500,
-            color: '#007bff',
-            backgroundColor: 'white',
-            border: '1px solid #007bff',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          Add Parameter
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={syncParamsWithUrl}
+            className="sync-params-button"
+            title="Parse query params from URL"
+            style={{
+              padding: '6px 12px',
+              fontSize: '13px',
+              fontWeight: 500,
+              color: '#6c757d',
+              backgroundColor: 'white',
+              border: '1px solid #6c757d',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            ↻ Sync from URL
+          </button>
+          <button
+            onClick={addQueryParam}
+            className="add-query-param-button"
+            style={{
+              padding: '6px 12px',
+              fontSize: '13px',
+              fontWeight: 500,
+              color: '#007bff',
+              backgroundColor: 'white',
+              border: '1px solid #007bff',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Add Parameter
+          </button>
+        </div>
       </div>
 
       {queryParams.length === 0 ? (

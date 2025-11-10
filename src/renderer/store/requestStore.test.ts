@@ -395,6 +395,75 @@ describe('Request Store', () => {
     });
   });
 
+  describe('URL synchronization', () => {
+    it('should sync URL with query params', () => {
+      const store = useRequestStore.getState();
+      store.actions.setUrl('https://api.example.com/users');
+
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'key', 'page');
+      store.actions.updateQueryParam(0, 'value', '1');
+
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(1, 'key', 'limit');
+      store.actions.updateQueryParam(1, 'value', '10');
+
+      store.actions.syncUrlWithParams();
+
+      const state = useRequestStore.getState();
+      expect(state.url).toBe('https://api.example.com/users?page=1&limit=10');
+    });
+
+    it('should sync params with URL', () => {
+      const store = useRequestStore.getState();
+      store.actions.setUrl('https://api.example.com/users?page=1&limit=10&sort=name');
+
+      store.actions.syncParamsWithUrl();
+
+      const state = useRequestStore.getState();
+      expect(state.queryParams).toHaveLength(3);
+      expect(state.queryParams[0]?.key).toBe('page');
+      expect(state.queryParams[0]?.value).toBe('1');
+      expect(state.queryParams[1]?.key).toBe('limit');
+      expect(state.queryParams[1]?.value).toBe('10');
+      expect(state.queryParams[2]?.key).toBe('sort');
+      expect(state.queryParams[2]?.value).toBe('name');
+    });
+
+    it('should only include enabled params when syncing URL', () => {
+      const store = useRequestStore.getState();
+      store.actions.setUrl('https://api.example.com/users');
+
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'key', 'page');
+      store.actions.updateQueryParam(0, 'value', '1');
+
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(1, 'key', 'limit');
+      store.actions.updateQueryParam(1, 'value', '10');
+      store.actions.toggleQueryParam(1); // Disable limit param
+
+      store.actions.syncUrlWithParams();
+
+      const state = useRequestStore.getState();
+      expect(state.url).toBe('https://api.example.com/users?page=1');
+    });
+
+    it('should preserve base URL when syncing', () => {
+      const store = useRequestStore.getState();
+      store.actions.setUrl('https://api.example.com:8080/v1/users?old=param');
+
+      store.actions.addQueryParam();
+      store.actions.updateQueryParam(0, 'key', 'new');
+      store.actions.updateQueryParam(0, 'value', 'param');
+
+      store.actions.syncUrlWithParams();
+
+      const state = useRequestStore.getState();
+      expect(state.url).toBe('https://api.example.com:8080/v1/users?new=param');
+    });
+  });
+
   describe('resetRequest action', () => {
     it('should reset all request fields to defaults', () => {
       const store = useRequestStore.getState();

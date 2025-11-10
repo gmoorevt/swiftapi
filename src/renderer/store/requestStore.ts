@@ -16,6 +16,7 @@ import { HistoryService } from '../services/historyService';
 import { HistoryEntry } from '../../models/HistoryEntry';
 import { Auth } from '../../models/Auth';
 import type { Auth as AuthConfig } from '../../types/auth.types';
+import { parseQueryParams, buildUrlWithParams, getBaseUrl } from '../../lib/urlUtils';
 
 interface RequestState {
   // Current request state
@@ -54,6 +55,8 @@ interface RequestState {
     updateQueryParam: (index: number, field: keyof QueryParam, value: string | boolean) => void;
     removeQueryParam: (index: number) => void;
     toggleQueryParam: (index: number) => void;
+    syncUrlWithParams: () => void;
+    syncParamsWithUrl: () => void;
 
     // Request execution
     sendRequest: () => Promise<void>;
@@ -186,6 +189,19 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         return param;
       });
       set({ queryParams: updatedParams });
+    },
+
+    syncUrlWithParams: () => {
+      const state = get();
+      const baseUrl = getBaseUrl(state.url) || state.url;
+      const newUrl = buildUrlWithParams(baseUrl, state.queryParams);
+      set({ url: newUrl });
+    },
+
+    syncParamsWithUrl: () => {
+      const state = get();
+      const parsedParams = parseQueryParams(state.url);
+      set({ queryParams: parsedParams });
     },
 
     // Request execution
