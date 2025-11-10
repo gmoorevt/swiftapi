@@ -8,6 +8,26 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MonacoWrapper } from './MonacoWrapper';
 
+// Mock monaco-editor package
+vi.mock('monaco-editor', () => ({}));
+
+// Mock monaco-editor workers
+vi.mock('monaco-editor/esm/vs/editor/editor.worker?worker', () => ({
+  default: class MockWorker {},
+}));
+vi.mock('monaco-editor/esm/vs/language/json/json.worker?worker', () => ({
+  default: class MockWorker {},
+}));
+vi.mock('monaco-editor/esm/vs/language/css/css.worker?worker', () => ({
+  default: class MockWorker {},
+}));
+vi.mock('monaco-editor/esm/vs/language/html/html.worker?worker', () => ({
+  default: class MockWorker {},
+}));
+vi.mock('monaco-editor/esm/vs/language/typescript/ts.worker?worker', () => ({
+  default: class MockWorker {},
+}));
+
 // Mock @monaco-editor/react
 vi.mock('@monaco-editor/react', () => ({
   default: ({ value, language }: { value: string; language: string }) => (
@@ -15,6 +35,9 @@ vi.mock('@monaco-editor/react', () => ({
       {value}
     </div>
   ),
+  loader: {
+    config: vi.fn(),
+  },
 }));
 
 describe('MonacoWrapper', () => {
