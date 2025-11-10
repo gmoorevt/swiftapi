@@ -47,10 +47,16 @@ export function StatusDisplay(): React.ReactElement {
   }
 
   // Determine status color based on category
-  const getStatusColor = () => {
-    if (response.statusCategory === 'success') return '#28a745'; // green
-    if (response.statusCategory === 'error') return '#dc3545'; // red
-    if (response.statusCategory === 'redirect') return '#17a2b8'; // blue
+  const getStatusColor = (): string => {
+    if (response.statusCategory === 'success') {
+      return '#28a745'; // green
+    }
+    if (response.statusCategory === 'error') {
+      return '#dc3545'; // red
+    }
+    if (response.statusCategory === 'redirect') {
+      return '#17a2b8'; // blue
+    }
     return '#ffc107'; // yellow/orange for client errors
   };
 

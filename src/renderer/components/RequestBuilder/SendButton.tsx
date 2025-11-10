@@ -11,9 +11,13 @@ export function SendButton(): React.ReactElement {
   const isLoading = useRequestStore((state) => state.isLoading);
   const sendRequest = useRequestStore((state) => state.actions.sendRequest);
 
+  const handleClick = (): void => {
+    void sendRequest();
+  };
+
   return (
     <button
-      onClick={sendRequest}
+      onClick={handleClick}
       disabled={isLoading}
       className="send-button"
       style={{

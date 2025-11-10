@@ -95,7 +95,9 @@ export class Response {
    * Check if response is JSON based on content-type
    */
   private checkIsJson(): boolean {
-    if (!this.contentType) return false;
+    if (!this.contentType) {
+      return false;
+    }
     return this.contentType.toLowerCase().includes('application/json');
   }
 
@@ -103,7 +105,9 @@ export class Response {
    * Check if response is XML based on content-type
    */
   private checkIsXml(): boolean {
-    if (!this.contentType) return false;
+    if (!this.contentType) {
+      return false;
+    }
     const lower = this.contentType.toLowerCase();
     return lower.includes('application/xml') || lower.includes('text/xml');
   }
@@ -112,7 +116,9 @@ export class Response {
    * Check if response is HTML based on content-type
    */
   private checkIsHtml(): boolean {
-    if (!this.contentType) return false;
+    if (!this.contentType) {
+      return false;
+    }
     return this.contentType.toLowerCase().includes('text/html');
   }
 

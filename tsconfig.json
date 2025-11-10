@@ -49,7 +49,7 @@
     }
   },
   "include": [
-    "src/renderer/**/*",
+    "src/**/*",
     "tests/**/*",
     "vite.config.ts",
     "vitest.config.ts",
