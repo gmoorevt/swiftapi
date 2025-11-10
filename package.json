@@ -3,7 +3,10 @@
   "version": "0.1.0-alpha",
   "description": "A fast, lightweight, and privacy-focused API testing client",
   "main": "dist/main/index.js",
-  "author": "SwiftAPI Contributors",
+  "author": {
+    "name": "SwiftAPI Contributors",
+    "email": "swiftapi@example.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
