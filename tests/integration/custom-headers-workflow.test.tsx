@@ -147,8 +147,8 @@ describe('Integration: Custom Headers Workflow', () => {
     const nameInputs1 = screen.getAllByPlaceholderText(/header name/i);
     const valueInputs1 = screen.getAllByPlaceholderText(/header value/i);
 
-    fireEvent.change(nameInputs1[0], { target: { value: 'X-API-Key' } });
-    fireEvent.change(valueInputs1[0], { target: { value: 'secret-key-123' } });
+    fireEvent.change(nameInputs1[0]!, { target: { value: 'X-API-Key' } });
+    fireEvent.change(valueInputs1[0]!, { target: { value: 'secret-key-123' } });
 
     // Add second header
     fireEvent.click(addHeaderButton);
@@ -161,8 +161,8 @@ describe('Integration: Custom Headers Workflow', () => {
     const nameInputs2 = screen.getAllByPlaceholderText(/header name/i);
     const valueInputs2 = screen.getAllByPlaceholderText(/header value/i);
 
-    fireEvent.change(nameInputs2[1], { target: { value: 'X-Request-ID' } });
-    fireEvent.change(valueInputs2[1], { target: { value: 'req-abc-123' } });
+    fireEvent.change(nameInputs2[1]!, { target: { value: 'X-Request-ID' } });
+    fireEvent.change(valueInputs2[1]!, { target: { value: 'req-abc-123' } });
 
     // Send request
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -219,16 +219,16 @@ describe('Integration: Custom Headers Workflow', () => {
     const valueInputs = screen.getAllByPlaceholderText(/header value/i);
 
     // Set up first header (enabled)
-    fireEvent.change(nameInputs[0], { target: { value: 'X-Enabled' } });
-    fireEvent.change(valueInputs[0], { target: { value: 'enabled-value' } });
+    fireEvent.change(nameInputs[0]!, { target: { value: 'X-Enabled' } });
+    fireEvent.change(valueInputs[0]!, { target: { value: 'enabled-value' } });
 
     // Set up second header (will be disabled)
-    fireEvent.change(nameInputs[1], { target: { value: 'X-Disabled' } });
-    fireEvent.change(valueInputs[1], { target: { value: 'disabled-value' } });
+    fireEvent.change(nameInputs[1]!, { target: { value: 'X-Disabled' } });
+    fireEvent.change(valueInputs[1]!, { target: { value: 'disabled-value' } });
 
     // Disable the second header
     const checkboxes = screen.getAllByRole('checkbox');
-    fireEvent.click(checkboxes[1]); // Uncheck second header
+    fireEvent.click(checkboxes[1]!); // Uncheck second header
 
     // Send request
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -288,16 +288,16 @@ describe('Integration: Custom Headers Workflow', () => {
     const nameInputs = screen.getAllByPlaceholderText(/header name/i);
     const valueInputs = screen.getAllByPlaceholderText(/header value/i);
 
-    fireEvent.change(nameInputs[0], { target: { value: 'Header-1' } });
-    fireEvent.change(valueInputs[0], { target: { value: 'value-1' } });
-    fireEvent.change(nameInputs[1], { target: { value: 'Header-2' } });
-    fireEvent.change(valueInputs[1], { target: { value: 'value-2' } });
-    fireEvent.change(nameInputs[2], { target: { value: 'Header-3' } });
-    fireEvent.change(valueInputs[2], { target: { value: 'value-3' } });
+    fireEvent.change(nameInputs[0]!, { target: { value: 'Header-1' } });
+    fireEvent.change(valueInputs[0]!, { target: { value: 'value-1' } });
+    fireEvent.change(nameInputs[1]!, { target: { value: 'Header-2' } });
+    fireEvent.change(valueInputs[1]!, { target: { value: 'value-2' } });
+    fireEvent.change(nameInputs[2]!, { target: { value: 'Header-3' } });
+    fireEvent.change(valueInputs[2]!, { target: { value: 'value-3' } });
 
     // Remove the second header
     const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    fireEvent.click(deleteButtons[1]);
+    fireEvent.click(deleteButtons[1]!);
 
     // Wait for header to be removed
     await waitFor(() => {

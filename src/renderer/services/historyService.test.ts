@@ -54,7 +54,7 @@ describe('HistoryService', () => {
 
       const history = historyService.getAll();
       expect(history).toHaveLength(1);
-      expect(history[0].url).toBe('https://api.example.com/users');
+      expect(history[0]!.url).toBe('https://api.example.com/users');
     });
 
     it('should add multiple entries', () => {
@@ -96,8 +96,8 @@ describe('HistoryService', () => {
 
       // Should keep most recent 50 (FIFO - oldest removed)
       // getAll() returns newest first (reversed)
-      expect(history[0].url).toBe('https://api.example.com/users/59'); // Newest
-      expect(history[history.length - 1].url).toBe('https://api.example.com/users/10'); // Oldest kept
+      expect(history[0]!.url).toBe('https://api.example.com/users/59'); // Newest
+      expect(history[history.length - 1]!.url).toBe('https://api.example.com/users/10'); // Oldest kept
     });
 
     it('should persist entries to storage', () => {
@@ -115,7 +115,7 @@ describe('HistoryService', () => {
       const history = newService.getAll();
 
       expect(history).toHaveLength(1);
-      expect(history[0].url).toBe('https://api.example.com/test');
+      expect(history[0]!.url).toBe('https://api.example.com/test');
     });
   });
 
@@ -146,8 +146,8 @@ describe('HistoryService', () => {
       const history = historyService.getAll();
 
       // Newest first
-      expect(history[0].url).toBe('https://api.example.com/second');
-      expect(history[1].url).toBe('https://api.example.com/first');
+      expect(history[0]!.url).toBe('https://api.example.com/second');
+      expect(history[1]!.url).toBe('https://api.example.com/first');
     });
   });
 
@@ -223,7 +223,7 @@ describe('HistoryService', () => {
 
       const history = historyService.getAll();
       expect(history).toHaveLength(1);
-      expect(history[0].id).toBe('456');
+      expect(history[0]!.id).toBe('456');
     });
 
     it('should do nothing for non-existent ID', () => {

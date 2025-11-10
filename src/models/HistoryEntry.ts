@@ -25,8 +25,8 @@ export class HistoryEntry {
   timestamp: string;
   method: HttpMethod;
   url: string;
-  statusCode?: number;
-  responseTime?: number;
+  statusCode: number | undefined;
+  responseTime: number | undefined;
   headers: Header[];
   queryParams: QueryParam[];
   body: string;
@@ -42,7 +42,7 @@ export class HistoryEntry {
     this.headers = data.headers || [];
     this.queryParams = data.queryParams || [];
     this.body = data.body || '';
-    this.bodyType = data.bodyType || BodyType.NONE;
+    this.bodyType = data.bodyType || BodyType.RAW;
   }
 
   /**

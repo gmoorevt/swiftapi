@@ -111,7 +111,6 @@ describe('Performance Benchmarks', () => {
 
   describe('Memory Efficiency (T094)', () => {
     it('should handle multiple requests without memory leaks', () => {
-      const httpService = new HttpService();
       const requests: Request[] = [];
 
       // Create many request objects
@@ -128,8 +127,8 @@ describe('Performance Benchmarks', () => {
 
       // Verify we can create many objects without errors
       expect(requests.length).toBe(1000);
-      expect(requests[0].url).toContain('endpoint0');
-      expect(requests[999].url).toContain('endpoint999');
+      expect(requests[0]!.url).toContain('endpoint0');
+      expect(requests[999]!.url).toContain('endpoint999');
     });
 
     it('should efficiently store large response bodies', () => {

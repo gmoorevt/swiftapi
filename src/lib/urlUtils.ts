@@ -60,7 +60,7 @@ export function buildUrlWithParams(baseUrl: string, queryParams: QueryParam[]): 
     return urlObj.toString();
   } catch {
     // If base URL is invalid, try to build query string manually
-    const baseWithoutParams = baseUrl.split('?')[0];
+    const baseWithoutParams = baseUrl.split('?')[0] || baseUrl;
     const queryString = enabledParams
       .map(p => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`)
       .join('&');
@@ -81,6 +81,6 @@ export function getBaseUrl(url: string): string {
     return urlObj.toString();
   } catch {
     // If invalid URL, just split on '?'
-    return url.split('?')[0];
+    return url.split('?')[0] || url;
   }
 }

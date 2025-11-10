@@ -26,6 +26,7 @@ export enum BodyType {
   JSON = 'json',
   FORM_DATA = 'formdata',
   RAW = 'raw',
+  NONE = 'none',
 }
 
 /**

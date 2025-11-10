@@ -12,10 +12,6 @@ import { createStorageAdapter } from './storageAdapter';
 
 const MAX_HISTORY_ENTRIES = 50;
 
-interface HistorySchema {
-  history: HistoryEntryData[];
-}
-
 export class HistoryService {
   private store: ReturnType<typeof createStorageAdapter>;
 
@@ -28,7 +24,7 @@ export class HistoryService {
    * Maintains max 50 entries (FIFO)
    */
   add(entry: HistoryEntry): void {
-    const history = this.store.get('history', []);
+    const history = this.store.get<HistoryEntryData[]>('history', []);
 
     // Add new entry at the end
     history.push(entry.toJSON());
@@ -38,7 +34,7 @@ export class HistoryService {
       history.splice(0, history.length - MAX_HISTORY_ENTRIES);
     }
 
-    this.store.set('history', history);
+    this.store.set<HistoryEntryData[]>('history', history);
   }
 
   /**
@@ -46,9 +42,9 @@ export class HistoryService {
    * Returns newest first (reverse chronological)
    */
   getAll(): HistoryEntry[] {
-    const history = this.store.get('history', []);
+    const history = this.store.get<HistoryEntryData[]>('history', []);
     return history
-      .map(data => HistoryEntry.fromJSON(data))
+      .map((data: HistoryEntryData) => HistoryEntry.fromJSON(data))
       .reverse(); // Newest first
   }
 
@@ -56,8 +52,8 @@ export class HistoryService {
    * Get entry by ID
    */
   getById(id: string): HistoryEntry | undefined {
-    const history = this.store.get('history', []);
-    const data = history.find(entry => entry.id === id);
+    const history = this.store.get<HistoryEntryData[]>('history', []);
+    const data = history.find((entry: HistoryEntryData) => entry.id === id);
     return data ? HistoryEntry.fromJSON(data) : undefined;
   }
 
@@ -65,15 +61,15 @@ export class HistoryService {
    * Remove specific entry by ID
    */
   remove(id: string): void {
-    const history = this.store.get('history', []);
-    const filtered = history.filter(entry => entry.id !== id);
-    this.store.set('history', filtered);
+    const history = this.store.get<HistoryEntryData[]>('history', []);
+    const filtered = history.filter((entry: HistoryEntryData) => entry.id !== id);
+    this.store.set<HistoryEntryData[]>('history', filtered);
   }
 
   /**
    * Clear all history
    */
   clear(): void {
-    this.store.set('history', []);
+    this.store.set<HistoryEntryData[]>('history', []);
   }
 }

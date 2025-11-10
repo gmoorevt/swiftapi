@@ -5,6 +5,7 @@
 import { describe, it, expect } from 'vitest';
 import { Auth } from './Auth';
 import { AuthType } from '../types/auth.types';
+import type { NoAuthConfig, ApiKeyConfig, BearerConfig, BasicAuthConfig } from '../types/auth.types';
 import type { Header } from '../types/request.types';
 
 describe('Auth', () => {
@@ -110,12 +111,12 @@ describe('Auth', () => {
       const result = auth.applyToHeaders(headers);
 
       expect(result).toHaveLength(1);
-      expect(result[0].name).toBe('Authorization');
-      expect(result[0].value).toMatch(/^Basic /);
-      expect(result[0].enabled).toBe(true);
+      expect(result[0]?.name).toBe('Authorization');
+      expect(result[0]?.value).toMatch(/^Basic /);
+      expect(result[0]?.enabled).toBe(true);
 
       // Verify base64 encoding
-      const encodedPart = result[0].value.replace('Basic ', '');
+      const encodedPart = result[0]!.value.replace('Basic ', '');
       const decoded = Buffer.from(encodedPart, 'base64').toString('utf-8');
       expect(decoded).toBe('user:pass');
     });
@@ -134,7 +135,7 @@ describe('Auth', () => {
       expect(result).toHaveLength(3);
       expect(result[0]).toEqual({ name: 'Content-Type', value: 'application/json', enabled: true });
       expect(result[1]).toEqual({ name: 'X-Custom', value: 'test', enabled: true });
-      expect(result[2].name).toBe('Authorization');
+      expect(result[2]?.name).toBe('Authorization');
     });
 
     it('should not modify existing headers array', () => {
@@ -196,7 +197,7 @@ describe('Auth', () => {
 
   describe('fromJSON', () => {
     it('should deserialize NONE auth', () => {
-      const json = { type: AuthType.NONE };
+      const json: NoAuthConfig = { type: AuthType.NONE };
       const auth = Auth.fromJSON(json);
 
       expect(auth).toBeInstanceOf(Auth);
@@ -204,7 +205,7 @@ describe('Auth', () => {
     });
 
     it('should deserialize API_KEY auth', () => {
-      const json = {
+      const json: ApiKeyConfig = {
         type: AuthType.API_KEY,
         headerName: 'X-API-Key',
         value: 'secret',
@@ -217,7 +218,7 @@ describe('Auth', () => {
     });
 
     it('should deserialize BEARER auth', () => {
-      const json = {
+      const json: BearerConfig = {
         type: AuthType.BEARER,
         token: 'token123',
       };
@@ -228,7 +229,7 @@ describe('Auth', () => {
     });
 
     it('should deserialize BASIC auth', () => {
-      const json = {
+      const json: BasicAuthConfig = {
         type: AuthType.BASIC,
         username: 'user',
         password: 'pass',

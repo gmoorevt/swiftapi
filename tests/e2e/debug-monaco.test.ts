@@ -2,7 +2,7 @@
  * Debug test to capture Monaco Editor loading issues
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 test('debug Monaco Editor loading', async ({ page }) => {
   const consoleMessages: string[] = [];

@@ -107,7 +107,7 @@ describe('HistoryEntry', () => {
         headers: [],
         queryParams: [],
         body: '',
-        bodyType: BodyType.NONE,
+        bodyType: BodyType.RAW,
       });
 
       const json = entry.toJSON();
@@ -115,7 +115,7 @@ describe('HistoryEntry', () => {
       expect(json.headers).toEqual([]);
       expect(json.queryParams).toEqual([]);
       expect(json.body).toBe('');
-      expect(json.bodyType).toBe(BodyType.NONE);
+      expect(json.bodyType).toBe(BodyType.RAW);
     });
   });
 
@@ -152,7 +152,7 @@ describe('HistoryEntry', () => {
       const id = HistoryEntry.generateId();
       const after = Date.now();
 
-      const timestamp = parseInt(id.split('-')[0]);
+      const timestamp = parseInt(id.split('-')[0]!);
       expect(timestamp).toBeGreaterThanOrEqual(before);
       expect(timestamp).toBeLessThanOrEqual(after);
     });

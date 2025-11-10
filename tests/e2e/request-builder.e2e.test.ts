@@ -262,7 +262,7 @@ test.describe('SwiftAPI Request Builder E2E Tests', () => {
 
       // Verify Monaco Editor is loaded (look for Monaco-specific elements)
       // Monaco renders in a specific structure with contenteditable
-      const monacoContent = page.locator('[class*="monaco"]').first();
+      // const monacoContent = page.locator('[class*="monaco"]').first();
 
       // Give Monaco time to render
       await page.waitForTimeout(1000);

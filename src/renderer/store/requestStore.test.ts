@@ -559,7 +559,7 @@ describe('Request Store', () => {
         headers: [],
         queryParams: [],
         body: '',
-        bodyType: BodyType.NONE,
+        bodyType: BodyType.RAW,
         toJSON: () => ({}),
       } as any;
 

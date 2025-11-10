@@ -86,7 +86,7 @@ describe('HeadersEditor', () => {
     fireEvent.change(nameInput, { target: { value: 'Authorization' } });
 
     const state = useRequestStore.getState();
-    expect(state.headers[0].name).toBe('Authorization');
+    expect(state.headers[0]!.name).toBe('Authorization');
   });
 
   it('should update header value when value input changes', () => {
@@ -99,7 +99,7 @@ describe('HeadersEditor', () => {
     fireEvent.change(valueInput, { target: { value: 'Bearer token123' } });
 
     const state = useRequestStore.getState();
-    expect(state.headers[0].value).toBe('Bearer token123');
+    expect(state.headers[0]!.value).toBe('Bearer token123');
   });
 
   // T071: HeadersEditor removes header when delete button clicked
@@ -146,12 +146,12 @@ describe('HeadersEditor', () => {
     const deleteButtons = screen.getAllByRole('button', { name: /delete|remove/i });
 
     // Delete the second header
-    fireEvent.click(deleteButtons[1]);
+    fireEvent.click(deleteButtons[1]!);
 
     const state = useRequestStore.getState();
     expect(state.headers).toHaveLength(2);
-    expect(state.headers[0].name).toBe('Header-1');
-    expect(state.headers[1].name).toBe('Header-3');
+    expect(state.headers[0]!.name).toBe('Header-1');
+    expect(state.headers[1]!.name).toBe('Header-3');
   });
 
   // T072: HeadersEditor toggles header enabled/disabled
@@ -189,13 +189,13 @@ describe('HeadersEditor', () => {
     fireEvent.click(checkbox);
 
     const state1 = useRequestStore.getState();
-    expect(state1.headers[0].enabled).toBe(false);
+    expect(state1.headers[0]!.enabled).toBe(false);
 
     // Click to re-enable
     fireEvent.click(checkbox);
 
     const state2 = useRequestStore.getState();
-    expect(state2.headers[0].enabled).toBe(true);
+    expect(state2.headers[0]!.enabled).toBe(true);
   });
 
   it('should visually indicate disabled headers', () => {
@@ -258,15 +258,15 @@ describe('HeadersEditor', () => {
     const nameInputs = screen.getAllByPlaceholderText(/header name/i);
     const valueInputs = screen.getAllByPlaceholderText(/header value/i);
 
-    fireEvent.change(nameInputs[0], { target: { value: 'Header-1' } });
-    fireEvent.change(valueInputs[0], { target: { value: 'Value-1' } });
-    fireEvent.change(nameInputs[1], { target: { value: 'Header-2' } });
-    fireEvent.change(valueInputs[1], { target: { value: 'Value-2' } });
+    fireEvent.change(nameInputs[0]!, { target: { value: 'Header-1' } });
+    fireEvent.change(valueInputs[0]!, { target: { value: 'Value-1' } });
+    fireEvent.change(nameInputs[1]!, { target: { value: 'Header-2' } });
+    fireEvent.change(valueInputs[1]!, { target: { value: 'Value-2' } });
 
     const state = useRequestStore.getState();
-    expect(state.headers[0].name).toBe('Header-1');
-    expect(state.headers[0].value).toBe('Value-1');
-    expect(state.headers[1].name).toBe('Header-2');
-    expect(state.headers[1].value).toBe('Value-2');
+    expect(state.headers[0]!.name).toBe('Header-1');
+    expect(state.headers[0]!.value).toBe('Value-1');
+    expect(state.headers[1]!.name).toBe('Header-2');
+    expect(state.headers[1]!.value).toBe('Value-2');
   });
 });

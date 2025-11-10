@@ -27,7 +27,6 @@ export class StorageService {
     this.store = new Store<StorageSchema>({
       name: 'swiftapi-settings',
       // Don't store sensitive data - only URL and method
-      defaults: {},
     });
   }
 

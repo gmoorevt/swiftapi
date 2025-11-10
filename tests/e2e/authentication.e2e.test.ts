@@ -173,7 +173,7 @@ test.describe('Authentication', () => {
     const responseBody = await page.textContent('body');
 
     // Should not have Bearer prefix in Authorization
-    if (responseBody.includes('Authorization')) {
+    if (responseBody && responseBody.includes('Authorization')) {
       expect(responseBody).not.toContain('Bearer test-bearer');
     }
   });

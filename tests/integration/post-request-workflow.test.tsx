@@ -18,7 +18,7 @@ import { BodyEditor } from '../../src/renderer/components/RequestBuilder/BodyEdi
 import { SendButton } from '../../src/renderer/components/RequestBuilder/SendButton';
 import { StatusDisplay } from '../../src/renderer/components/ResponseViewer/StatusDisplay';
 import { BodyViewer } from '../../src/renderer/components/ResponseViewer/BodyViewer';
-import { HttpMethod, BodyType } from '../../src/types/request.types';
+import { BodyType } from '../../src/types/request.types';
 
 // Mock axios
 vi.mock('axios');
