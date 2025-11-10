@@ -71,3 +71,33 @@ export function validateTimeout(timeout: number): ValidationResult {
 
   return { valid: true };
 }
+
+/**
+ * Validate JSON string
+ *
+ * @param input - JSON string to validate
+ * @returns Validation result
+ *
+ * Uses native JSON.parse for validation (Simplicity principle)
+ *
+ * @example
+ * validateJson('{"name":"John"}') // { valid: true }
+ * validateJson('{invalid}') // { valid: false, error: 'Invalid JSON: ...' }
+ */
+export function validateJson(input: string): ValidationResult {
+  const trimmed = input.trim();
+
+  // Check for empty input
+  if (!trimmed) {
+    return { valid: false, error: 'Invalid JSON: input cannot be empty' };
+  }
+
+  // Try to parse JSON using native JSON.parse
+  try {
+    JSON.parse(trimmed);
+    return { valid: true };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return { valid: false, error: `Invalid JSON: ${errorMessage}` };
+  }
+}

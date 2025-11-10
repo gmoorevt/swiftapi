@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { validateUrl, validateTimeout } from './validation';
+import { validateUrl, validateTimeout, validateJson } from './validation';
 
 describe('validateUrl', () => {
   it('should prepend https:// to URLs without protocol', () => {
@@ -109,5 +109,80 @@ describe('validateTimeout', () => {
     const result = validateTimeout(0);
     expect(result.valid).toBe(false);
     expect(result.error).toBe('Timeout must be between 1000ms and 300000ms');
+  });
+});
+
+describe('validateJson', () => {
+  it('should accept valid JSON object', () => {
+    const result = validateJson('{"name":"John","age":30}');
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept valid JSON array', () => {
+    const result = validateJson('[1,2,3,4,5]');
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept valid nested JSON', () => {
+    const result = validateJson('{"user":{"name":"Alice","roles":["admin","user"]}}');
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept empty JSON object', () => {
+    const result = validateJson('{}');
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept empty JSON array', () => {
+    const result = validateJson('[]');
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should accept JSON with whitespace', () => {
+    const result = validateJson('  { "name": "Test" }  ');
+    expect(result.valid).toBe(true);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('should reject malformed JSON with missing quotes', () => {
+    const result = validateJson('{name:"John"}');
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid JSON');
+  });
+
+  it('should reject malformed JSON with trailing comma', () => {
+    const result = validateJson('{"name":"John",}');
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid JSON');
+  });
+
+  it('should reject malformed JSON with missing bracket', () => {
+    const result = validateJson('{"name":"John"');
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid JSON');
+  });
+
+  it('should reject empty string', () => {
+    const result = validateJson('');
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid JSON');
+  });
+
+  it('should reject plain text', () => {
+    const result = validateJson('not json at all');
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain('Invalid JSON');
+  });
+
+  it('should provide error message for malformed JSON', () => {
+    const result = validateJson('{invalid}');
+    expect(result.valid).toBe(false);
+    expect(result.error).toBeDefined();
+    expect(typeof result.error).toBe('string');
   });
 });
