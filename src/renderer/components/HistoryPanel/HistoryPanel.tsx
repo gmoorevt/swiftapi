@@ -44,7 +44,10 @@ export function HistoryPanel(): React.ReactElement {
   if (!isOpen) {
     return (
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          loadHistory(); // Refresh history when opening
+          setIsOpen(true);
+        }}
         style={{
           padding: '6px 12px',
           fontSize: '13px',

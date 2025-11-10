@@ -45,10 +45,20 @@ test.describe('Request History', () => {
     // Verify history panel is open
     await expect(page.getByText('Request History')).toBeVisible();
 
-    // Verify request appears in history
-    await expect(page.getByText('https://jsonplaceholder.typicode.com/posts/1')).toBeVisible();
-    await expect(page.getByText('GET')).toBeVisible();
-    await expect(page.getByText('200')).toBeVisible();
+    // Wait for history to load
+    await page.waitForTimeout(500);
+
+    // Verify request appears in history - use more specific selectors
+    const historyPanel = page.locator('[style*="position: fixed"]');
+    await expect(historyPanel.getByText('https://jsonplaceholder.typicode.com/posts/1')).toBeVisible();
+
+    // Look for GET method badge inside history panel
+    const methodBadge = historyPanel.locator('span').filter({ hasText: /^GET$/ });
+    await expect(methodBadge).toBeVisible();
+
+    // Look for status code inside history panel
+    const statusCode = historyPanel.locator('span').filter({ hasText: /^200$/ });
+    await expect(statusCode).toBeVisible();
   });
 
   test('should restore request when clicking history item', async ({ page }) => {
@@ -63,20 +73,22 @@ test.describe('Request History', () => {
 
     // Open history panel
     await page.getByRole('button', { name: /history/i }).click();
+    await page.waitForTimeout(500);
 
-    // Click on first history item
-    const historyItem = page.locator('[style*="cursor: pointer"]').first();
-    await historyItem.click();
+    // Click on first history item - be more specific with selector
+    const historyPanel = page.locator('[style*="position: fixed"]');
+    const historyItems = historyPanel.locator('[style*="cursor: pointer"]');
+    await historyItems.first().click();
 
     // Wait a moment for state to update
     await page.waitForTimeout(500);
 
-    // Verify history panel closed
-    await expect(page.getByText('Request History')).not.toBeVisible();
-
     // Verify URL was restored
     const urlInput = page.locator('.url-input');
     await expect(urlInput).toHaveValue('https://jsonplaceholder.typicode.com/posts/1');
+
+    // Verify history panel closed
+    await expect(page.getByText('Request History')).not.toBeVisible();
   });
 
   test('should add multiple requests to history', async ({ page }) => {
@@ -112,16 +124,20 @@ test.describe('Request History', () => {
 
     // Open history panel
     await page.getByRole('button', { name: /history/i }).click();
+    await page.waitForTimeout(500);
 
     // Verify status code and response time are shown
-    const historyItems = page.locator('[style*="cursor: pointer"]');
+    const historyPanel = page.locator('[style*="position: fixed"]');
+    const historyItems = historyPanel.locator('[style*="cursor: pointer"]');
     const firstItem = historyItems.first();
 
-    // Should contain status code 200
-    await expect(firstItem.getByText('200')).toBeVisible();
+    // Should contain status code 200 - look for span with exact text
+    const statusCode = firstItem.locator('span').filter({ hasText: /^200$/ });
+    await expect(statusCode).toBeVisible();
 
     // Should contain response time (ends with 'ms')
-    await expect(firstItem.locator('text=/\\d+ms/')).toBeVisible();
+    const responseTime = firstItem.locator('span').filter({ hasText: /\d+ms/ });
+    await expect(responseTime).toBeVisible();
   });
 
   test('should close history panel when clicking X button', async ({ page }) => {

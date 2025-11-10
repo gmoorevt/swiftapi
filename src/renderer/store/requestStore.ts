@@ -174,7 +174,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
             method: request.method,
             url: request.url,
             statusCode: result.response?.statusCode,
-            responseTime: result.response?.time,
+            responseTime: result.response?.responseTime,
           });
           historyService.add(historyEntry);
         } else {
