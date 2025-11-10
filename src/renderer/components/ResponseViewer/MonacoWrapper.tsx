@@ -1,16 +1,45 @@
 /**
  * MonacoWrapper Component
  *
- * Wraps Monaco Editor with lazy loading for performance
+ * Wraps Monaco Editor for syntax highlighting
  * Provides syntax highlighting for JSON, XML, HTML, and plain text
  *
  * Constitutional requirements:
- * - Performance: Lazy loading reduces initial bundle size
+ * - Performance: Editor loads quickly with optimized settings
  * - Simplicity: Single component for all syntax highlighting needs
+ * - Security: Uses local bundled Monaco (no CDN) for CSP compliance
  */
 
-import React, { Suspense } from 'react';
-import Editor from '@monaco-editor/react';
+import React from 'react';
+import Editor, { loader } from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+
+// Configure Monaco environment for web workers
+self.MonacoEnvironment = {
+  getWorker(_: unknown, label: string) {
+    if (label === 'json') {
+      return new jsonWorker();
+    }
+    if (label === 'css' || label === 'scss' || label === 'less') {
+      return new cssWorker();
+    }
+    if (label === 'html' || label === 'handlebars' || label === 'razor') {
+      return new htmlWorker();
+    }
+    if (label === 'typescript' || label === 'javascript') {
+      return new tsWorker();
+    }
+    return new editorWorker();
+  },
+};
+
+// Configure Monaco to use local bundled version (no CDN)
+loader.config({ monaco });
 
 export interface MonacoWrapperProps {
   content: string;
@@ -20,7 +49,7 @@ export interface MonacoWrapperProps {
 }
 
 /**
- * Monaco Editor wrapper with lazy loading
+ * Monaco Editor wrapper for response viewing
  *
  * @param content - Content to display in the editor
  * @param language - Language for syntax highlighting
@@ -34,8 +63,12 @@ export function MonacoWrapper({
   readOnly = true,
 }: MonacoWrapperProps): React.ReactElement {
   return (
-    <Suspense
-      fallback={
+    <Editor
+      height={height}
+      language={language}
+      value={content}
+      theme="vs-dark"
+      loading={
         <div
           style={{
             height,
@@ -49,28 +82,21 @@ export function MonacoWrapper({
           Loading editor...
         </div>
       }
-    >
-      <Editor
-        height={height}
-        language={language}
-        value={content}
-        theme="vs-dark"
-        options={{
-          readOnly,
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          fontSize: 13,
-          lineNumbers: 'on',
-          wordWrap: 'on',
-          folding: true,
-          automaticLayout: true,
-          renderWhitespace: 'selection',
-          scrollbar: {
-            vertical: 'auto',
-            horizontal: 'auto',
-          },
-        }}
-      />
-    </Suspense>
+      options={{
+        readOnly,
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        fontSize: 13,
+        lineNumbers: 'on',
+        wordWrap: 'on',
+        folding: true,
+        automaticLayout: true,
+        renderWhitespace: 'selection',
+        scrollbar: {
+          vertical: 'auto',
+          horizontal: 'auto',
+        },
+      }}
+    />
   );
 }
