@@ -68,7 +68,7 @@ export class Request {
   /**
    * Convert to plain object for serialization
    */
-  toJSON() {
+  toJSON(): Record<string, unknown> {
     return {
       url: this.url,
       method: this.method,

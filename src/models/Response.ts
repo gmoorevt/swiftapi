@@ -125,7 +125,7 @@ export class Response {
   /**
    * Convert to plain object for serialization
    */
-  toJSON() {
+  toJSON(): Record<string, unknown> {
     return {
       statusCode: this.statusCode,
       statusText: this.statusText,

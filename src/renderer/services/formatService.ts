@@ -22,7 +22,7 @@ export class FormatService {
    */
   formatJson(jsonString: string): string {
     try {
-      const parsed = JSON.parse(jsonString);
+      const parsed: unknown = JSON.parse(jsonString);
       return JSON.stringify(parsed, null, 2);
     } catch {
       // Return original string if invalid JSON

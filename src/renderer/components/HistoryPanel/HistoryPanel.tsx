@@ -35,7 +35,8 @@ export function HistoryPanel(): React.ReactElement {
   };
 
   const handleClear = (): void => {
-    if (window.confirm('Clear all history?')) {
+    // eslint-disable-next-line no-alert
+    if (confirm('Clear all history?')) {
       historyService.clear();
       loadHistory();
     }

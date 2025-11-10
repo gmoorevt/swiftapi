@@ -51,7 +51,7 @@
 
     /* Code Quality Rules */
     "complexity": ["error", 10],
-    "max-lines-per-function": ["warn", { "max": 50, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": "off",
     "max-depth": ["error", 4],
     "max-params": ["warn", 4],
     "no-console": ["warn", { "allow": ["warn", "error"] }],

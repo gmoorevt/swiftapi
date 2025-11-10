@@ -62,7 +62,7 @@ export function HeadersEditor(): React.ReactElement {
             borderRadius: '4px',
           }}
         >
-          No headers added yet. Click "Add Header" to add a custom header.
+          No headers added yet. Click &quot;Add Header&quot; to add a custom header.
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

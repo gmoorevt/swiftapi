@@ -23,12 +23,18 @@ export function createStorageAdapter(storeName: string): StorageAdapter {
     // Use electron-store in Electron
     try {
       // Dynamic import to avoid bundling issues
-      const Store = require('electron-store');
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Store = require('electron-store') as new (options: { name: string }) => {
+        get<T>(key: string, defaultValue: T): T;
+        set<T>(key: string, value: T): void;
+        clear(): void;
+        has(key: string): boolean;
+      };
       const store = new Store({ name: storeName });
 
       return {
         get<T>(key: string, defaultValue: T): T {
-          return store.get(key, defaultValue) as T;
+          return store.get(key, defaultValue);
         },
         set<T>(key: string, value: T): void {
           store.set(key, value);
@@ -50,7 +56,7 @@ export function createStorageAdapter(storeName: string): StorageAdapter {
     get<T>(key: string, defaultValue: T): T {
       try {
         const item = localStorage.getItem(`${storeName}.${key}`);
-        return item ? JSON.parse(item) : defaultValue;
+        return item ? (JSON.parse(item) as T) : defaultValue;
       } catch {
         return defaultValue;
       }

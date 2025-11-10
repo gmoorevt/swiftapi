@@ -22,7 +22,9 @@ export function BodyViewer(): React.ReactElement {
 
   // Format the response body using FormatService
   const formattedContent = useMemo(() => {
-    if (!response) return null;
+    if (!response) {
+      return null;
+    }
 
     // Get content-type from response headers
     const contentTypeHeader = response.headers.find(

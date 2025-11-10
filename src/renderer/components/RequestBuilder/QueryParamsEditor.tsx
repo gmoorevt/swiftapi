@@ -90,7 +90,7 @@ export function QueryParamsEditor(): React.ReactElement {
             borderRadius: '4px',
           }}
         >
-          No query parameters added yet. Click "Add Parameter" to add a query parameter.
+          No query parameters added yet. Click &quot;Add Parameter&quot; to add a query parameter.
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
