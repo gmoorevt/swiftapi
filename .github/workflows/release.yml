@@ -45,7 +45,7 @@ jobs:
 
       # Upload artifacts
       - name: Upload release artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.os }}
           path: release/**/*
@@ -60,15 +60,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          merge-multiple: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            release-ubuntu-latest/**/*
-            release-macos-latest/**/*
-            release-windows-latest/**/*
+            release/**/*
           draft: false
           prerelease: false
           generate_release_notes: true
