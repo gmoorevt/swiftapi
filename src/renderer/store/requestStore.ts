@@ -12,6 +12,10 @@ import type { Header } from '../../types/request.types';
 import type { Response } from '../../models/Response';
 import { Request } from '../../models/Request';
 import { HttpService } from '../services/httpService';
+import { HistoryService } from '../services/historyService';
+import { HistoryEntry } from '../../models/HistoryEntry';
+import { Auth } from '../../models/Auth';
+import type { Auth as AuthConfig } from '../../types/auth.types';
 
 interface RequestState {
   // Current request state
@@ -21,6 +25,7 @@ interface RequestState {
   body: string;
   bodyType: BodyType;
   timeout: number;
+  auth: Auth;
 
   // Response state
   response: Response | null;
@@ -35,6 +40,7 @@ interface RequestState {
     setBody: (body: string) => void;
     setBodyType: (bodyType: BodyType) => void;
     setTimeout: (timeout: number) => void;
+    setAuth: (auth: AuthConfig) => void;
 
     // Header management
     addHeader: () => void;
@@ -57,8 +63,9 @@ interface RequestState {
   };
 }
 
-// Create HTTP service instance (singleton)
+// Create service instances (singletons)
 const httpService = new HttpService();
+const historyService = new HistoryService();
 
 /**
  * Request Store
@@ -73,6 +80,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
   body: '',
   bodyType: BodyType.JSON,
   timeout: 30000,
+  auth: Auth.createDefault(),
   response: null,
   error: null,
   isLoading: false,
@@ -89,6 +97,8 @@ export const useRequestStore = create<RequestState>((set, get) => ({
     setBodyType: (bodyType: BodyType) => set({ bodyType }),
 
     setTimeout: (timeout: number) => set({ timeout }),
+
+    setAuth: (authConfig: AuthConfig) => set({ auth: new Auth(authConfig) }),
 
     // Header management
     addHeader: () => {
@@ -138,11 +148,14 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       set({ response: null, error: null, isLoading: true });
 
       try {
+        // Apply authentication to headers
+        const headersWithAuth = state.auth.applyToHeaders(state.headers);
+
         // Build request from current state
         const request = new Request({
           url: state.url,
           method: state.method,
-          headers: state.headers,
+          headers: headersWithAuth,
           body: state.body,
           bodyType: state.bodyType,
           timeout: state.timeout,
@@ -153,6 +166,17 @@ export const useRequestStore = create<RequestState>((set, get) => ({
 
         if (result.success) {
           set({ response: result.response, error: null, isLoading: false });
+
+          // Save to history after successful request
+          const historyEntry = new HistoryEntry({
+            id: HistoryEntry.generateId(),
+            timestamp: new Date().toISOString(),
+            method: request.method,
+            url: request.url,
+            statusCode: result.response?.statusCode,
+            responseTime: result.response?.time,
+          });
+          historyService.add(historyEntry);
         } else {
           set({
             response: null,
@@ -191,6 +215,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       body: '',
       bodyType: BodyType.JSON,
       timeout: 30000,
+      auth: Auth.createDefault(),
       response: null,
       error: null,
       isLoading: false,

@@ -8,9 +8,11 @@ import { UrlInput } from './components/RequestBuilder/UrlInput';
 import { MethodSelector } from './components/RequestBuilder/MethodSelector';
 import { BodyEditor } from './components/RequestBuilder/BodyEditor';
 import { HeadersEditor } from './components/RequestBuilder/HeadersEditor';
+import { AuthSection } from './components/RequestBuilder/AuthSection';
 import { SendButton } from './components/RequestBuilder/SendButton';
 import { StatusDisplay } from './components/ResponseViewer/StatusDisplay';
 import { BodyViewer } from './components/ResponseViewer/BodyViewer';
+import { HistoryPanel } from './components/HistoryPanel/HistoryPanel';
 
 function App(): React.ReactElement {
   return (
@@ -90,6 +92,9 @@ function App(): React.ReactElement {
 
         {/* Headers Editor */}
         <HeadersEditor />
+
+        {/* Authentication Section */}
+        <AuthSection />
       </section>
 
       {/* Response Viewer Section */}
@@ -133,6 +138,9 @@ function App(): React.ReactElement {
           <BodyViewer />
         </div>
       </section>
+
+      {/* History Panel (overlay) */}
+      <HistoryPanel />
     </div>
   );
 }
