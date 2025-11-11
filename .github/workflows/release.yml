@@ -51,6 +51,8 @@ jobs:
     name: Publish Release
     needs: release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -60,13 +62,24 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: release-*
-          merge-multiple: true
+          path: artifacts
+
+      - name: List downloaded artifacts
+        run: |
+          echo "Downloaded artifacts:"
+          ls -R artifacts/
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          find artifacts -type f -exec cp {} release/ \;
+          echo "Release files:"
+          ls -lh release/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            release/**/*
+          files: release/*
           draft: false
           prerelease: false
           generate_release_notes: true
