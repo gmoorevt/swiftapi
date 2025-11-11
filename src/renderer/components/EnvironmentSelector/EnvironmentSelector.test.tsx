@@ -195,7 +195,7 @@ describe('EnvironmentSelector', () => {
 
       const options = screen.getAllByRole('option');
       expect(options).toHaveLength(1);
-      expect(options[0].textContent).toBe('No Environment');
+      expect(options[0]!.textContent).toBe('No Environment');
     });
 
     it('should show "Create Environment" button and allow opening dialog when no environments exist', () => {

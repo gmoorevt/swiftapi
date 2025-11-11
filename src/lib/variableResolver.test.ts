@@ -97,7 +97,7 @@ describe('variableResolver', () => {
       for (let i = 0; i < 15; i++) {
         variables[`v${i}`] = `{{v${i + 1}}}`;
       }
-      variables.v15 = 'end';
+      variables['v15'] = 'end';
 
       expect(() => resolveVariables('{{v0}}', variables))
         .toThrow('Maximum nesting depth (10) exceeded');

@@ -12,9 +12,39 @@ export function StatusDisplay(): React.ReactElement {
   const error = useRequestStore((state) => state.error);
   const isLoading = useRequestStore((state) => state.isLoading);
 
-  // Show loading state
+  // Show loading state with spinner
   if (isLoading) {
-    return <div style={{ padding: '16px', color: '#666' }}>Sending request...</div>;
+    return (
+      <div
+        style={{
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          color: '#007bff',
+        }}
+      >
+        <div
+          style={{
+            width: '16px',
+            height: '16px',
+            border: '3px solid #e0e0e0',
+            borderTop: '3px solid #007bff',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+          }}
+        />
+        <span style={{ fontWeight: 500 }}>Sending request...</span>
+        <style>
+          {`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
+      </div>
+    );
   }
 
   // Show error state

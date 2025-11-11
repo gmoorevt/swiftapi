@@ -76,7 +76,7 @@ export function resolveVariables(
     let hasChanges = false;
 
     // Replace ALL variables in current iteration
-    resolved = resolved.replace(VARIABLE_PATTERN, (match, varName) => {
+    resolved = resolved.replace(VARIABLE_PATTERN, (_match: string, varName: string) => {
       // Check if variable exists
       if (!(varName in variables)) {
         throw new VariableResolutionError(
@@ -96,10 +96,12 @@ export function resolveVariables(
 
       currentIterationVars.push(varName);
       hasChanges = true;
-      return variables[varName];
+      return variables[varName]!;
     });
 
-    if (!hasChanges) break;
+    if (!hasChanges) {
+break;
+}
 
     resolutionHistory.push(currentIterationVars);
     depth++;
@@ -125,7 +127,7 @@ export function resolveVariables(
  */
 export function extractVariables(text: string): string[] {
   const matches = text.matchAll(VARIABLE_PATTERN);
-  return Array.from(matches, m => m[1]);
+  return Array.from(matches, m => m[1]).filter((v): v is string => v !== undefined);
 }
 
 /**

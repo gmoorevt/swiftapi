@@ -22,6 +22,12 @@ interface EnvironmentState {
     createEnvironment: (name: string, variables?: Record<string, string>) => string;
     updateEnvironment: (id: string, changes: Partial<Pick<Environment, 'name' | 'variables'>>) => void;
     deleteEnvironment: (id: string) => void;
+    renameEnvironment: (id: string, newName: string) => void;
+
+    // Variable management (granular)
+    addVariable: (envId: string, key: string, value: string) => void;
+    updateVariable: (envId: string, oldKey: string, newKey: string, newValue: string) => void;
+    deleteVariable: (envId: string, key: string) => void;
 
     // Active environment
     setActiveEnvironment: (id: string | null) => void;
@@ -165,7 +171,8 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
           if (error instanceof VariableResolutionError) {
             throw error;
           }
-          throw new Error(`Failed to resolve variables: ${error}`);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          throw new Error(`Failed to resolve variables: ${errorMessage}`);
         }
       },
 
@@ -216,6 +223,112 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         const both = keys1.filter(k => set2.has(k));
 
         return { only1, only2, both };
+      },
+
+      /**
+       * Rename an environment
+       * @param id - Environment ID to rename
+       * @param newName - New name for the environment
+       * @throws Error if name already exists (case-insensitive)
+       */
+      renameEnvironment: (id: string, newName: string) => {
+        const updated = environmentService.rename(id, newName);
+
+        if (updated) {
+          set(state => ({
+            environments: {
+              ...state.environments,
+              [id]: updated
+            }
+          }));
+        }
+      },
+
+      /**
+       * Add a variable to an environment
+       * @param envId - Environment ID
+       * @param key - Variable key
+       * @param value - Variable value
+       * @throws Error if variable key is invalid
+       */
+      addVariable: (envId: string, key: string, value: string) => {
+        const env = get().environments[envId];
+        if (!env) {
+          return;
+        }
+
+        const newVariables = { ...env.variables, [key]: value };
+        const updated = environmentService.update(envId, { variables: newVariables });
+
+        if (updated) {
+          set(state => ({
+            environments: {
+              ...state.environments,
+              [envId]: updated
+            }
+          }));
+        }
+      },
+
+      /**
+       * Update a variable (can change key and/or value)
+       * @param envId - Environment ID
+       * @param oldKey - Current variable key
+       * @param newKey - New variable key
+       * @param newValue - New variable value
+       * @throws Error if new variable key is invalid
+       */
+      updateVariable: (envId: string, oldKey: string, newKey: string, newValue: string) => {
+        const env = get().environments[envId];
+        if (!env) {
+          return;
+        }
+
+        const newVariables = { ...env.variables };
+
+        // If key changed, delete old key
+        if (oldKey !== newKey) {
+          delete newVariables[oldKey];
+        }
+
+        newVariables[newKey] = newValue;
+
+        const updated = environmentService.update(envId, { variables: newVariables });
+
+        if (updated) {
+          set(state => ({
+            environments: {
+              ...state.environments,
+              [envId]: updated
+            }
+          }));
+        }
+      },
+
+      /**
+       * Delete a variable from an environment
+       * @param envId - Environment ID
+       * @param key - Variable key to delete
+       */
+      deleteVariable: (envId: string, key: string) => {
+        const env = get().environments[envId];
+        if (!env) {
+          return;
+        }
+
+        const newVariables = { ...env.variables };
+        delete newVariables[key];
+
+        const updated = environmentService.update(envId, { variables: newVariables });
+
+        if (updated) {
+          set(state => ({
+            environments: {
+              ...state.environments,
+              [envId]: updated
+            }
+          }));
+        }
       },
 
       /**

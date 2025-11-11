@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { EnvironmentService } from './environmentService';
-import { Environment } from '../../models/Environment';
 
 describe('EnvironmentService', () => {
   let service: EnvironmentService;
@@ -247,7 +246,7 @@ describe('EnvironmentService', () => {
       const newService = new EnvironmentService();
 
       expect(newService.getAll()).toHaveLength(1);
-      expect(newService.getById(env1.id)?.variables.url).toBe('dev.api.com');
+      expect(newService.getById(env1.id)?.variables['url']).toBe('dev.api.com');
       expect(newService.getById(env2.id)).toBeUndefined();
     });
   });
@@ -267,6 +266,88 @@ describe('EnvironmentService', () => {
       service.clearAll();
 
       expect(service.getActive()).toBeNull();
+    });
+  });
+
+  describe('rename', () => {
+    it('should rename environment', () => {
+      const env = service.create('Development', { baseUrl: 'http://localhost' });
+      const renamed = service.rename(env.id, 'Dev');
+
+      expect(renamed).toBeDefined();
+      expect(renamed?.name).toBe('Dev');
+      expect(renamed?.id).toBe(env.id);
+      expect(renamed?.variables).toEqual({ baseUrl: 'http://localhost' });
+    });
+
+    it('should persist renamed environment', () => {
+      const env = service.create('Development', {});
+      service.rename(env.id, 'Dev');
+
+      const retrieved = service.getById(env.id);
+      expect(retrieved?.name).toBe('Dev');
+    });
+
+    it('should throw error for duplicate name (case-insensitive)', () => {
+      const env1 = service.create('Development');
+      service.create('Production');
+
+      expect(() => service.rename(env1.id, 'production'))
+        .toThrow('Environment with name "production" already exists');
+
+      expect(() => service.rename(env1.id, 'PRODUCTION'))
+        .toThrow('Environment with name "PRODUCTION" already exists');
+    });
+
+    it('should allow renaming to same name with different case', () => {
+      const env = service.create('Development');
+      const renamed = service.rename(env.id, 'development');
+
+      expect(renamed?.name).toBe('development');
+    });
+
+    it('should return undefined for non-existent environment', () => {
+      const renamed = service.rename('non-existent-id', 'NewName');
+      expect(renamed).toBeUndefined();
+    });
+
+    it('should preserve variables when renaming', () => {
+      const env = service.create('Dev', {
+        baseUrl: 'http://localhost',
+        apiKey: 'test-key',
+        timeout: '5000'
+      });
+
+      const renamed = service.rename(env.id, 'Development');
+
+      expect(renamed?.variables).toEqual({
+        baseUrl: 'http://localhost',
+        apiKey: 'test-key',
+        timeout: '5000'
+      });
+    });
+
+    it('should preserve active status when renaming active environment', () => {
+      const env = service.create('Dev');
+      service.setActive(env.id);
+
+      service.rename(env.id, 'Development');
+
+      const active = service.getActive();
+      expect(active?.id).toBe(env.id);
+      expect(active?.name).toBe('Development');
+    });
+
+    it('should update timestamps when renaming', async () => {
+      const env = service.create('Dev');
+      const originalUpdatedAt = env.updatedAt;
+
+      // Small delay to ensure timestamp changes
+      await new Promise(resolve => setTimeout(resolve, 10));
+      const renamed = service.rename(env.id, 'Development');
+
+      expect(renamed?.createdAt).toBe(env.createdAt);
+      expect(renamed?.updatedAt).not.toBe(originalUpdatedAt);
     });
   });
 });

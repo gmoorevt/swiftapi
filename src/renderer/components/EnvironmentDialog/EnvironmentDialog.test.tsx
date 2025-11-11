@@ -4,8 +4,8 @@
  * Tests for environment management dialog with create/edit form and variable table
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EnvironmentDialog } from './EnvironmentDialog';
 import { useEnvironmentStore } from '../../store/environmentStore';
@@ -137,7 +137,7 @@ describe('EnvironmentDialog', () => {
       const store = useEnvironmentStore.getState();
       const envs = Object.values(store.environments);
       expect(envs).toHaveLength(1);
-      expect(envs[0].name).toBe('Development');
+      expect(envs[0]!.name).toBe('Development');
     });
 
     it('should show error for empty environment name', async () => {
@@ -226,6 +226,10 @@ describe('EnvironmentDialog', () => {
       const envElement = screen.getByText('Development');
       fireEvent.click(envElement);
 
+      // Click rename button to enable editing
+      const renameButton = screen.getByRole('button', { name: /rename/i });
+      fireEvent.click(renameButton);
+
       const nameInput = screen.getByDisplayValue('Development');
       await userEvent.clear(nameInput);
       await userEvent.type(nameInput, 'Dev Environment');
@@ -234,7 +238,7 @@ describe('EnvironmentDialog', () => {
       fireEvent.click(saveButton);
 
       const updatedStore = useEnvironmentStore.getState();
-      expect(updatedStore.environments[envId].name).toBe('Dev Environment');
+      expect(updatedStore.environments[envId]!.name).toBe('Dev Environment');
     });
 
     it('should cancel edit when cancel button clicked', async () => {
@@ -246,6 +250,10 @@ describe('EnvironmentDialog', () => {
       const envElement = screen.getByText('Development');
       fireEvent.click(envElement);
 
+      // Click rename button to enable editing
+      const renameButton = screen.getByRole('button', { name: /rename/i });
+      fireEvent.click(renameButton);
+
       const nameInput = screen.getByDisplayValue('Development');
       await userEvent.clear(nameInput);
       await userEvent.type(nameInput, 'Modified Name');
@@ -256,7 +264,7 @@ describe('EnvironmentDialog', () => {
       // Name should not be changed
       const updatedStore = useEnvironmentStore.getState();
       const envs = Object.values(updatedStore.environments);
-      expect(envs[0].name).toBe('Development');
+      expect(envs[0]!.name).toBe('Development');
     });
   });
 
@@ -307,7 +315,7 @@ describe('EnvironmentDialog', () => {
       fireEvent.click(saveVarButton);
 
       const updatedStore = useEnvironmentStore.getState();
-      expect(updatedStore.environments[envId].variables.base_url).toBe('http://dev.example.com');
+      expect(updatedStore.environments[envId]!.variables['base_url']).toBe('http://dev.example.com');
     });
 
     it('should show error for invalid variable name', async () => {
@@ -356,7 +364,7 @@ describe('EnvironmentDialog', () => {
       fireEvent.click(saveButton);
 
       const updatedStore = useEnvironmentStore.getState();
-      expect(updatedStore.environments[envId].variables.base_url).toBe('http://localhost:3000');
+      expect(updatedStore.environments[envId]!.variables['base_url']).toBe('http://localhost:3000');
     });
 
     it('should delete variable when delete button clicked', async () => {
@@ -379,8 +387,8 @@ describe('EnvironmentDialog', () => {
       fireEvent.click(confirmButton);
 
       const updatedStore = useEnvironmentStore.getState();
-      expect(updatedStore.environments[envId].variables.base_url).toBeUndefined();
-      expect(updatedStore.environments[envId].variables.api_key).toBe('dev-key');
+      expect(updatedStore.environments[envId]!.variables['base_url']).toBeUndefined();
+      expect(updatedStore.environments[envId]!.variables['api_key']).toBe('dev-key');
     });
 
     it('should show confirmation dialog before deleting variable', async () => {
@@ -494,6 +502,168 @@ describe('EnvironmentDialog', () => {
       render(<EnvironmentDialog open={true} onClose={() => {}} />);
 
       expect(screen.getByText(/active/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Rename environment', () => {
+    it('should show rename button in edit mode', () => {
+      const store = useEnvironmentStore.getState();
+      store.actions.createEnvironment('Development', {});
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      expect(screen.getByRole('button', { name: /rename/i })).toBeInTheDocument();
+    });
+
+    it('should enable name input when rename clicked', () => {
+      const store = useEnvironmentStore.getState();
+      store.actions.createEnvironment('Development', {});
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      // Name input should initially be disabled
+      const nameInput = screen.getByDisplayValue('Development') as HTMLInputElement;
+      expect(nameInput.disabled).toBe(true);
+
+      const renameButton = screen.getByRole('button', { name: /rename/i });
+      fireEvent.click(renameButton);
+
+      // Name input should now be enabled
+      expect(nameInput.disabled).toBe(false);
+    });
+
+    it('should rename environment when save clicked', async () => {
+      const store = useEnvironmentStore.getState();
+      const envId = store.actions.createEnvironment('Development', {});
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      const renameButton = screen.getByRole('button', { name: /rename/i });
+      fireEvent.click(renameButton);
+
+      const nameInput = screen.getByDisplayValue('Development');
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Dev');
+
+      const saveButton = screen.getByRole('button', { name: /save/i });
+      fireEvent.click(saveButton);
+
+      const updatedStore = useEnvironmentStore.getState();
+      expect(updatedStore.environments[envId]!.name).toBe('Dev');
+    });
+
+    it('should show error when renaming to duplicate name', async () => {
+      const store = useEnvironmentStore.getState();
+      store.actions.createEnvironment('Development', {});
+      store.actions.createEnvironment('Production', {});
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      const renameButton = screen.getByRole('button', { name: /rename/i });
+      fireEvent.click(renameButton);
+
+      const nameInput = screen.getByDisplayValue('Development');
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Production');
+
+      const saveButton = screen.getByRole('button', { name: /save/i });
+      fireEvent.click(saveButton);
+
+      expect(screen.getByText(/already exists/i)).toBeInTheDocument();
+    });
+
+    it('should cancel rename when cancel clicked', async () => {
+      const store = useEnvironmentStore.getState();
+      const envId = store.actions.createEnvironment('Development', {});
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      const renameButton = screen.getByRole('button', { name: /rename/i });
+      fireEvent.click(renameButton);
+
+      const nameInput = screen.getByDisplayValue('Development');
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Modified');
+
+      const cancelButton = screen.getByRole('button', { name: /cancel/i });
+      fireEvent.click(cancelButton);
+
+      const updatedStore = useEnvironmentStore.getState();
+      expect(updatedStore.environments[envId]!.name).toBe('Development');
+    });
+  });
+
+  describe('Enhanced delete confirmation for active environment', () => {
+    it('should show warning message when deleting active environment', () => {
+      const store = useEnvironmentStore.getState();
+      const envId = store.actions.createEnvironment('Development', {});
+      store.actions.setActiveEnvironment(envId);
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      const deleteButton = screen.getByRole('button', { name: /delete environment/i });
+      fireEvent.click(deleteButton);
+
+      // Should show active environment warning
+      expect(screen.getByText(/currently active/i)).toBeInTheDocument();
+      expect(screen.getByText(/no environment will be selected/i)).toBeInTheDocument();
+    });
+
+    it('should show standard message when deleting non-active environment', () => {
+      const store = useEnvironmentStore.getState();
+      store.actions.createEnvironment('Development', {});
+      const env2Id = store.actions.createEnvironment('Staging', {});
+      store.actions.setActiveEnvironment(env2Id);
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      const deleteButton = screen.getByRole('button', { name: /delete environment/i });
+      fireEvent.click(deleteButton);
+
+      // Should show standard confirmation message
+      expect(screen.getByText(/are you sure.*delete.*development/i)).toBeInTheDocument();
+      expect(screen.queryByText(/currently active/i)).not.toBeInTheDocument();
+    });
+
+    it('should clear active environment when deleting active environment', () => {
+      const store = useEnvironmentStore.getState();
+      const envId = store.actions.createEnvironment('Development', {});
+      store.actions.setActiveEnvironment(envId);
+
+      render(<EnvironmentDialog open={true} onClose={() => {}} />);
+
+      const envElement = screen.getByText('Development');
+      fireEvent.click(envElement);
+
+      const deleteButton = screen.getByRole('button', { name: /delete environment/i });
+      fireEvent.click(deleteButton);
+
+      const confirmButton = screen.getByRole('button', { name: /confirm deletion/i });
+      fireEvent.click(confirmButton);
+
+      const updatedStore = useEnvironmentStore.getState();
+      expect(updatedStore.activeEnvironmentId).toBeNull();
     });
   });
 });

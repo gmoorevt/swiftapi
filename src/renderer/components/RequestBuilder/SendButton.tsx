@@ -15,11 +15,15 @@ export function SendButton(): React.ReactElement {
     void sendRequest();
   };
 
+  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  const shortcut = isMac ? 'Cmd' : 'Ctrl';
+
   return (
     <button
       onClick={handleClick}
       disabled={isLoading}
       className="send-button"
+      title={`Send Request (${shortcut}+Enter)`}
       style={{
         padding: '8px 24px',
         fontSize: '14px',

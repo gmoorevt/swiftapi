@@ -118,6 +118,17 @@ export class EnvironmentService {
   }
 
   /**
+   * Rename environment (convenience method wrapping update)
+   * @param id - Environment ID to rename
+   * @param newName - New name for environment
+   * @throws Error if new name duplicates existing environment (case-insensitive)
+   * @returns Updated environment or undefined if not found
+   */
+  rename(id: string, newName: string): Environment | undefined {
+    return this.update(id, { name: newName });
+  }
+
+  /**
    * Set active environment
    * @param id - Environment ID to activate, or null to clear
    */

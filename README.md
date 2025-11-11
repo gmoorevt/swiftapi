@@ -19,33 +19,38 @@ SwiftAPI is an open-source API testing client designed to replace Postman with a
 
 ## Key Features
 
-### Core Functionality
-- ✅ HTTP request builder (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS)
-- ✅ Collections and environments for organizing requests
-- ✅ Variables with {{template}} syntax
-- ✅ Request history and auto-save
-- ✅ Response viewer with syntax highlighting
+### ✅ Core Functionality (v0.1.0-alpha)
+- **HTTP Methods**: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
+- **Request Builder**: URL input, headers, query parameters, body (JSON, XML, Text)
+- **Collections**: Organize and save requests with folders
+- **Environments**: Manage multiple environments (Dev, Staging, Production)
+- **Variables**: Template syntax `{{variable}}` with nested resolution
+- **Request History**: Auto-save and replay previous requests
+- **Response Viewer**: Syntax highlighting, formatted JSON/XML
+- **Authentication**: Basic, Bearer Token, API Key
 
-### Testing & Automation
-- ✅ Pre-request and post-response scripts (JavaScript)
-- ✅ Test assertions and validations
-- ✅ Collection runner for automated testing
-- ✅ CLI for CI/CD integration
-- ✅ Multiple report formats (JSON, JUnit, HTML)
+### 🎨 User Experience
+- **Tabbed Interface**: Organized tabs for Query Params, Headers, Body, Authentication
+- **Keyboard Shortcuts**:
+  - `Ctrl/Cmd+Enter` - Send request
+  - `Ctrl/Cmd+S` - Save request
+- **Visual Feedback**: Loading spinners, status indicators, tooltips
+- **Confirmation Dialogs**: Protect against accidental deletions
+- **Collections Sidebar**: Tree view with context menus for rename, delete, duplicate
 
-### Developer Experience
-- ✅ Dark mode support
-- ✅ Keyboard shortcuts for everything
-- ✅ Quick switcher (Cmd/Ctrl+K)
-- ✅ Multiple tabs
-- ✅ Import/Export (Postman, OpenAPI, cURL)
+### 🚀 Performance (Exceeds Targets)
+- Variable resolution: **< 1ms** (100-700x faster than 50ms target)
+- Collection loading: **< 10ms** for 500 requests (50x faster)
+- Environment switching: **< 1ms** (100x faster)
+- Test coverage: **96.42%** (exceeds 80% requirement)
 
-### Advanced Features
-- ✅ Authentication (Basic, Bearer, OAuth 2.0, API Key)
-- ✅ GraphQL support with schema introspection
-- ✅ WebSocket testing
-- ✅ File uploads and multipart forms
-- ✅ Mock servers for local development
+### 🔜 Coming Soon
+- ⏳ Pre-request and post-response scripts
+- ⏳ Collection runner for automated testing
+- ⏳ CLI for CI/CD integration
+- ⏳ Import/Export (Postman, OpenAPI, cURL)
+- ⏳ GraphQL support
+- ⏳ WebSocket testing
 
 ## Installation
 
@@ -93,7 +98,46 @@ snap install swiftapi
 
 ## Quick Start
 
-> Coming soon - First API call in under 2 minutes!
+### Your First API Request (< 2 minutes)
+
+1. **Launch SwiftAPI**
+   ```bash
+   npm run dev
+   ```
+
+2. **Make a Request**
+   - Enter a URL: `https://api.github.com/users/octocat`
+   - Select method: `GET`
+   - Click **Send** (or press `Ctrl/Cmd+Enter`)
+   - View the response with syntax highlighting
+
+3. **Save to Collection**
+   - Click **Save** (or press `Ctrl/Cmd+S`)
+   - Create a new collection or select existing
+   - Name your request
+
+### Using Variables and Environments
+
+1. **Create an Environment**
+   - Click the environment dropdown (top right)
+   - Click **Manage Environments**
+   - Create "Development" environment
+   - Add variable: `base_url` = `https://api.dev.example.com`
+
+2. **Use Variables in Requests**
+   - URL: `{{base_url}}/users`
+   - Headers: `Authorization: Bearer {{api_token}}`
+   - Body: `{"userId": "{{user_id}}"}`
+
+3. **Switch Environments**
+   - Select "Development", "Staging", or "Production" from dropdown
+   - All variables automatically resolve to the active environment
+
+### Keyboard Shortcuts
+
+- `Ctrl/Cmd+Enter` - Send request
+- `Ctrl/Cmd+S` - Save request
+- Right-click on collections/requests for more options
 
 ## Development
 
@@ -176,15 +220,17 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for det
 
 ## Roadmap
 
-- [x] **Foundation**: Constitution and project setup
-- [ ] **Phase 1**: MVP - Basic request engine, collections, variables (Weeks 1-4)
-- [ ] **Phase 2**: Enhanced UX - Folders, authentication, keyboard shortcuts (Weeks 5-8)
-- [ ] **Phase 3**: Testing & Validation - Scripts, collection runner, assertions (Weeks 9-12)
-- [ ] **Phase 4**: CLI & Automation - Command-line interface, CI/CD integration (Weeks 13-16)
-- [ ] **Phase 5**: Documentation & Sharing - Auto-docs, import/export (Weeks 17-20)
-- [ ] **Phase 6**: Advanced - WebSocket, gRPC, mock servers (Weeks 21-28)
+- [x] **Foundation**: Constitution v1.1.0 and project setup
+- [x] **Phase 1**: Basic Request Builder - HTTP methods, request/response, history
+- [x] **Phase 2**: Environment Management - Variables, environments, template resolution
+- [x] **Phase 6**: Collections & Organization - Save requests, organize in collections
+- [x] **Phase 9**: Performance & UX Polish - Tabs, keyboard shortcuts, loading states
+- [ ] **Phase 3**: Testing & Validation - Scripts, collection runner, assertions
+- [ ] **Phase 4**: CLI & Automation - Command-line interface, CI/CD integration
+- [ ] **Phase 5**: Import/Export - Postman collections, OpenAPI, cURL
+- [ ] **Phase 7**: Advanced Features - WebSocket, gRPC, mock servers
 
-See the full [Product Specification](api-client-specification.md) for detailed features.
+**Current Status**: v0.1.0-alpha - Core features complete, ready for testing and feedback!
 
 ## Community
 

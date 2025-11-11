@@ -81,7 +81,7 @@ describe('Environment', () => {
 
     it('should accept variables starting with underscore', () => {
       const env = Environment.create('Dev', { _internal: 'value' });
-      expect(env.variables._internal).toBe('value');
+      expect(env.variables['_internal']).toBe('value');
     });
   });
 
@@ -161,7 +161,7 @@ describe('Environment', () => {
       const env = Environment.create('Dev', { key: 'oldValue' });
       const updated = env.setVariable('key', 'newValue');
 
-      expect(updated.variables.key).toBe('newValue');
+      expect(updated.variables['key']).toBe('newValue');
     });
 
     it('should delete variable and return new Environment', () => {

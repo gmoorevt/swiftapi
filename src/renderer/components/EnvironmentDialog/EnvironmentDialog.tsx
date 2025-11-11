@@ -6,7 +6,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useEnvironmentStore } from '../../store/environmentStore';
-import { Environment } from '../../../models/Environment';
 
 interface EnvironmentDialogProps {
   open: boolean;
@@ -29,12 +28,14 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
   const [error, setError] = useState('');
   const [variableEdit, setVariableEdit] = useState<VariableEdit | null>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ type: 'env' | 'var'; target: string } | null>(null);
+  const [isRenaming, setIsRenaming] = useState(false);
 
   const environments = useEnvironmentStore((state) => state.environments);
   const activeEnvironmentId = useEnvironmentStore((state) => state.activeEnvironmentId);
   const createEnvironment = useEnvironmentStore((state) => state.actions.createEnvironment);
   const updateEnvironment = useEnvironmentStore((state) => state.actions.updateEnvironment);
   const deleteEnvironment = useEnvironmentStore((state) => state.actions.deleteEnvironment);
+  const renameEnvironment = useEnvironmentStore((state) => state.actions.renameEnvironment);
 
   const selectedEnvironment = selectedEnvironmentId ? environments[selectedEnvironmentId] : null;
 
@@ -52,6 +53,7 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
       setError('');
       setVariableEdit(null);
       setDeleteConfirmation(null);
+      setIsRenaming(false);
     }
   }, [open]);
 
@@ -87,6 +89,9 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     setMode('edit');
     setSelectedEnvironmentId(envId);
     const env = environments[envId];
+    if (!env) {
+return;
+}
     setEnvironmentName(env.name);
     setError('');
   };
@@ -117,8 +122,10 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     }
   };
 
-  const handleEditSave = () => {
-    if (!selectedEnvironmentId) return;
+  const handleEditSave = (): void => {
+    if (!selectedEnvironmentId) {
+      return;
+    }
 
     setError('');
 
@@ -127,15 +134,20 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
       return;
     }
 
-    // Check for duplicate names (excluding current environment)
-    const duplicate = Object.values(environments).find(
-      (env) => env.id !== selectedEnvironmentId && env.name.toLowerCase() === environmentName.trim().toLowerCase()
-    );
-    if (duplicate) {
-      setError('An environment with this name already exists');
+    // If renaming, use renameEnvironment method
+    if (isRenaming) {
+      try {
+        renameEnvironment(selectedEnvironmentId, environmentName.trim());
+        setMode('list');
+        setSelectedEnvironmentId(null);
+        setIsRenaming(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to rename environment');
+      }
       return;
     }
 
+    // Otherwise, just update (for other changes if any in future)
     try {
       updateEnvironment(selectedEnvironmentId, { name: environmentName.trim() });
       setMode('list');
@@ -149,6 +161,12 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     setMode('list');
     setSelectedEnvironmentId(null);
     setEnvironmentName('');
+    setError('');
+    setIsRenaming(false);
+  };
+
+  const handleRename = () => {
+    setIsRenaming(true);
     setError('');
   };
 
@@ -171,8 +189,10 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     setError('');
   };
 
-  const handleSaveVariable = () => {
-    if (!selectedEnvironmentId || !variableEdit) return;
+  const handleSaveVariable = (): void => {
+    if (!selectedEnvironmentId || !variableEdit) {
+      return;
+    }
 
     setError('');
 
@@ -189,6 +209,9 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     }
 
     const env = environments[selectedEnvironmentId];
+    if (!env) {
+return;
+}
     const newVariables = { ...env.variables };
 
     // If editing and key changed, delete old key
@@ -210,10 +233,15 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     setDeleteConfirmation({ type: 'var', target: key });
   };
 
-  const handleConfirmDeleteVariable = () => {
-    if (!selectedEnvironmentId || !deleteConfirmation || deleteConfirmation.type !== 'var') return;
+  const handleConfirmDeleteVariable = (): void => {
+    if (!selectedEnvironmentId || !deleteConfirmation || deleteConfirmation.type !== 'var') {
+      return;
+    }
 
     const env = environments[selectedEnvironmentId];
+    if (!env) {
+return;
+}
     const newVariables = { ...env.variables };
     delete newVariables[deleteConfirmation.target];
 
@@ -221,13 +249,17 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     setDeleteConfirmation(null);
   };
 
-  const handleDeleteEnvironment = () => {
-    if (!selectedEnvironmentId) return;
+  const handleDeleteEnvironment = (): void => {
+    if (!selectedEnvironmentId) {
+      return;
+    }
     setDeleteConfirmation({ type: 'env', target: selectedEnvironmentId });
   };
 
-  const handleConfirmDeleteEnvironment = () => {
-    if (!deleteConfirmation || deleteConfirmation.type !== 'env') return;
+  const handleConfirmDeleteEnvironment = (): void => {
+    if (!deleteConfirmation || deleteConfirmation.type !== 'env') {
+      return;
+    }
 
     deleteEnvironment(deleteConfirmation.target);
     setDeleteConfirmation(null);
@@ -240,12 +272,34 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
   };
 
   // Render confirmation dialog
-  const renderDeleteConfirmation = () => {
-    if (!deleteConfirmation) return null;
+  const renderDeleteConfirmation = (): React.ReactElement | null => {
+    if (!deleteConfirmation) {
+      return null;
+    }
 
-    const message = deleteConfirmation.type === 'env'
-      ? `Are you sure you want to delete the environment "${environments[deleteConfirmation.target]?.name}"?`
-      : `Are you sure you want to delete the variable "${deleteConfirmation.target}"?`;
+    let message: React.ReactNode;
+
+    if (deleteConfirmation.type === 'env') {
+      const envName = environments[deleteConfirmation.target]?.name;
+      const isActive = deleteConfirmation.target === activeEnvironmentId;
+
+      if (isActive) {
+        message = (
+          <>
+            <p style={{ margin: '0 0 8px', fontSize: '14px' }}>
+              Are you sure you want to delete the environment &quot;{envName}&quot;?
+            </p>
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#856404', backgroundColor: '#fff3cd', padding: '8px', borderRadius: '4px', border: '1px solid #ffeeba' }}>
+              <strong>Warning:</strong> This environment is currently active. After deletion, no environment will be selected.
+            </p>
+          </>
+        );
+      } else {
+        message = <p style={{ margin: '0 0 16px', fontSize: '14px' }}>Are you sure you want to delete the environment &quot;{envName}&quot;?</p>;
+      }
+    } else {
+      message = <p style={{ margin: '0 0 16px', fontSize: '14px' }}>Are you sure you want to delete the variable &quot;{deleteConfirmation.target}&quot;?</p>;
+    }
 
     return (
       <div
@@ -271,7 +325,7 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           }}
         >
-          <p style={{ margin: '0 0 16px', fontSize: '14px' }}>{message}</p>
+          {message}
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
             <button
               onClick={handleCancelDelete}
@@ -309,8 +363,10 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
   };
 
   // Render variable table
-  const renderVariableTable = () => {
-    if (!selectedEnvironment) return null;
+  const renderVariableTable = (): React.ReactElement | null => {
+    if (!selectedEnvironment) {
+      return null;
+    }
 
     const variables = Object.entries(selectedEnvironment.variables);
 
@@ -339,7 +395,7 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
 
         {variables.length === 0 && !variableEdit ? (
           <div style={{ padding: '24px', textAlign: 'center', color: '#666', fontSize: '14px' }}>
-            No variables defined. Click "Add Variable" to create one.
+            No variables defined. Click &quot;Add Variable&quot; to create one.
           </div>
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -636,23 +692,45 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
         <h2 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>Edit Environment</h2>
 
         <div style={{ marginBottom: '16px' }}>
-          <label
-            htmlFor="env-name"
-            style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: 600 }}
-          >
-            Environment Name
-          </label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <label
+              htmlFor="env-name"
+              style={{ fontSize: '13px', fontWeight: 600 }}
+            >
+              Environment Name
+            </label>
+            {!isRenaming && (
+              <button
+                onClick={handleRename}
+                aria-label="Rename"
+                style={{
+                  padding: '4px 12px',
+                  fontSize: '12px',
+                  border: '1px solid #007bff',
+                  borderRadius: '4px',
+                  backgroundColor: 'white',
+                  color: '#007bff',
+                  cursor: 'pointer',
+                }}
+              >
+                Rename
+              </button>
+            )}
+          </div>
           <input
             id="env-name"
             type="text"
             value={environmentName}
             onChange={(e) => setEnvironmentName(e.target.value)}
+            disabled={!isRenaming}
             style={{
               width: '100%',
               padding: '8px 12px',
               fontSize: '14px',
               border: '1px solid #ddd',
               borderRadius: '4px',
+              backgroundColor: isRenaming ? 'white' : '#f5f5f5',
+              cursor: isRenaming ? 'text' : 'not-allowed',
             }}
           />
         </div>

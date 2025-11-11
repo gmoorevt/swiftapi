@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { generateUUID } from '../lib/uuid';
 
 /**
  * Environment model representing a set of variables for API testing
@@ -24,7 +24,7 @@ export class Environment {
   static create(name: string, variables: Record<string, string> = {}): Environment {
     const now = new Date().toISOString();
     return new Environment(
-      randomUUID(),
+      generateUUID(),
       name,
       variables,
       now,
