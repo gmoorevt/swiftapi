@@ -49,53 +49,11 @@ SwiftAPI is an open-source API testing client designed to replace Postman with a
 
 ## Installation
 
-### Download Pre-built Binaries
+### Build from Source (Recommended for Now)
 
-Download the latest release for your platform from [GitHub Releases](https://github.com/gmoorevt/swiftapi/releases):
+SwiftAPI is currently in active development. Pre-built binaries will be available soon.
 
-#### macOS
-```bash
-# Download the latest .dmg file
-# Double-click to mount and drag SwiftAPI to Applications
-
-# Or use curl to download the latest release
-curl -L -o SwiftAPI.dmg https://github.com/gmoorevt/swiftapi/releases/latest/download/SwiftAPI-mac.dmg
-open SwiftAPI.dmg
-```
-
-#### Windows
-```bash
-# Download the latest installer (.exe)
-# Run the installer and follow the prompts
-
-# Or download the portable version (.zip)
-# Extract and run SwiftAPI.exe
-```
-
-#### Linux
-
-**AppImage (Recommended)**
-```bash
-# Download the .AppImage file
-chmod +x SwiftAPI-*.AppImage
-./SwiftAPI-*.AppImage
-```
-
-**Debian/Ubuntu (.deb)**
-```bash
-sudo dpkg -i swiftapi_*.deb
-# Or
-sudo apt install ./swiftapi_*.deb
-```
-
-**Red Hat/Fedora (.rpm)**
-```bash
-sudo rpm -i swiftapi-*.rpm
-# Or
-sudo dnf install swiftapi-*.rpm
-```
-
-### Build from Source
+For now, you can run SwiftAPI from source:
 
 ```bash
 # Clone the repository
@@ -112,7 +70,15 @@ npm run dev
 npm run build
 ```
 
-### Package Managers (Coming Soon)
+### Pre-built Binaries (Coming Soon)
+
+Once SwiftAPI reaches v1.0, pre-built binaries will be available from [GitHub Releases](https://github.com/gmoorevt/swiftapi/releases):
+
+- **macOS**: `.dmg` installer
+- **Windows**: `.exe` installer and portable `.zip`
+- **Linux**: AppImage, `.deb`, and `.rpm` packages
+
+### Package Managers (Future)
 
 ```bash
 # macOS (Homebrew)
