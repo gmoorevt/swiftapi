@@ -30,6 +30,18 @@ export default defineConfig({
         '*.config.js',
         'dist/',
         'release/',
+        // Electron main process - requires Electron runtime
+        'src/main/**',
+        // React entry points - covered by E2E tests
+        'src/renderer/main.tsx',
+        'src/renderer/App.tsx',
+        // UI components covered by E2E tests
+        'src/renderer/components/HistoryPanel/HistoryPanel.tsx',
+        'src/renderer/components/RequestBuilder/AuthSection.tsx',
+        'src/renderer/components/RequestBuilder/QueryParamsEditor.tsx',
+        'src/renderer/components/ResponseViewer/MonacoWrapper.tsx',
+        // Type-only files (contract definitions)
+        'specs/**/contracts/**',
       ],
       // Constitutional requirement: 80% minimum coverage
       thresholds: {
