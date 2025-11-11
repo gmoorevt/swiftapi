@@ -49,9 +49,70 @@ SwiftAPI is an open-source API testing client designed to replace Postman with a
 
 ## Installation
 
-> **Note**: SwiftAPI is currently in development. Installation instructions will be available once the first release is ready.
+### Download Pre-built Binaries
 
-### Planned Installation Methods
+Download the latest release for your platform from [GitHub Releases](https://github.com/gmoorevt/swiftapi/releases):
+
+#### macOS
+```bash
+# Download the latest .dmg file
+# Double-click to mount and drag SwiftAPI to Applications
+
+# Or use curl to download the latest release
+curl -L -o SwiftAPI.dmg https://github.com/gmoorevt/swiftapi/releases/latest/download/SwiftAPI-mac.dmg
+open SwiftAPI.dmg
+```
+
+#### Windows
+```bash
+# Download the latest installer (.exe)
+# Run the installer and follow the prompts
+
+# Or download the portable version (.zip)
+# Extract and run SwiftAPI.exe
+```
+
+#### Linux
+
+**AppImage (Recommended)**
+```bash
+# Download the .AppImage file
+chmod +x SwiftAPI-*.AppImage
+./SwiftAPI-*.AppImage
+```
+
+**Debian/Ubuntu (.deb)**
+```bash
+sudo dpkg -i swiftapi_*.deb
+# Or
+sudo apt install ./swiftapi_*.deb
+```
+
+**Red Hat/Fedora (.rpm)**
+```bash
+sudo rpm -i swiftapi-*.rpm
+# Or
+sudo dnf install swiftapi-*.rpm
+```
+
+### Build from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/gmoorevt/swiftapi.git
+cd swiftapi
+
+# Install dependencies
+npm install
+
+# Run in development mode
+npm run dev
+
+# Build for production
+npm run build
+```
+
+### Package Managers (Coming Soon)
 
 ```bash
 # macOS (Homebrew)
@@ -62,12 +123,6 @@ choco install swiftapi
 
 # Linux (snap)
 snap install swiftapi
-
-# NPM (global CLI)
-npm install -g @swiftapi/cli
-
-# Download binary
-# Pre-built binaries will be available from GitHub Releases
 ```
 
 ## Quick Start
