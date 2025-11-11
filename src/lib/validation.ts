@@ -35,9 +35,7 @@ export function validateUrl(input: string): ValidationResult {
   }
 
   // Auto-prepend https:// if no protocol specified
-  const urlWithProtocol = /^https?:\/\//i.test(trimmed)
-    ? trimmed
-    : `https://${trimmed}`;
+  const urlWithProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 
   // Validate using native URL API
   try {

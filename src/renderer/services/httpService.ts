@@ -41,13 +41,11 @@ export class HttpService {
       const responseTime = Date.now() - startTime;
 
       // Convert axios response to our Response model
-      const headers: Header[] = Object.entries(response.headers).map(
-        ([name, value]) => ({
-          name,
-          value: String(value),
-          enabled: true,
-        })
-      );
+      const headers: Header[] = Object.entries(response.headers).map(([name, value]) => ({
+        name,
+        value: String(value),
+        enabled: true,
+      }));
 
       const body = this.serializeResponseBody(response.data);
       const size = body.length;
@@ -105,9 +103,7 @@ export class HttpService {
 
     // Add Content-Type based on body type (if not already set)
     if (request.hasBody() && !this.hasContentType(headers)) {
-      headers['Content-Type'] = this.getContentTypeForBodyType(
-        request.bodyType
-      );
+      headers['Content-Type'] = this.getContentTypeForBodyType(request.bodyType);
     }
 
     return headers;
@@ -117,9 +113,7 @@ export class HttpService {
    * Check if headers already contain Content-Type
    */
   private hasContentType(headers: Record<string, string>): boolean {
-    return Object.keys(headers).some(
-      (key) => key.toLowerCase() === 'content-type'
-    );
+    return Object.keys(headers).some((key) => key.toLowerCase() === 'content-type');
   }
 
   /**

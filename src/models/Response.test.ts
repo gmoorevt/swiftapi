@@ -15,9 +15,7 @@ describe('Response Model', () => {
       const response = new Response({
         statusCode: 200,
         statusText: 'OK',
-        headers: [
-          { name: 'content-type', value: 'application/json', enabled: true },
-        ],
+        headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
         body: '{"message": "success"}',
         responseTime: 245,
         size: 1024,
@@ -199,9 +197,7 @@ describe('Response Model', () => {
       const response = new Response({
         statusCode: 200,
         statusText: 'OK',
-        headers: [
-          { name: 'content-type', value: 'application/json', enabled: true },
-        ],
+        headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
         body: '{}',
         responseTime: 100,
         size: 2,
@@ -217,9 +213,7 @@ describe('Response Model', () => {
       const response = new Response({
         statusCode: 200,
         statusText: 'OK',
-        headers: [
-          { name: 'content-type', value: 'application/xml', enabled: true },
-        ],
+        headers: [{ name: 'content-type', value: 'application/xml', enabled: true }],
         body: '<root></root>',
         responseTime: 100,
         size: 13,
@@ -235,9 +229,7 @@ describe('Response Model', () => {
       const response = new Response({
         statusCode: 200,
         statusText: 'OK',
-        headers: [
-          { name: 'content-type', value: 'text/html', enabled: true },
-        ],
+        headers: [{ name: 'content-type', value: 'text/html', enabled: true }],
         body: '<html></html>',
         responseTime: 100,
         size: 13,

@@ -56,9 +56,7 @@ export function BodyViewer(): React.ReactElement {
 
   // Map content type to Monaco language
   const monacoLanguage =
-    formattedContent.contentType === 'text'
-      ? 'plaintext'
-      : formattedContent.contentType;
+    formattedContent.contentType === 'text' ? 'plaintext' : formattedContent.contentType;
 
   return (
     <div
@@ -68,11 +66,7 @@ export function BodyViewer(): React.ReactElement {
         overflow: 'hidden',
       }}
     >
-      <MonacoWrapper
-        content={formattedContent.content}
-        language={monacoLanguage}
-        height="400px"
-      />
+      <MonacoWrapper content={formattedContent.content} language={monacoLanguage} height="400px" />
     </div>
   );
 }

@@ -43,9 +43,7 @@ export class HistoryService {
    */
   getAll(): HistoryEntry[] {
     const history = this.store.get<HistoryEntryData[]>('history', []);
-    return history
-      .map((data: HistoryEntryData) => HistoryEntry.fromJSON(data))
-      .reverse(); // Newest first
+    return history.map((data: HistoryEntryData) => HistoryEntry.fromJSON(data)).reverse(); // Newest first
   }
 
   /**

@@ -40,7 +40,7 @@ export function parseQueryParams(url: string): QueryParam[] {
  */
 export function buildUrlWithParams(baseUrl: string, queryParams: QueryParam[]): string {
   // Filter to only enabled params
-  const enabledParams = queryParams.filter(p => p.enabled && p.key.trim() !== '');
+  const enabledParams = queryParams.filter((p) => p.enabled && p.key.trim() !== '');
 
   // If no enabled params, return base URL
   if (enabledParams.length === 0) {
@@ -53,7 +53,7 @@ export function buildUrlWithParams(baseUrl: string, queryParams: QueryParam[]): 
     urlObj.search = '';
 
     // Add each enabled param
-    enabledParams.forEach(param => {
+    enabledParams.forEach((param) => {
       urlObj.searchParams.append(param.key, param.value);
     });
 
@@ -62,7 +62,7 @@ export function buildUrlWithParams(baseUrl: string, queryParams: QueryParam[]): 
     // If base URL is invalid, try to build query string manually
     const baseWithoutParams = baseUrl.split('?')[0] || baseUrl;
     const queryString = enabledParams
-      .map(p => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`)
+      .map((p) => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`)
       .join('&');
 
     return queryString ? `${baseWithoutParams}?${queryString}` : baseWithoutParams;

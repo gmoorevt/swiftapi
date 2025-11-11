@@ -20,9 +20,7 @@ describe('HistoryEntry', () => {
           { name: 'Authorization', value: 'Bearer token', enabled: true },
           { name: 'Content-Type', value: 'application/json', enabled: true },
         ],
-        queryParams: [
-          { key: 'page', value: '1', description: 'Page number', enabled: true },
-        ],
+        queryParams: [{ key: 'page', value: '1', description: 'Page number', enabled: true }],
         body: '{"test": "data"}',
         bodyType: BodyType.JSON,
       };
@@ -36,9 +34,18 @@ describe('HistoryEntry', () => {
       expect(entry.statusCode).toBe(200);
       expect(entry.responseTime).toBe(150);
       expect(entry.headers).toHaveLength(2);
-      expect(entry.headers[0]).toEqual({ name: 'Authorization', value: 'Bearer token', enabled: true });
+      expect(entry.headers[0]).toEqual({
+        name: 'Authorization',
+        value: 'Bearer token',
+        enabled: true,
+      });
       expect(entry.queryParams).toHaveLength(1);
-      expect(entry.queryParams[0]).toEqual({ key: 'page', value: '1', description: 'Page number', enabled: true });
+      expect(entry.queryParams[0]).toEqual({
+        key: 'page',
+        value: '1',
+        description: 'Page number',
+        enabled: true,
+      });
       expect(entry.body).toBe('{"test": "data"}');
       expect(entry.bodyType).toBe(BodyType.JSON);
     });
@@ -68,12 +75,8 @@ describe('HistoryEntry', () => {
         url: 'https://api.example.com/users/1',
         statusCode: 204,
         responseTime: 50,
-        headers: [
-          { name: 'X-Custom', value: 'test', enabled: true },
-        ],
-        queryParams: [
-          { key: 'id', value: '1', description: '', enabled: true },
-        ],
+        headers: [{ name: 'X-Custom', value: 'test', enabled: true }],
+        queryParams: [{ key: 'id', value: '1', description: '', enabled: true }],
         body: '{"name": "John"}',
         bodyType: BodyType.JSON,
       });
@@ -87,12 +90,8 @@ describe('HistoryEntry', () => {
         url: 'https://api.example.com/users/1',
         statusCode: 204,
         responseTime: 50,
-        headers: [
-          { name: 'X-Custom', value: 'test', enabled: true },
-        ],
-        queryParams: [
-          { key: 'id', value: '1', description: '', enabled: true },
-        ],
+        headers: [{ name: 'X-Custom', value: 'test', enabled: true }],
+        queryParams: [{ key: 'id', value: '1', description: '', enabled: true }],
         body: '{"name": "John"}',
         bodyType: BodyType.JSON,
       });

@@ -10,8 +10,8 @@ import { useRequestStore } from '../../store/requestStore';
 import { AuthType } from '../../../types/auth.types';
 
 export function AuthSection(): React.ReactElement {
-  const auth = useRequestStore(state => state.auth);
-  const setAuth = useRequestStore(state => state.actions.setAuth);
+  const auth = useRequestStore((state) => state.auth);
+  const setAuth = useRequestStore((state) => state.actions.setAuth);
 
   // Local state for form inputs
   const [authType, setAuthType] = useState<AuthType>(auth.type);

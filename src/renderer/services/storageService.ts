@@ -67,10 +67,7 @@ export class StorageService {
     const method = this.store.get('lastMethod');
 
     // Validate that stored method is a valid HttpMethod
-    if (
-      method &&
-      Object.values(HttpMethod).includes(method as HttpMethod)
-    ) {
+    if (method && Object.values(HttpMethod).includes(method as HttpMethod)) {
       return method as HttpMethod;
     }
 

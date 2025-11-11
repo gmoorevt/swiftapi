@@ -233,25 +233,41 @@ describe('validateHeader', () => {
   });
 
   it('should reject header with CRLF sequence in value', () => {
-    const result = validateHeader({ name: 'Content-Type', value: 'text/html\r\nX-Injected: malicious', enabled: true });
+    const result = validateHeader({
+      name: 'Content-Type',
+      value: 'text/html\r\nX-Injected: malicious',
+      enabled: true,
+    });
     expect(result.valid).toBe(false);
     expect(result.error).toContain('CRLF');
   });
 
   it('should accept valid header with standard name', () => {
-    const result = validateHeader({ name: 'Content-Type', value: 'application/json', enabled: true });
+    const result = validateHeader({
+      name: 'Content-Type',
+      value: 'application/json',
+      enabled: true,
+    });
     expect(result.valid).toBe(true);
     expect(result.error).toBeUndefined();
   });
 
   it('should accept valid header with custom name', () => {
-    const result = validateHeader({ name: 'X-Custom-Header', value: 'custom-value', enabled: true });
+    const result = validateHeader({
+      name: 'X-Custom-Header',
+      value: 'custom-value',
+      enabled: true,
+    });
     expect(result.valid).toBe(true);
     expect(result.error).toBeUndefined();
   });
 
   it('should accept header with Authorization token', () => {
-    const result = validateHeader({ name: 'Authorization', value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', enabled: true });
+    const result = validateHeader({
+      name: 'Authorization',
+      value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+      enabled: true,
+    });
     expect(result.valid).toBe(true);
     expect(result.error).toBeUndefined();
   });
@@ -263,7 +279,11 @@ describe('validateHeader', () => {
   });
 
   it('should accept header with special characters in value', () => {
-    const result = validateHeader({ name: 'Accept', value: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8', enabled: true });
+    const result = validateHeader({
+      name: 'Accept',
+      value: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8',
+      enabled: true,
+    });
     expect(result.valid).toBe(true);
     expect(result.error).toBeUndefined();
   });

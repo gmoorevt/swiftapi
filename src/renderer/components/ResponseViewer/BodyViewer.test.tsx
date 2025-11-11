@@ -35,9 +35,7 @@ describe('BodyViewer', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'content-type', value: 'text/plain', enabled: true },
-      ],
+      headers: [{ name: 'content-type', value: 'text/plain', enabled: true }],
       body: 'Hello World',
       responseTime: 100,
       size: 11,
@@ -55,9 +53,7 @@ describe('BodyViewer', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'content-type', value: 'application/json', enabled: true },
-      ],
+      headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
       body: '{"message": "success", "data": {"id": 1}}',
       responseTime: 100,
       size: 40,
@@ -96,9 +92,7 @@ describe('BodyViewer', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'content-type', value: 'application/json', enabled: true },
-      ],
+      headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
       body: '{"test": "value"}',
       responseTime: 100,
       size: 17,
@@ -117,9 +111,7 @@ describe('BodyViewer', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'content-type', value: 'text/plain', enabled: true },
-      ],
+      headers: [{ name: 'content-type', value: 'text/plain', enabled: true }],
       body: 'Plain text content',
       responseTime: 100,
       size: 18,

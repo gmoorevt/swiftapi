@@ -29,7 +29,7 @@ vi.mock('electron-store', () => {
       has(key: string) {
         return mockStore.has(key);
       }
-    }
+    },
   };
 });
 
@@ -88,7 +88,7 @@ describe('StorageService', () => {
     it('should persist all HTTP methods', () => {
       const methods = [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE];
 
-      methods.forEach(method => {
+      methods.forEach((method) => {
         storageService.saveLastMethod(method);
         expect(storageService.getLastMethod()).toBe(method);
       });

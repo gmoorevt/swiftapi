@@ -118,9 +118,7 @@ describe('urlUtils', () => {
 
     it('should return base URL when no enabled params', () => {
       const baseUrl = 'https://api.example.com/users';
-      const params: QueryParam[] = [
-        { key: 'page', value: '1', enabled: false },
-      ];
+      const params: QueryParam[] = [{ key: 'page', value: '1', enabled: false }];
 
       const result = buildUrlWithParams(baseUrl, params);
       expect(result).toBe('https://api.example.com/users');
@@ -147,9 +145,7 @@ describe('urlUtils', () => {
 
     it('should replace existing query parameters', () => {
       const baseUrl = 'https://api.example.com/users?old=param';
-      const params: QueryParam[] = [
-        { key: 'page', value: '1', enabled: true },
-      ];
+      const params: QueryParam[] = [{ key: 'page', value: '1', enabled: true }];
 
       const result = buildUrlWithParams(baseUrl, params);
       expect(result).toBe('https://api.example.com/users?page=1');
@@ -157,9 +153,7 @@ describe('urlUtils', () => {
 
     it('should handle invalid base URL gracefully', () => {
       const baseUrl = 'not-a-valid-url';
-      const params: QueryParam[] = [
-        { key: 'page', value: '1', enabled: true },
-      ];
+      const params: QueryParam[] = [{ key: 'page', value: '1', enabled: true }];
 
       const result = buildUrlWithParams(baseUrl, params);
       expect(result).toBe('not-a-valid-url?page=1');

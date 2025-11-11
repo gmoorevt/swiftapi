@@ -116,10 +116,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
     addHeader: () => {
       const currentHeaders = get().headers;
       set({
-        headers: [
-          ...currentHeaders,
-          { name: '', value: '', enabled: true },
-        ],
+        headers: [...currentHeaders, { name: '', value: '', enabled: true }],
       });
     },
 
@@ -156,10 +153,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
     addQueryParam: () => {
       const currentParams = get().queryParams;
       set({
-        queryParams: [
-          ...currentParams,
-          { key: '', value: '', description: '', enabled: true },
-        ],
+        queryParams: [...currentParams, { key: '', value: '', description: '', enabled: true }],
       });
     },
 
@@ -250,14 +244,13 @@ export const useRequestStore = create<RequestState>((set, get) => ({
           set({
             response: null,
             error: result.error.message,
-            isLoading: false
+            isLoading: false,
           });
         }
       } catch (error) {
         // Handle unexpected errors
-        const errorMessage = error instanceof Error
-          ? error.message
-          : 'An unexpected error occurred';
+        const errorMessage =
+          error instanceof Error ? error.message : 'An unexpected error occurred';
         set({ response: null, error: errorMessage, isLoading: false });
       }
     },
@@ -277,30 +270,32 @@ export const useRequestStore = create<RequestState>((set, get) => ({
     // State management
     setLoading: (isLoading: boolean) => set({ isLoading }),
 
-    resetRequest: () => set({
-      url: '',
-      method: HttpMethod.GET,
-      headers: [],
-      queryParams: [],
-      body: '',
-      bodyType: BodyType.JSON,
-      timeout: 30000,
-      auth: Auth.createDefault(),
-      response: null,
-      error: null,
-      isLoading: false,
-    }),
+    resetRequest: () =>
+      set({
+        url: '',
+        method: HttpMethod.GET,
+        headers: [],
+        queryParams: [],
+        body: '',
+        bodyType: BodyType.JSON,
+        timeout: 30000,
+        auth: Auth.createDefault(),
+        response: null,
+        error: null,
+        isLoading: false,
+      }),
 
-    restoreFromHistory: (entry: HistoryEntry) => set({
-      url: entry.url,
-      method: entry.method,
-      headers: entry.headers,
-      queryParams: entry.queryParams,
-      body: entry.body,
-      bodyType: entry.bodyType,
-      response: null,
-      error: null,
-      isLoading: false,
-    }),
+    restoreFromHistory: (entry: HistoryEntry) =>
+      set({
+        url: entry.url,
+        method: entry.method,
+        headers: entry.headers,
+        queryParams: entry.queryParams,
+        body: entry.body,
+        bodyType: entry.bodyType,
+        response: null,
+        error: null,
+        isLoading: false,
+      }),
   },
 }));

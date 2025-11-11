@@ -14,11 +14,7 @@ export function StatusDisplay(): React.ReactElement {
 
   // Show loading state
   if (isLoading) {
-    return (
-      <div style={{ padding: '16px', color: '#666' }}>
-        Sending request...
-      </div>
-    );
+    return <div style={{ padding: '16px', color: '#666' }}>Sending request...</div>;
   }
 
   // Show error state
@@ -86,17 +82,13 @@ export function StatusDisplay(): React.ReactElement {
       {/* Response Time */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <span style={{ color: '#666', fontSize: '14px' }}>Time:</span>
-        <span style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          {response.responseTime} ms
-        </span>
+        <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{response.responseTime} ms</span>
       </div>
 
       {/* Size */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <span style={{ color: '#666', fontSize: '14px' }}>Size:</span>
-        <span style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          {response.formattedSize}
-        </span>
+        <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{response.formattedSize}</span>
       </div>
     </div>
   );

@@ -521,9 +521,18 @@ describe('Request Store', () => {
       expect(state.url).toBe('https://api.example.com/users');
       expect(state.method).toBe(HttpMethod.POST);
       expect(state.headers).toHaveLength(2);
-      expect(state.headers[0]).toEqual({ name: 'Authorization', value: 'Bearer token123', enabled: true });
+      expect(state.headers[0]).toEqual({
+        name: 'Authorization',
+        value: 'Bearer token123',
+        enabled: true,
+      });
       expect(state.queryParams).toHaveLength(2);
-      expect(state.queryParams[0]).toEqual({ key: 'page', value: '2', description: 'Page number', enabled: true });
+      expect(state.queryParams[0]).toEqual({
+        key: 'page',
+        value: '2',
+        description: 'Page number',
+        enabled: true,
+      });
       expect(state.body).toBe('{"name": "John Doe"}');
       expect(state.bodyType).toBe(BodyType.JSON);
       expect(state.response).toBeNull();

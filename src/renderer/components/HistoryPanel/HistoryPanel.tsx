@@ -16,8 +16,8 @@ const historyService = new HistoryService();
 export function HistoryPanel(): React.ReactElement {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const setUrl = useRequestStore(state => state.actions.setUrl);
-  const setMethod = useRequestStore(state => state.actions.setMethod);
+  const setUrl = useRequestStore((state) => state.actions.setUrl);
+  const setMethod = useRequestStore((state) => state.actions.setMethod);
 
   // Load history on mount
   useEffect(() => {
@@ -91,9 +91,7 @@ export function HistoryPanel(): React.ReactElement {
           alignItems: 'center',
         }}
       >
-        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
-          Request History
-        </h3>
+        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>Request History</h3>
         <button
           onClick={() => setIsOpen(false)}
           style={{
@@ -123,7 +121,7 @@ export function HistoryPanel(): React.ReactElement {
             No history yet. Send a request to see it here!
           </div>
         ) : (
-          history.map(entry => (
+          history.map((entry) => (
             <div
               key={entry.id}
               onClick={() => handleRestore(entry)}
@@ -160,10 +158,15 @@ export function HistoryPanel(): React.ReactElement {
                     padding: '2px 6px',
                     borderRadius: '3px',
                     backgroundColor:
-                      entry.method === HttpMethod.GET ? '#28a745' :
-                      entry.method === HttpMethod.POST ? '#007bff' :
-                      entry.method === HttpMethod.PUT ? '#ffc107' :
-                      entry.method === HttpMethod.DELETE ? '#dc3545' : '#6c757d',
+                      entry.method === HttpMethod.GET
+                        ? '#28a745'
+                        : entry.method === HttpMethod.POST
+                          ? '#007bff'
+                          : entry.method === HttpMethod.PUT
+                            ? '#ffc107'
+                            : entry.method === HttpMethod.DELETE
+                              ? '#dc3545'
+                              : '#6c757d',
                     color: 'white',
                   }}
                 >
@@ -173,8 +176,12 @@ export function HistoryPanel(): React.ReactElement {
                   <span
                     style={{
                       fontSize: '12px',
-                      color: entry.statusCode >= 200 && entry.statusCode < 300 ? '#28a745' :
-                             entry.statusCode >= 400 ? '#dc3545' : '#666',
+                      color:
+                        entry.statusCode >= 200 && entry.statusCode < 300
+                          ? '#28a745'
+                          : entry.statusCode >= 400
+                            ? '#dc3545'
+                            : '#666',
                       fontWeight: 500,
                     }}
                   >
@@ -182,9 +189,7 @@ export function HistoryPanel(): React.ReactElement {
                   </span>
                 )}
                 {entry.responseTime && (
-                  <span style={{ fontSize: '11px', color: '#999' }}>
-                    {entry.responseTime}ms
-                  </span>
+                  <span style={{ fontSize: '11px', color: '#999' }}>{entry.responseTime}ms</span>
                 )}
               </div>
               <div

@@ -5,7 +5,12 @@
 import { describe, it, expect } from 'vitest';
 import { Auth } from './Auth';
 import { AuthType } from '../types/auth.types';
-import type { NoAuthConfig, ApiKeyConfig, BearerConfig, BasicAuthConfig } from '../types/auth.types';
+import type {
+  NoAuthConfig,
+  ApiKeyConfig,
+  BearerConfig,
+  BasicAuthConfig,
+} from '../types/auth.types';
 import type { Header } from '../types/request.types';
 
 describe('Auth', () => {

@@ -16,9 +16,7 @@ describe('Request Model', () => {
       const request = new Request({
         url: 'https://api.example.com',
         method: HttpMethod.POST,
-        headers: [
-          { name: 'Authorization', value: 'Bearer token', enabled: true },
-        ],
+        headers: [{ name: 'Authorization', value: 'Bearer token', enabled: true }],
         body: '{"test": "data"}',
         bodyType: BodyType.JSON,
         timeout: 30000,
@@ -125,9 +123,7 @@ describe('Request Model', () => {
     it('should return empty array when no headers are enabled', () => {
       const request = new Request({
         url: 'https://api.example.com',
-        headers: [
-          { name: 'Header1', value: 'value1', enabled: false },
-        ],
+        headers: [{ name: 'Header1', value: 'value1', enabled: false }],
       });
 
       const enabledHeaders = request.getEnabledHeaders();

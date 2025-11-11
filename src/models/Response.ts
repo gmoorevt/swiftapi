@@ -46,9 +46,7 @@ export class Response {
     this.timestamp = options.timestamp;
 
     // Extract content-type from headers
-    const contentTypeHeader = this.headers.find(
-      (h) => h.name.toLowerCase() === 'content-type'
-    );
+    const contentTypeHeader = this.headers.find((h) => h.name.toLowerCase() === 'content-type');
     this.contentType = contentTypeHeader?.value ?? null;
 
     // Compute derived properties

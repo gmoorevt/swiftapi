@@ -71,7 +71,7 @@ export function createStorageAdapter(storeName: string): StorageAdapter {
     clear(): void {
       try {
         const keys = Object.keys(localStorage);
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (key.startsWith(`${storeName}.`)) {
             localStorage.removeItem(key);
           }

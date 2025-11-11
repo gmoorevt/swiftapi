@@ -137,8 +137,8 @@ describe('HttpService', () => {
       };
 
       // Simulate 100ms delay
-      (axios as any).mockImplementation(() =>
-        new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100))
+      (axios as any).mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100))
       );
 
       const request = new Request({
@@ -235,7 +235,7 @@ describe('HttpService', () => {
       expect(axios).toHaveBeenCalledWith(
         expect.objectContaining({
           headers: expect.objectContaining({
-            'Authorization': 'Bearer token',
+            Authorization: 'Bearer token',
           }),
         })
       );
@@ -251,8 +251,8 @@ describe('HttpService', () => {
         data: {},
       };
 
-      (axios as any).mockImplementation(() =>
-        new Promise((resolve) => setTimeout(() => resolve(mockResponse), 1000))
+      (axios as any).mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 1000))
       );
 
       const request = new Request({
@@ -304,8 +304,8 @@ describe('HttpService', () => {
         data: {},
       };
 
-      (axios as any).mockImplementation(() =>
-        new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100))
+      (axios as any).mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100))
       );
 
       const request = new Request({

@@ -18,18 +18,16 @@ export function BodyEditor(): React.ReactElement | null {
   const setBodyType = useRequestStore((state) => state.actions.setBodyType);
 
   // Only show body editor for methods that support request body
-  const hasBody = method === HttpMethod.POST ||
-                  method === HttpMethod.PUT ||
-                  method === HttpMethod.DELETE;
+  const hasBody =
+    method === HttpMethod.POST || method === HttpMethod.PUT || method === HttpMethod.DELETE;
 
   if (!hasBody) {
     return null;
   }
 
   // Validate JSON if body type is JSON
-  const validationResult = bodyType === BodyType.JSON && body.trim()
-    ? validateJson(body)
-    : { valid: true };
+  const validationResult =
+    bodyType === BodyType.JSON && body.trim() ? validateJson(body) : { valid: true };
 
   const showError = !validationResult.valid;
 

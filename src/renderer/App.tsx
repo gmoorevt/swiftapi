@@ -33,9 +33,7 @@ function App(): React.ReactElement {
           backgroundColor: '#f8f9fa',
         }}
       >
-        <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
-          SwiftAPI
-        </h1>
+        <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>SwiftAPI</h1>
         <p
           style={{
             margin: '4px 0 0',
