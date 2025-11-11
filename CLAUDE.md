@@ -3,6 +3,7 @@
 Auto-generated from all feature plans. Last updated: 2025-11-07
 
 ## Active Technologies
+- Electron-store (local JSON files) - 100% offline, no cloud dependencies (002-collections-variables)
 
 - TypeScript 5.3+ (strict mode) (001-basic-request-builder)
 
@@ -22,6 +23,7 @@ npm test && npm run lint
 TypeScript 5.3+ (strict mode): Follow standard conventions
 
 ## Recent Changes
+- 002-collections-variables: Added TypeScript 5.3+ (strict mode)
 
 - 001-basic-request-builder: Added TypeScript 5.3+ (strict mode)
 

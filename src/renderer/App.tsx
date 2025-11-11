@@ -14,6 +14,7 @@ import { SendButton } from './components/RequestBuilder/SendButton';
 import { StatusDisplay } from './components/ResponseViewer/StatusDisplay';
 import { BodyViewer } from './components/ResponseViewer/BodyViewer';
 import { HistoryPanel } from './components/HistoryPanel/HistoryPanel';
+import { EnvironmentSelector } from './components/EnvironmentSelector/EnvironmentSelector';
 
 function App(): React.ReactElement {
   return (
@@ -31,18 +32,24 @@ function App(): React.ReactElement {
           padding: '16px 24px',
           borderBottom: '2px solid #e0e0e0',
           backgroundColor: '#f8f9fa',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>SwiftAPI</h1>
-        <p
-          style={{
-            margin: '4px 0 0',
-            fontSize: '12px',
-            color: '#666',
-          }}
-        >
-          Fast, lightweight, privacy-focused API testing
-        </p>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>SwiftAPI</h1>
+          <p
+            style={{
+              margin: '4px 0 0',
+              fontSize: '12px',
+              color: '#666',
+            }}
+          >
+            Fast, lightweight, privacy-focused API testing
+          </p>
+        </div>
+        <EnvironmentSelector />
       </header>
 
       {/* Request Builder Section */}
