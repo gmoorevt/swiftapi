@@ -189,6 +189,19 @@ return;
     setError('');
   };
 
+  const validateVariableKey = (key: string): string | null => {
+    if (!key.trim()) {
+      return 'Variable name is required';
+    }
+
+    const varPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+    if (!varPattern.test(key)) {
+      return 'Invalid variable name. Must start with letter or underscore, followed by letters, numbers, or underscores.';
+    }
+
+    return null;
+  };
+
   const handleSaveVariable = (): void => {
     if (!selectedEnvironmentId || !variableEdit) {
       return;
@@ -196,22 +209,16 @@ return;
 
     setError('');
 
-    if (!variableEdit.key.trim()) {
-      setError('Variable name is required');
-      return;
-    }
-
-    // Validate variable name format
-    const varPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
-    if (!varPattern.test(variableEdit.key)) {
-      setError('Invalid variable name. Must start with letter or underscore, followed by letters, numbers, or underscores.');
+    const validationError = validateVariableKey(variableEdit.key);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     const env = environments[selectedEnvironmentId];
     if (!env) {
-return;
-}
+      return;
+    }
     const newVariables = { ...env.variables };
 
     // If editing and key changed, delete old key
