@@ -136,7 +136,7 @@ describe('UrlInput', () => {
       expect(screen.getByText(/https:\/\/dev\.example\.com\/v1\/products/i)).toBeInTheDocument();
     });
 
-    it('should show error when variable is undefined', () => {
+    it('should show warning when variable is undefined', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Development', {
         base_url: 'https://dev.example.com'
@@ -148,8 +148,8 @@ describe('UrlInput', () => {
 
       render(<UrlInput />);
 
-      expect(screen.getByText(/error:/i)).toBeInTheDocument();
-      expect(screen.getByText(/undefined_var.*not defined/i)).toBeInTheDocument();
+      expect(screen.getByText(/warning:/i)).toBeInTheDocument();
+      expect(screen.getByText(/undefined.*undefined_var/i)).toBeInTheDocument();
     });
 
     it('should handle nested variables', () => {

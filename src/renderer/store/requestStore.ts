@@ -17,6 +17,7 @@ import { HistoryEntry } from '../../models/HistoryEntry';
 import { Auth } from '../../models/Auth';
 import type { Auth as AuthConfig } from '../../types/auth.types';
 import { parseQueryParams, buildUrlWithParams, getBaseUrl } from '../../lib/urlUtils';
+import { useEnvironmentStore } from './environmentStore';
 
 interface RequestState {
   // Current request state
@@ -207,15 +208,32 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       set({ response: null, error: null, isLoading: true });
 
       try {
-        // Apply authentication to headers
-        const headersWithAuth = state.auth.applyToHeaders(state.headers);
+        // Get environment store for variable resolution
+        const envStore = useEnvironmentStore.getState();
+        const resolveVariables = envStore.actions.resolveVariables;
 
-        // Build request from current state
+        // Resolve variables in URL
+        const resolvedUrl = resolveVariables(state.url);
+
+        // Resolve variables in headers
+        const resolvedHeaders = state.headers.map(header => ({
+          ...header,
+          name: resolveVariables(header.name),
+          value: resolveVariables(header.value),
+        }));
+
+        // Apply authentication to headers
+        const headersWithAuth = state.auth.applyToHeaders(resolvedHeaders);
+
+        // Resolve variables in body
+        const resolvedBody = resolveVariables(state.body);
+
+        // Build request from current state with resolved variables
         const request = new Request({
-          url: state.url,
+          url: resolvedUrl,
           method: state.method,
           headers: headersWithAuth,
-          body: state.body,
+          body: resolvedBody,
           bodyType: state.bodyType,
           timeout: state.timeout,
         });
@@ -226,17 +244,17 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         if (result.success) {
           set({ response: result.response, error: null, isLoading: false });
 
-          // Save complete request to history for restoration
+          // Save complete request to history for restoration (with original, unresolved values)
           const historyEntry = new HistoryEntry({
             id: HistoryEntry.generateId(),
             timestamp: new Date().toISOString(),
-            method: request.method,
-            url: request.url,
+            method: state.method,
+            url: state.url, // Save original URL with variables
             statusCode: result.response?.statusCode,
             responseTime: result.response?.responseTime,
-            headers: state.headers,
+            headers: state.headers, // Save original headers with variables
             queryParams: state.queryParams,
-            body: state.body,
+            body: state.body, // Save original body with variables
             bodyType: state.bodyType,
           });
           historyService.add(historyEntry);

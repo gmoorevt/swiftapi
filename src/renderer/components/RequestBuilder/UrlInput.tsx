@@ -15,11 +15,23 @@ export function UrlInput(): React.ReactElement {
 
   const activeEnvironment = useEnvironmentStore(selectActiveEnvironment);
   const resolveVariables = useEnvironmentStore((state) => state.actions.resolveVariables);
+  const validateVariables = useEnvironmentStore((state) => state.actions.validateVariablesForRequest);
 
   // Check if URL contains variables
   const hasVariables = useMemo(() => {
     return /\{\{[^}]+\}\}/.test(url);
   }, [url]);
+
+  // Validate variables and check for missing ones
+  const missingVariables = useMemo(() => {
+    if (!hasVariables) {
+      return [];
+    }
+    return validateVariables(url);
+  }, [url, hasVariables, validateVariables]);
+
+  // Show warning if variables exist but no environment is selected
+  const needsEnvironment = hasVariables && !activeEnvironment;
 
   // Resolve variables and handle errors
   const { resolvedUrl, error } = useMemo(() => {
@@ -39,6 +51,7 @@ export function UrlInput(): React.ReactElement {
   }, [url, hasVariables, activeEnvironment, resolveVariables]);
 
   const shouldShowHint = hasVariables && activeEnvironment && (resolvedUrl || error);
+  const shouldShowWarning = needsEnvironment || (activeEnvironment && missingVariables.length > 0);
 
   return (
     <div style={{ width: '100%' }}>
@@ -57,8 +70,33 @@ export function UrlInput(): React.ReactElement {
         }}
       />
 
+      {/* Warning banner for missing variables */}
+      {shouldShowWarning && (
+        <div
+          style={{
+            marginTop: '4px',
+            padding: '6px 8px',
+            fontSize: '12px',
+            borderRadius: '3px',
+            backgroundColor: '#fff3cd',
+            border: '1px solid #ffc107',
+            color: '#856404',
+          }}
+        >
+          {needsEnvironment ? (
+            <div>
+              <strong>Warning:</strong> URL contains variables but no environment is selected.
+            </div>
+          ) : (
+            <div>
+              <strong>Warning:</strong> Undefined variables: {missingVariables.map(v => `{{${v}}}`).join(', ')}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Variable resolution hint */}
-      {shouldShowHint && (
+      {shouldShowHint && !shouldShowWarning && (
         <div
           style={{
             marginTop: '4px',

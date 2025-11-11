@@ -23,9 +23,9 @@ describe('EnvironmentSelector', () => {
       expect(select).toBeInTheDocument();
     });
 
-    it('should render "Manage Environments" button', () => {
+    it('should render "Create Environment" button when no environments exist', () => {
       render(<EnvironmentSelector />);
-      const button = screen.getByRole('button', { name: /manage environments/i });
+      const button = screen.getByRole('button', { name: /create environment/i });
       expect(button).toBeInTheDocument();
     });
 
@@ -126,9 +126,13 @@ describe('EnvironmentSelector', () => {
   });
 
   describe('Manage Environments button', () => {
-    it('should open EnvironmentDialog when "Manage Environments" clicked', () => {
+    it('should open EnvironmentDialog when "Manage" clicked', () => {
+      // Create an environment so "Manage" button appears instead of "Create Environment"
+      const store = useEnvironmentStore.getState();
+      store.actions.createEnvironment('Development', {});
+
       render(<EnvironmentSelector />);
-      const button = screen.getByRole('button', { name: /manage environments/i });
+      const button = screen.getByRole('button', { name: /manage/i });
 
       fireEvent.click(button);
 
@@ -138,8 +142,12 @@ describe('EnvironmentSelector', () => {
     });
 
     it('should close EnvironmentDialog when close button clicked', () => {
+      // Create an environment so "Manage" button appears
+      const store = useEnvironmentStore.getState();
+      store.actions.createEnvironment('Development', {});
+
       render(<EnvironmentSelector />);
-      const manageButton = screen.getByRole('button', { name: /manage environments/i });
+      const manageButton = screen.getByRole('button', { name: /manage/i });
 
       // Open dialog
       fireEvent.click(manageButton);
@@ -190,9 +198,9 @@ describe('EnvironmentSelector', () => {
       expect(options[0].textContent).toBe('No Environment');
     });
 
-    it('should allow opening manage dialog even when no environments exist', () => {
+    it('should show "Create Environment" button and allow opening dialog when no environments exist', () => {
       render(<EnvironmentSelector />);
-      const button = screen.getByRole('button', { name: /manage environments/i });
+      const button = screen.getByRole('button', { name: /create environment/i });
 
       fireEvent.click(button);
 

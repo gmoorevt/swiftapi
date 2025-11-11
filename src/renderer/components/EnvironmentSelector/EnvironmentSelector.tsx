@@ -35,6 +35,10 @@ export function EnvironmentSelector(): React.ReactElement {
     setIsDialogOpen(false);
   };
 
+  const handleCreateClick = () => {
+    setIsDialogOpen(true);
+  };
+
   return (
     <div
       style={{
@@ -50,11 +54,12 @@ export function EnvironmentSelector(): React.ReactElement {
         style={{
           padding: '6px 10px',
           fontSize: '13px',
-          border: '1px solid #ddd',
+          border: activeEnvironmentId ? '1px solid #4CAF50' : '1px solid #ddd',
           borderRadius: '4px',
-          backgroundColor: 'white',
+          backgroundColor: activeEnvironmentId ? '#f1f8f4' : 'white',
           cursor: 'pointer',
           minWidth: '150px',
+          fontWeight: activeEnvironmentId ? 600 : 'normal',
         }}
       >
         <option value="">No Environment</option>
@@ -65,38 +70,57 @@ export function EnvironmentSelector(): React.ReactElement {
         ))}
       </select>
 
-      <button
-        onClick={handleManageClick}
-        aria-label="Manage Environments"
-        style={{
-          padding: '6px 12px',
-          fontSize: '13px',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          backgroundColor: 'white',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-        }}
-      >
-        Manage
-        {environmentCount > 0 && (
-          <span
-            style={{
-              display: 'inline-block',
-              padding: '2px 6px',
-              fontSize: '11px',
-              fontWeight: 600,
-              borderRadius: '10px',
-              backgroundColor: '#e0e0e0',
-              color: '#333',
-            }}
-          >
-            {environmentCount}
-          </span>
-        )}
-      </button>
+      {environmentCount === 0 ? (
+        <button
+          onClick={handleCreateClick}
+          aria-label="Create Environment"
+          style={{
+            padding: '6px 12px',
+            fontSize: '13px',
+            border: '1px solid #4CAF50',
+            borderRadius: '4px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            cursor: 'pointer',
+            fontWeight: 600,
+          }}
+        >
+          + Create Environment
+        </button>
+      ) : (
+        <button
+          onClick={handleManageClick}
+          aria-label="Manage Environments"
+          style={{
+            padding: '6px 12px',
+            fontSize: '13px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            backgroundColor: 'white',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+        >
+          Manage
+          {environmentCount > 0 && (
+            <span
+              style={{
+                display: 'inline-block',
+                padding: '2px 6px',
+                fontSize: '11px',
+                fontWeight: 600,
+                borderRadius: '10px',
+                backgroundColor: '#e0e0e0',
+                color: '#333',
+              }}
+            >
+              {environmentCount}
+            </span>
+          )}
+        </button>
+      )}
 
       <EnvironmentDialog open={isDialogOpen} onClose={handleDialogClose} />
     </div>

@@ -9,7 +9,7 @@
 import { create } from 'zustand';
 import { Environment } from '../../models/Environment';
 import { EnvironmentService } from '../services/environmentService';
-import { resolveVariables, VariableResolutionError } from '../../lib/variableResolver';
+import { resolveVariables, VariableResolutionError, extractVariables } from '../../lib/variableResolver';
 
 interface EnvironmentState {
   // State
@@ -29,6 +29,8 @@ interface EnvironmentState {
 
     // Variable resolution
     resolveVariables: (text: string) => string;
+    validateVariablesForRequest: (text: string) => string[];
+    getVariableDifferences: (env1Id: string, env2Id: string) => { only1: string[]; only2: string[]; both: string[] };
 
     // Utility
     reset: () => void;
@@ -165,6 +167,55 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
           }
           throw new Error(`Failed to resolve variables: ${error}`);
         }
+      },
+
+      /**
+       * Validate that all variables in text are defined in active environment
+       * @param text - Text to validate (e.g., URL with {{variables}})
+       * @returns Array of undefined variable names (empty if all valid)
+       */
+      validateVariablesForRequest: (text: string): string[] => {
+        const state = get();
+        const activeEnv = selectActiveEnvironment(state);
+
+        // Extract all variables from text
+        const variableNames = extractVariables(text);
+        const uniqueVars = Array.from(new Set(variableNames));
+
+        // If no active environment, all variables are undefined
+        if (!activeEnv) {
+          return uniqueVars;
+        }
+
+        // Check which variables are not defined
+        return uniqueVars.filter(varName => !(varName in activeEnv.variables));
+      },
+
+      /**
+       * Compare variables between two environments
+       * @param env1Id - First environment ID
+       * @param env2Id - Second environment ID
+       * @returns Object with arrays: only1, only2, both
+       */
+      getVariableDifferences: (env1Id: string, env2Id: string) => {
+        const state = get();
+        const env1 = state.environments[env1Id];
+        const env2 = state.environments[env2Id];
+
+        if (!env1 || !env2) {
+          return { only1: [], only2: [], both: [] };
+        }
+
+        const keys1 = Object.keys(env1.variables);
+        const keys2 = Object.keys(env2.variables);
+        const set2 = new Set(keys2);
+        const set1 = new Set(keys1);
+
+        const only1 = keys1.filter(k => !set2.has(k));
+        const only2 = keys2.filter(k => !set1.has(k));
+        const both = keys1.filter(k => set2.has(k));
+
+        return { only1, only2, both };
       },
 
       /**
