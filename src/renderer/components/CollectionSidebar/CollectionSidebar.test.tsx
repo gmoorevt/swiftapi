@@ -35,17 +35,17 @@ describe('CollectionSidebar', () => {
 
   describe('Rendering', () => {
     it('should render the sidebar', () => {
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
       expect(screen.getByRole('complementary', { name: /collections/i })).toBeInTheDocument();
     });
 
     it('should show empty state when no collections exist', () => {
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
       expect(screen.getByText(/no collections yet/i)).toBeInTheDocument();
     });
 
     it('should show "Create Collection" button in empty state', () => {
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
       expect(screen.getByRole('button', { name: /create collection/i })).toBeInTheDocument();
     });
   });
@@ -55,7 +55,7 @@ describe('CollectionSidebar', () => {
       useCollectionStore.getState().actions.createCollection('Collection A');
       useCollectionStore.getState().actions.createCollection('Collection B');
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       // Collections should appear with arrow and name
       expect(screen.getByText(/Collection A/)).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/posts'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       expect(screen.getByText(/2/i)).toBeInTheDocument();
     });
@@ -112,7 +112,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/users'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       // Request should not be visible initially (collapsed)
       expect(screen.queryByText('Test Request')).not.toBeInTheDocument();
@@ -140,7 +140,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/users'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       const collectionHeader = screen.getByText(/My Collection/);
       await user.click(collectionHeader);
@@ -168,7 +168,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/users'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       const collectionHeader = screen.getByText(/My Collection/);
 
@@ -203,7 +203,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/{{endpoint}}'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       // Expand collection
       const collectionHeader = screen.getByText(/My Collection/);
@@ -245,7 +245,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/users'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       // Expand collection
       const collectionHeader = screen.getByText(/My Collection/);
@@ -265,7 +265,7 @@ describe('CollectionSidebar', () => {
       const collectionStore = useCollectionStore.getState();
       collectionStore.actions.createCollection('My Collection');
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       const collectionHeader = screen.getByText(/My Collection/);
       fireEvent.contextMenu(collectionHeader);
@@ -295,7 +295,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/users'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       // Expand collection
       const collectionHeader = screen.getByText(/My Collection/);
@@ -316,7 +316,7 @@ describe('CollectionSidebar', () => {
       const collectionStore = useCollectionStore.getState();
       collectionStore.actions.createCollection('Old Name');
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       const collectionHeader = screen.getByText(/Old Name/);
       fireEvent.contextMenu(collectionHeader);
@@ -341,7 +341,7 @@ describe('CollectionSidebar', () => {
       const collectionStore = useCollectionStore.getState();
       collectionStore.actions.createCollection('My Collection');
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       const collectionHeader = screen.getByText(/My Collection/);
       fireEvent.contextMenu(collectionHeader);
@@ -380,7 +380,7 @@ describe('CollectionSidebar', () => {
         'https://api.example.com/users'
       );
 
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       // Expand collection
       const collectionHeader = screen.getByText(/My Collection/);
@@ -402,7 +402,7 @@ describe('CollectionSidebar', () => {
   describe('Create collection button', () => {
     it('should create new collection when button clicked', async () => {
       const user = userEvent.setup();
-      render(<CollectionSidebar />);
+      render(<CollectionSidebar isOpen={true} onClose={() => {}} />);
 
       const createButton = screen.getByRole('button', { name: /create collection/i });
       await user.click(createButton);

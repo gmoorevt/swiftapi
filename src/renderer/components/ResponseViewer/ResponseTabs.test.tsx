@@ -44,10 +44,10 @@ describe('ResponseTabs', () => {
 
     // Body tab should be active (has specific styles)
     expect(bodyButton).toHaveStyle({
-      borderBottom: '2px solid #0066cc',
-      color: '#0066cc'
+      borderBottom: '2px solid #007bff',
+      color: '#007bff'
     });
-    expect(headersButton).toHaveStyle({ color: '#666' });
+    expect(headersButton).toHaveStyle({ color: '#666666' });
   });
 
   it('should display BodyViewer content by default', () => {
@@ -95,8 +95,8 @@ describe('ResponseTabs', () => {
 
     // Initially Body is active
     expect(bodyButton).toHaveStyle({
-      borderBottom: '2px solid #0066cc',
-      color: '#0066cc'
+      borderBottom: '2px solid #007bff',
+      color: '#007bff'
     });
 
     // Click Headers
@@ -104,10 +104,10 @@ describe('ResponseTabs', () => {
 
     // Headers should now be active
     expect(headersButton).toHaveStyle({
-      borderBottom: '2px solid #0066cc',
-      color: '#0066cc'
+      borderBottom: '2px solid #007bff',
+      color: '#007bff'
     });
-    expect(bodyButton).toHaveStyle({ color: '#666' });
+    expect(bodyButton).toHaveStyle({ color: '#666666' });
   });
 
   it('should display header count badge when response has headers', () => {

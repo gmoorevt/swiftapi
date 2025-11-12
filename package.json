@@ -1,6 +1,6 @@
 {
   "name": "swiftapi",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0-beta",
   "description": "A fast, lightweight, and privacy-focused API testing client",
   "main": "dist/main/index.js",
   "author": {
