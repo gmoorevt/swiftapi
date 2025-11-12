@@ -4,18 +4,16 @@
  * Tabbed interface for organizing request configuration:
  * - Query Parameters
  * - Headers
- * - Body
  * - Authentication
  */
 
 import React, { useState } from 'react';
 import { QueryParamsEditor } from './QueryParamsEditor';
 import { HeadersEditor } from './HeadersEditor';
-import { BodyEditor } from './BodyEditor';
 import { AuthSection } from './AuthSection';
 import { useTheme } from '../../hooks/useTheme';
 
-type TabName = 'params' | 'headers' | 'body' | 'auth';
+type TabName = 'params' | 'headers' | 'auth';
 
 interface TabDefinition {
   id: TabName;
@@ -25,17 +23,16 @@ interface TabDefinition {
 
 export function RequestTabs(): React.ReactElement {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<TabName>('body');
+  const [activeTab, setActiveTab] = useState<TabName>('params');
 
   const tabs: TabDefinition[] = [
-    { id: 'body', label: 'Body', component: <BodyEditor /> },
     { id: 'params', label: 'Query Params', component: <QueryParamsEditor /> },
     { id: 'headers', label: 'Headers', component: <HeadersEditor /> },
     { id: 'auth', label: 'Authentication', component: <AuthSection /> },
   ];
 
   return (
-    <div style={{ marginTop: '16px' }}>
+    <div style={{ padding: '0 24px', marginTop: '16px' }}>
       {/* Tab Navigation */}
       <div
         role="tablist"
