@@ -8,6 +8,7 @@ import React, { useMemo } from 'react';
 import { useRequestStore } from '../../store/requestStore';
 import { useEnvironmentStore, selectActiveEnvironment } from '../../store/environmentStore';
 import { VariableResolutionError } from '../../../lib/variableResolver';
+import { useTheme } from '../../hooks/useTheme';
 
 // Helper function to resolve variables with error handling
 function resolveUrlVariables(
@@ -35,10 +36,16 @@ function resolveUrlVariables(
 function WarningMessage({
   needsEnvironment,
   missingVariables,
+  theme,
 }: {
   needsEnvironment: boolean;
   missingVariables: string[];
+  theme: ReturnType<typeof useTheme>['theme'];
 }): React.ReactElement {
+  const warningBg = theme.mode === 'dark' ? '#3a2f1a' : '#fff3cd';
+  const warningBorder = theme.colors.status.warning;
+  const warningText = theme.mode === 'dark' ? '#fbbf24' : '#856404';
+
   return (
     <div
       style={{
@@ -46,9 +53,9 @@ function WarningMessage({
         padding: '6px 8px',
         fontSize: '12px',
         borderRadius: '3px',
-        backgroundColor: '#fff3cd',
-        border: '1px solid #ffc107',
-        color: '#856404',
+        backgroundColor: warningBg,
+        border: `1px solid ${warningBorder}`,
+        color: warningText,
       }}
     >
       {needsEnvironment ? (
@@ -70,11 +77,18 @@ function ResolutionHint({
   error,
   environmentName,
   resolvedUrl,
+  theme,
 }: {
   error: string | null;
   environmentName: string;
   resolvedUrl: string | null;
+  theme: ReturnType<typeof useTheme>['theme'];
 }): React.ReactElement {
+  const warningBg = theme.mode === 'dark' ? '#3a2f1a' : '#fff3cd';
+  const infoBg = theme.mode === 'dark' ? '#1a2a3a' : '#e7f3ff';
+  const infoText = theme.mode === 'dark' ? '#4d9fff' : '#004085';
+  const warningText = theme.mode === 'dark' ? '#fbbf24' : '#856404';
+
   return (
     <div
       style={{
@@ -82,9 +96,9 @@ function ResolutionHint({
         padding: '6px 8px',
         fontSize: '12px',
         borderRadius: '3px',
-        backgroundColor: error ? '#fff3cd' : '#e7f3ff',
-        border: `1px solid ${error ? '#ffc107' : '#b3d9ff'}`,
-        color: error ? '#856404' : '#004085',
+        backgroundColor: error ? warningBg : infoBg,
+        border: `1px solid ${error ? theme.colors.status.warning : theme.colors.status.info}`,
+        color: error ? warningText : infoText,
       }}
     >
       {error ? (
@@ -103,6 +117,7 @@ function ResolutionHint({
 export function UrlInput(): React.ReactElement {
   const url = useRequestStore((state) => state.url);
   const setUrl = useRequestStore((state) => state.actions.setUrl);
+  const { theme } = useTheme();
 
   const activeEnvironment = useEnvironmentStore(selectActiveEnvironment);
   const resolveVariables = useEnvironmentStore((state) => state.actions.resolveVariables);
@@ -141,13 +156,15 @@ export function UrlInput(): React.ReactElement {
           width: '100%',
           padding: '8px 12px',
           fontSize: '14px',
-          border: '1px solid #ddd',
+          border: `1px solid ${theme.colors.border.secondary}`,
           borderRadius: '4px',
+          backgroundColor: theme.colors.background.primary,
+          color: theme.colors.text.primary,
         }}
       />
 
       {shouldShowWarning && (
-        <WarningMessage needsEnvironment={needsEnvironment} missingVariables={missingVariables} />
+        <WarningMessage needsEnvironment={needsEnvironment} missingVariables={missingVariables} theme={theme} />
       )}
 
       {shouldShowHint && activeEnvironment && (
@@ -155,6 +172,7 @@ export function UrlInput(): React.ReactElement {
           error={error}
           environmentName={activeEnvironment.name}
           resolvedUrl={resolvedUrl}
+          theme={theme}
         />
       )}
     </div>

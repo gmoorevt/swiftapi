@@ -6,10 +6,12 @@
 
 import React from 'react';
 import { useRequestStore } from '../../store/requestStore';
+import { useTheme } from '../../hooks/useTheme';
 
 export function SendButton(): React.ReactElement {
   const isLoading = useRequestStore((state) => state.isLoading);
   const sendRequest = useRequestStore((state) => state.actions.sendRequest);
+  const { theme } = useTheme();
 
   const handleClick = (): void => {
     void sendRequest();
@@ -29,7 +31,7 @@ export function SendButton(): React.ReactElement {
         fontSize: '14px',
         fontWeight: 'bold',
         color: 'white',
-        backgroundColor: isLoading ? '#999' : '#007bff',
+        backgroundColor: isLoading ? theme.colors.text.tertiary : theme.colors.interactive.primary,
         border: 'none',
         borderRadius: '4px',
         cursor: isLoading ? 'not-allowed' : 'pointer',

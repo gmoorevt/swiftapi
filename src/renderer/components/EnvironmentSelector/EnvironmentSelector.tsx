@@ -7,9 +7,11 @@
 import React, { useState } from 'react';
 import { useEnvironmentStore } from '../../store/environmentStore';
 import { EnvironmentDialog } from '../EnvironmentDialog/EnvironmentDialog';
+import { useTheme } from '../../hooks/useTheme';
 
 export function EnvironmentSelector(): React.ReactElement {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { theme } = useTheme();
 
   const environments = useEnvironmentStore((state) => state.environments);
   const activeEnvironmentId = useEnvironmentStore((state) => state.activeEnvironmentId);
@@ -54,9 +56,10 @@ export function EnvironmentSelector(): React.ReactElement {
         style={{
           padding: '6px 10px',
           fontSize: '13px',
-          border: activeEnvironmentId ? '1px solid #4CAF50' : '1px solid #ddd',
+          border: activeEnvironmentId ? `1px solid ${theme.colors.interactive.secondary}` : `1px solid ${theme.colors.border.secondary}`,
           borderRadius: '4px',
-          backgroundColor: activeEnvironmentId ? '#f1f8f4' : 'white',
+          backgroundColor: activeEnvironmentId ? theme.colors.background.tertiary : theme.colors.background.primary,
+          color: theme.colors.text.primary,
           cursor: 'pointer',
           minWidth: '150px',
           fontWeight: activeEnvironmentId ? 600 : 'normal',
@@ -77,9 +80,9 @@ export function EnvironmentSelector(): React.ReactElement {
           style={{
             padding: '6px 12px',
             fontSize: '13px',
-            border: '1px solid #4CAF50',
+            border: `1px solid ${theme.colors.interactive.secondary}`,
             borderRadius: '4px',
-            backgroundColor: '#4CAF50',
+            backgroundColor: theme.colors.interactive.secondary,
             color: 'white',
             cursor: 'pointer',
             fontWeight: 600,
@@ -94,9 +97,10 @@ export function EnvironmentSelector(): React.ReactElement {
           style={{
             padding: '6px 12px',
             fontSize: '13px',
-            border: '1px solid #ddd',
+            border: `1px solid ${theme.colors.border.secondary}`,
             borderRadius: '4px',
-            backgroundColor: 'white',
+            backgroundColor: theme.colors.background.primary,
+            color: theme.colors.text.primary,
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -112,8 +116,8 @@ export function EnvironmentSelector(): React.ReactElement {
                 fontSize: '11px',
                 fontWeight: 600,
                 borderRadius: '10px',
-                backgroundColor: '#e0e0e0',
-                color: '#333',
+                backgroundColor: theme.colors.background.secondary,
+                color: theme.colors.text.primary,
               }}
             >
               {environmentCount}

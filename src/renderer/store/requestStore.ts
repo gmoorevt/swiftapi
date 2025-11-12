@@ -8,7 +8,7 @@
 
 import { create } from 'zustand';
 import { HttpMethod, BodyType } from '../../types/request.types';
-import type { Header, QueryParam } from '../../types/request.types';
+import type { Header, QueryParam, HttpError } from '../../types/request.types';
 import type { Response } from '../../models/Response';
 import { Request } from '../../models/Request';
 import { HttpService } from '../services/httpService';
@@ -32,7 +32,7 @@ interface RequestState {
 
   // Response state
   response: Response | null;
-  error: string | null;
+  error: HttpError | null;
   isLoading: boolean;
 
   // Actions
@@ -65,7 +65,7 @@ interface RequestState {
 
     // Response handling
     setResponse: (response: Response | null) => void;
-    setError: (error: string | null) => void;
+    setError: (error: HttpError | null) => void;
     clearResponse: () => void;
 
     // State management
@@ -261,15 +261,19 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         } else {
           set({
             response: null,
-            error: result.error.message,
+            error: result.error,
             isLoading: false,
           });
         }
       } catch (error) {
         // Handle unexpected errors
-        const errorMessage =
-          error instanceof Error ? error.message : 'An unexpected error occurred';
-        set({ response: null, error: errorMessage, isLoading: false });
+        const httpError: HttpError = {
+          message: error instanceof Error ? error.message : 'An unexpected error occurred',
+          isNetworkError: false,
+          isTimeout: false,
+          isCancelled: false,
+        };
+        set({ response: null, error: httpError, isLoading: false });
       }
     },
 
@@ -281,7 +285,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
     // Response handling
     setResponse: (response: Response | null) => set({ response }),
 
-    setError: (error: string | null) => set({ error }),
+    setError: (error: HttpError | null) => set({ error }),
 
     clearResponse: () => set({ response: null, error: null }),
 

@@ -7,10 +7,12 @@
 import React from 'react';
 import { useRequestStore } from '../../store/requestStore';
 import { HttpMethod } from '../../../types/request.types';
+import { useTheme } from '../../hooks/useTheme';
 
 export function MethodSelector(): React.ReactElement {
   const method = useRequestStore((state) => state.method);
   const setMethod = useRequestStore((state) => state.actions.setMethod);
+  const { theme } = useTheme();
 
   return (
     <select
@@ -20,9 +22,10 @@ export function MethodSelector(): React.ReactElement {
       style={{
         padding: '8px 12px',
         fontSize: '14px',
-        border: '1px solid #ddd',
+        border: `1px solid ${theme.colors.border.secondary}`,
         borderRadius: '4px',
-        backgroundColor: 'white',
+        backgroundColor: theme.colors.background.primary,
+        color: theme.colors.text.primary,
         cursor: 'pointer',
       }}
     >

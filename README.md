@@ -96,6 +96,16 @@ choco install swiftapi
 snap install swiftapi
 ```
 
+## Documentation
+
+For comprehensive usage instructions, see the [User Guide](docs/USER_GUIDE.md), which covers:
+- Making your first API request
+- Working with collections and environments
+- Request configuration (headers, body, authentication)
+- Viewing and analyzing responses
+- Keyboard shortcuts and productivity tips
+- Troubleshooting common issues
+
 ## Quick Start
 
 ### Your First API Request (< 2 minutes)

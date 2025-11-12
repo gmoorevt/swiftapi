@@ -257,4 +257,79 @@ describe('Response Model', () => {
       expect(response.isHtml).toBe(false);
     });
   });
+
+  describe('cookies parsing', () => {
+    it('should parse Set-Cookie headers into cookies array', () => {
+      const response = new Response({
+        statusCode: 200,
+        statusText: 'OK',
+        headers: [
+          { name: 'Set-Cookie', value: 'sessionId=abc123; Path=/; Secure; HttpOnly', enabled: true },
+          { name: 'Set-Cookie', value: 'token=xyz789; Domain=example.com', enabled: true },
+        ],
+        body: '',
+        responseTime: 100,
+        size: 0,
+        timestamp: '2025-11-07T10:15:30.123Z',
+      });
+
+      expect(response.cookies).toHaveLength(2);
+      expect(response.cookies[0]).toEqual({
+        name: 'sessionId',
+        value: 'abc123',
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+      expect(response.cookies[1]).toEqual({
+        name: 'token',
+        value: 'xyz789',
+        domain: 'example.com',
+      });
+    });
+
+    it('should return empty cookies array when no Set-Cookie headers present', () => {
+      const response = new Response({
+        statusCode: 200,
+        statusText: 'OK',
+        headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
+        body: '{}',
+        responseTime: 100,
+        size: 2,
+        timestamp: '2025-11-07T10:15:30.123Z',
+      });
+
+      expect(response.cookies).toEqual([]);
+    });
+
+    it('should compute hasCookies as true when cookies present', () => {
+      const response = new Response({
+        statusCode: 200,
+        statusText: 'OK',
+        headers: [
+          { name: 'Set-Cookie', value: 'test=value', enabled: true },
+        ],
+        body: '',
+        responseTime: 100,
+        size: 0,
+        timestamp: '2025-11-07T10:15:30.123Z',
+      });
+
+      expect(response.hasCookies).toBe(true);
+    });
+
+    it('should compute hasCookies as false when no cookies present', () => {
+      const response = new Response({
+        statusCode: 200,
+        statusText: 'OK',
+        headers: [],
+        body: '',
+        responseTime: 100,
+        size: 0,
+        timestamp: '2025-11-07T10:15:30.123Z',
+      });
+
+      expect(response.hasCookies).toBe(false);
+    });
+  });
 });

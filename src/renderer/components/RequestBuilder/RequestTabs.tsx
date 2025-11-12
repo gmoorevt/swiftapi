@@ -13,6 +13,7 @@ import { QueryParamsEditor } from './QueryParamsEditor';
 import { HeadersEditor } from './HeadersEditor';
 import { BodyEditor } from './BodyEditor';
 import { AuthSection } from './AuthSection';
+import { useTheme } from '../../hooks/useTheme';
 
 type TabName = 'params' | 'headers' | 'body' | 'auth';
 
@@ -23,12 +24,13 @@ interface TabDefinition {
 }
 
 export function RequestTabs(): React.ReactElement {
-  const [activeTab, setActiveTab] = useState<TabName>('params');
+  const { theme } = useTheme();
+  const [activeTab, setActiveTab] = useState<TabName>('body');
 
   const tabs: TabDefinition[] = [
+    { id: 'body', label: 'Body', component: <BodyEditor /> },
     { id: 'params', label: 'Query Params', component: <QueryParamsEditor /> },
     { id: 'headers', label: 'Headers', component: <HeadersEditor /> },
-    { id: 'body', label: 'Body', component: <BodyEditor /> },
     { id: 'auth', label: 'Authentication', component: <AuthSection /> },
   ];
 
@@ -40,7 +42,7 @@ export function RequestTabs(): React.ReactElement {
         style={{
           display: 'flex',
           gap: '4px',
-          borderBottom: '2px solid #e0e0e0',
+          borderBottom: `2px solid ${theme.colors.border.secondary}`,
           marginBottom: '16px',
         }}
       >
@@ -56,22 +58,22 @@ export function RequestTabs(): React.ReactElement {
               padding: '10px 20px',
               fontSize: '13px',
               fontWeight: activeTab === tab.id ? 600 : 500,
-              color: activeTab === tab.id ? '#007bff' : '#666',
+              color: activeTab === tab.id ? theme.colors.interactive.primary : theme.colors.text.secondary,
               backgroundColor: 'transparent',
               border: 'none',
-              borderBottom: activeTab === tab.id ? '2px solid #007bff' : '2px solid transparent',
+              borderBottom: activeTab === tab.id ? `2px solid ${theme.colors.interactive.primary}` : '2px solid transparent',
               cursor: 'pointer',
               transition: 'all 0.2s',
               marginBottom: '-2px',
             }}
             onMouseEnter={(e) => {
               if (activeTab !== tab.id) {
-                e.currentTarget.style.color = '#333';
+                e.currentTarget.style.color = theme.colors.text.primary;
               }
             }}
             onMouseLeave={(e) => {
               if (activeTab !== tab.id) {
-                e.currentTarget.style.color = '#666';
+                e.currentTarget.style.color = theme.colors.text.secondary;
               }
             }}
           >

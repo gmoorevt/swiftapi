@@ -404,10 +404,10 @@ describe('Integration: POST Request Workflow', () => {
     const sendButton = screen.getByRole('button', { name: /send/i });
     fireEvent.click(sendButton);
 
-    // Wait for error to be displayed
+    // Wait for error to be displayed (now shows user-friendly message)
     await waitFor(
       () => {
-        expect(screen.getByText(/error.*network error/i)).toBeInTheDocument();
+        expect(screen.getByText(/cannot connect to server/i)).toBeInTheDocument();
       },
       { timeout: 3000 }
     );

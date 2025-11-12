@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { BodyEditor } from './BodyEditor';
 import { useRequestStore } from '../../store/requestStore';
 import { HttpMethod, BodyType } from '../../../types/request.types';
@@ -206,8 +206,10 @@ describe('BodyEditor', () => {
 
   it('should clear body when switching from POST to GET', () => {
     const store = useRequestStore.getState();
-    store.actions.setMethod(HttpMethod.POST);
-    store.actions.setBody('{"test": "data"}');
+    act(() => {
+      store.actions.setMethod(HttpMethod.POST);
+      store.actions.setBody('{"test": "data"}');
+    });
 
     const { rerender } = render(<BodyEditor />);
 
@@ -215,7 +217,9 @@ describe('BodyEditor', () => {
     expect(screen.getByPlaceholderText(/enter request body/i)).toBeInTheDocument();
 
     // Change to GET
-    store.actions.setMethod(HttpMethod.GET);
+    act(() => {
+      store.actions.setMethod(HttpMethod.GET);
+    });
     rerender(<BodyEditor />);
 
     // Body editor should not be visible

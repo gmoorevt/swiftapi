@@ -2,15 +2,19 @@
  * StatusDisplay Component
  *
  * Displays response status code, timing, and size information
+ * and enhanced error messages with retry functionality
  */
 
 import React from 'react';
 import { useRequestStore } from '../../store/requestStore';
+import { ErrorDisplay } from '../ErrorDisplay/ErrorDisplay';
+import { classifyError } from '../../../lib/errorClassifier';
 
 export function StatusDisplay(): React.ReactElement {
   const response = useRequestStore((state) => state.response);
   const error = useRequestStore((state) => state.error);
   const isLoading = useRequestStore((state) => state.isLoading);
+  const sendRequest = useRequestStore((state) => state.actions.sendRequest);
 
   // Show loading state with spinner
   if (isLoading) {
@@ -47,20 +51,10 @@ export function StatusDisplay(): React.ReactElement {
     );
   }
 
-  // Show error state
+  // Show error state with enhanced error display
   if (error) {
-    return (
-      <div
-        style={{
-          padding: '16px',
-          color: '#dc3545',
-          backgroundColor: '#f8d7da',
-          borderRadius: '4px',
-        }}
-      >
-        Error: {error}
-      </div>
-    );
+    const classifiedError = classifyError(error);
+    return <ErrorDisplay error={classifiedError} onRetry={sendRequest} />;
   }
 
   // Show empty state

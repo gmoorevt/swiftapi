@@ -9,17 +9,21 @@ import { MethodSelector } from './components/RequestBuilder/MethodSelector';
 import { SendButton } from './components/RequestBuilder/SendButton';
 import { RequestTabs } from './components/RequestBuilder/RequestTabs';
 import { StatusDisplay } from './components/ResponseViewer/StatusDisplay';
-import { BodyViewer } from './components/ResponseViewer/BodyViewer';
+import { ResponseTabs } from './components/ResponseViewer/ResponseTabs';
 import { HistoryPanel } from './components/HistoryPanel/HistoryPanel';
 import { EnvironmentSelector } from './components/EnvironmentSelector/EnvironmentSelector';
 import { CollectionSidebar } from './components/CollectionSidebar/CollectionSidebar';
 import { SaveRequestDialog } from './components/SaveRequestDialog/SaveRequestDialog';
+import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import { useRequestStore } from './store/requestStore';
+import { useThemeStore } from './store/themeStore';
 
 function App(): React.ReactElement {
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const sendRequest = useRequestStore((state) => state.actions.sendRequest);
   const isLoading = useRequestStore((state) => state.isLoading);
+  const theme = useThemeStore((state) => state.theme);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -39,23 +43,31 @@ function App(): React.ReactElement {
         event.preventDefault();
         setIsSaveDialogOpen(true);
       }
+
+      // Ctrl/Cmd + B: Toggle collections sidebar
+      if (isModifierPressed && event.key === 'b') {
+        event.preventDefault();
+        setIsCollectionsOpen(!isCollectionsOpen);
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [sendRequest, isLoading]);
+  }, [sendRequest, isLoading, isCollectionsOpen]);
   return (
     <div
       style={{
         display: 'flex',
         height: '100vh',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        backgroundColor: theme.colors.background.primary,
+        color: theme.colors.text.primary,
       }}
     >
       {/* Collections Sidebar */}
-      <CollectionSidebar />
+      <CollectionSidebar isOpen={isCollectionsOpen} onClose={() => setIsCollectionsOpen(false)} />
 
       {/* Main Content */}
       <div
@@ -70,34 +82,55 @@ function App(): React.ReactElement {
         <header
           style={{
             padding: '16px 24px',
-            borderBottom: '2px solid #e0e0e0',
-            backgroundColor: '#f8f9fa',
+            borderBottom: `2px solid ${theme.colors.border.primary}`,
+            backgroundColor: theme.colors.background.secondary,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
           <div>
-            <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>SwiftAPI</h1>
+            <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600, color: theme.colors.text.primary }}>SwiftAPI</h1>
             <p
               style={{
                 margin: '4px 0 0',
                 fontSize: '12px',
-                color: '#666',
+                color: theme.colors.text.secondary,
               }}
             >
               Fast, lightweight, privacy-focused API testing
             </p>
           </div>
-          <EnvironmentSelector />
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <button
+              onClick={() => setIsCollectionsOpen(!isCollectionsOpen)}
+              aria-label="Toggle Collections"
+              title={`Toggle Collections (${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}+B)`}
+              style={{
+                padding: '8px 12px',
+                fontSize: '13px',
+                fontWeight: 600,
+                border: `1px solid ${theme.colors.border.secondary}`,
+                borderRadius: '6px',
+                backgroundColor: theme.colors.background.primary,
+                color: theme.colors.text.primary,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              ☰ Collections
+            </button>
+            <EnvironmentSelector />
+            <ThemeToggle />
+          </div>
         </header>
 
         {/* Request Builder Section */}
         <section
           style={{
             padding: '24px',
-            borderBottom: '1px solid #e0e0e0',
-            backgroundColor: 'white',
+            borderBottom: `1px solid ${theme.colors.border.primary}`,
+            backgroundColor: theme.colors.background.primary,
           }}
         >
           <h2
@@ -105,7 +138,7 @@ function App(): React.ReactElement {
               margin: '0 0 16px',
               fontSize: '14px',
               fontWeight: 600,
-              color: '#333',
+              color: theme.colors.text.primary,
               textTransform: 'uppercase',
               letterSpacing: '0.5px',
             }}
@@ -137,20 +170,20 @@ function App(): React.ReactElement {
                 padding: '10px 16px',
                 fontSize: '14px',
                 fontWeight: 600,
-                border: '1px solid #28a745',
+                border: `1px solid ${theme.colors.status.success}`,
                 borderRadius: '6px',
-                backgroundColor: 'white',
-                color: '#28a745',
+                backgroundColor: theme.colors.background.primary,
+                color: theme.colors.status.success,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#28a745';
-                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.backgroundColor = theme.colors.status.success;
+                e.currentTarget.style.color = theme.colors.background.primary;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.color = '#28a745';
+                e.currentTarget.style.backgroundColor = theme.colors.background.primary;
+                e.currentTarget.style.color = theme.colors.status.success;
               }}
             >
               Save
@@ -171,7 +204,7 @@ function App(): React.ReactElement {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            backgroundColor: 'white',
+            backgroundColor: theme.colors.background.primary,
           }}
         >
           <div
@@ -184,7 +217,7 @@ function App(): React.ReactElement {
                 margin: '0 0 16px',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: '#333',
+                color: theme.colors.text.primary,
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
               }}
@@ -198,11 +231,10 @@ function App(): React.ReactElement {
           <div
             style={{
               flex: 1,
-              padding: '24px',
               overflow: 'auto',
             }}
           >
-            <BodyViewer />
+            <ResponseTabs />
           </div>
         </section>
 

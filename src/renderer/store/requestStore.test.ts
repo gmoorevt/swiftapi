@@ -263,15 +263,28 @@ describe('Request Store', () => {
   describe('setError action', () => {
     it('should update error in state', () => {
       const store = useRequestStore.getState();
-      store.actions.setError('Network error occurred');
+      const httpError = {
+        message: 'Network error occurred',
+        code: 'ERR_NETWORK',
+        isNetworkError: true,
+        isTimeout: false,
+        isCancelled: false,
+      };
+      store.actions.setError(httpError);
 
       const state = useRequestStore.getState();
-      expect(state.error).toBe('Network error occurred');
+      expect(state.error).toEqual(httpError);
     });
 
     it('should clear error when set to null', () => {
       const store = useRequestStore.getState();
-      store.actions.setError('Some error');
+      const httpError = {
+        message: 'Some error',
+        isNetworkError: false,
+        isTimeout: false,
+        isCancelled: false,
+      };
+      store.actions.setError(httpError);
       store.actions.setError(null);
 
       const state = useRequestStore.getState();
@@ -300,7 +313,13 @@ describe('Request Store', () => {
 
       const store = useRequestStore.getState();
       store.actions.setResponse(mockResponse);
-      store.actions.setError('Some error');
+      const httpError = {
+        message: 'Some error',
+        isNetworkError: false,
+        isTimeout: false,
+        isCancelled: false,
+      };
+      store.actions.setError(httpError);
       store.actions.clearResponse();
 
       const state = useRequestStore.getState();

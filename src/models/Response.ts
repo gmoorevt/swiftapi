@@ -8,6 +8,7 @@
  */
 
 import type { Header, StatusCategory } from '../types/request.types';
+import { parseSetCookieHeaders, type Cookie } from '../lib/cookieParser';
 
 interface ResponseOptions {
   statusCode: number;
@@ -35,6 +36,8 @@ export class Response {
   readonly isJson: boolean;
   readonly isXml: boolean;
   readonly isHtml: boolean;
+  readonly cookies: Cookie[];
+  readonly hasCookies: boolean;
 
   constructor(options: ResponseOptions) {
     this.statusCode = options.statusCode;
@@ -55,6 +58,8 @@ export class Response {
     this.isJson = this.checkIsJson();
     this.isXml = this.checkIsXml();
     this.isHtml = this.checkIsHtml();
+    this.cookies = parseSetCookieHeaders(this.headers);
+    this.hasCookies = this.cookies.length > 0;
   }
 
   /**
@@ -138,6 +143,8 @@ export class Response {
       isJson: this.isJson,
       isXml: this.isXml,
       isHtml: this.isHtml,
+      cookies: this.cookies,
+      hasCookies: this.hasCookies,
     };
   }
 }

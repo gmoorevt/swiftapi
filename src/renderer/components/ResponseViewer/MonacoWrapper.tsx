@@ -18,6 +18,7 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+import { useThemeStore } from '../../store/themeStore';
 
 // Configure Monaco environment for web workers
 self.MonacoEnvironment = {
@@ -62,12 +63,18 @@ export function MonacoWrapper({
   height = '400px',
   readOnly = true,
 }: MonacoWrapperProps): React.ReactElement {
+  const mode = useThemeStore((state) => state.mode);
+  const theme = useThemeStore((state) => state.theme);
+
+  // Map theme mode to Monaco theme
+  const monacoTheme = mode === 'dark' ? 'vs-dark' : 'vs-light';
+
   return (
     <Editor
       height={height}
       language={language}
       value={content}
-      theme="vs-dark"
+      theme={monacoTheme}
       loading={
         <div
           style={{
@@ -75,8 +82,8 @@ export function MonacoWrapper({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#1e1e1e',
-            color: '#999',
+            backgroundColor: theme.colors.background.secondary,
+            color: theme.colors.text.tertiary,
           }}
         >
           Loading editor...

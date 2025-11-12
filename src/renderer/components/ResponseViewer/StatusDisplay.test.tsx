@@ -156,10 +156,16 @@ describe('StatusDisplay', () => {
 
   it('should show error message when request fails', () => {
     const store = useRequestStore.getState();
-    store.actions.setError('Network error occurred');
+    store.actions.setError({
+      message: 'Network error occurred',
+      code: 'ERR_NETWORK',
+      isNetworkError: true,
+      isTimeout: false,
+      isCancelled: false,
+    });
 
     render(<StatusDisplay />);
-    expect(screen.getByText(/network error occurred/i)).toBeInTheDocument();
+    expect(screen.getByText(/Cannot connect to server/i)).toBeInTheDocument();
   });
 
   it('should show loading state', () => {

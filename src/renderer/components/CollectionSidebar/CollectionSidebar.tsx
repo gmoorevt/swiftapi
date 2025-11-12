@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCollectionStore } from '../../store/collectionStore';
 import { useRequestStore } from '../../store/requestStore';
+import { useTheme } from '../../hooks/useTheme';
 
 interface ContextMenuState {
   type: 'collection' | 'request';
@@ -15,7 +16,13 @@ interface ContextMenuState {
   y: number;
 }
 
-export function CollectionSidebar(): React.ReactElement {
+interface CollectionSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function CollectionSidebar({ isOpen, onClose }: CollectionSidebarProps): React.ReactElement {
+  const { theme } = useTheme();
   const [expandedCollections, setExpandedCollections] = useState<Set<string>>(new Set());
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -182,6 +189,11 @@ export function CollectionSidebar(): React.ReactElement {
     setNewCollectionName('');
   };
 
+  // When closed, don't render anything
+  if (!isOpen) {
+    return <></>;
+  }
+
   // Render empty state
   if (collections.length === 0 && !creatingCollection) {
     return (
@@ -191,8 +203,8 @@ export function CollectionSidebar(): React.ReactElement {
         style={{
           width: '280px',
           height: '100vh',
-          borderRight: '1px solid #e0e0e0',
-          backgroundColor: '#f8f9fa',
+          borderRight: `1px solid ${theme.colors.border.primary}`,
+          backgroundColor: theme.colors.background.secondary,
           padding: '16px',
           display: 'flex',
           flexDirection: 'column',
@@ -200,7 +212,7 @@ export function CollectionSidebar(): React.ReactElement {
           justifyContent: 'center',
         }}
       >
-        <p style={{ margin: '0 0 16px', fontSize: '14px', color: '#666', textAlign: 'center' }}>
+        <p style={{ margin: '0 0 16px', fontSize: '14px', color: theme.colors.text.secondary, textAlign: 'center' }}>
           No collections yet. Create one to organize your requests.
         </p>
         <button
@@ -211,7 +223,7 @@ export function CollectionSidebar(): React.ReactElement {
             fontSize: '13px',
             border: 'none',
             borderRadius: '4px',
-            backgroundColor: '#007bff',
+            backgroundColor: theme.colors.interactive.primary,
             color: 'white',
             cursor: 'pointer',
           }}
@@ -230,8 +242,8 @@ export function CollectionSidebar(): React.ReactElement {
         style={{
           width: '280px',
           height: '100vh',
-          borderRight: '1px solid #e0e0e0',
-          backgroundColor: '#f8f9fa',
+          borderRight: `1px solid ${theme.colors.border.primary}`,
+          backgroundColor: theme.colors.background.secondary,
           padding: '16px',
           overflow: 'auto',
         }}
@@ -244,32 +256,51 @@ export function CollectionSidebar(): React.ReactElement {
             alignItems: 'center',
           }}
         >
-          <h2
-            style={{
-              margin: 0,
-              fontSize: '14px',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              color: '#666',
-            }}
-          >
-            Collections
-          </h2>
-          <button
-            onClick={handleCreateCollection}
-            aria-label="Create Collection"
-            style={{
-              padding: '4px 8px',
-              fontSize: '11px',
-              border: '1px solid #007bff',
-              borderRadius: '4px',
-              backgroundColor: 'white',
-              color: '#007bff',
-              cursor: 'pointer',
-            }}
-          >
-            +
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h2
+              style={{
+                margin: 0,
+                fontSize: '14px',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                color: theme.colors.text.secondary,
+              }}
+            >
+              Collections
+            </h2>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              onClick={handleCreateCollection}
+              aria-label="Create Collection"
+              style={{
+                padding: '4px 8px',
+                fontSize: '11px',
+                border: `1px solid ${theme.colors.interactive.primary}`,
+                borderRadius: '4px',
+                backgroundColor: theme.colors.background.primary,
+                color: theme.colors.interactive.primary,
+                cursor: 'pointer',
+              }}
+            >
+              +
+            </button>
+            <button
+              onClick={onClose}
+              aria-label="Close Collections"
+              title="Close Collections (Cmd+B)"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '16px',
+                padding: '4px',
+                color: theme.colors.text.secondary,
+              }}
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* New collection input */}

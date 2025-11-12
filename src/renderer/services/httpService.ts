@@ -152,7 +152,7 @@ export class HttpService {
   }
 
   /**
-   * Parse axios error into our HttpError format
+   * Parse axios error into our HttpError format with enhanced error details
    */
   private parseError(error: unknown): HttpError {
     if (axios.isCancel(error)) {
@@ -168,10 +168,10 @@ export class HttpService {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
 
-      // Check for timeout
+      // Check for timeout errors
       if (axiosError.code === 'ECONNABORTED' || axiosError.code === 'ETIMEDOUT') {
         return {
-          message: 'Request timed out',
+          message: axiosError.message || 'Request timed out',
           code: axiosError.code,
           isNetworkError: false,
           isTimeout: true,
@@ -179,20 +179,23 @@ export class HttpService {
         };
       }
 
-      // Check for network error
+      // Check for network errors (no response from server)
       if (!axiosError.response) {
+        const message = axiosError.message || 'Network error occurred';
+        const code = axiosError.code;
+
         return {
-          message: axiosError.message || 'Network error occurred',
-          ...(axiosError.code ? { code: axiosError.code } : {}),
+          message,
+          ...(code ? { code } : {}),
           isNetworkError: true,
           isTimeout: false,
           isCancelled: false,
         };
       }
 
-      // HTTP error with response
+      // HTTP error with response (4xx, 5xx, etc.)
       return {
-        message: axiosError.message,
+        message: axiosError.message || `Request failed with status code ${axiosError.response.status}`,
         ...(axiosError.code ? { code: axiosError.code } : {}),
         statusCode: axiosError.response.status,
         isNetworkError: false,
@@ -201,9 +204,9 @@ export class HttpService {
       };
     }
 
-    // Unknown error
+    // Unknown error (not from axios)
     return {
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'An unexpected error occurred',
       isNetworkError: false,
       isTimeout: false,
       isCancelled: false,

@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { UrlInput } from './UrlInput';
 import { useRequestStore } from '../../store/requestStore';
 import { useEnvironmentStore } from '../../store/environmentStore';
@@ -116,21 +116,28 @@ describe('UrlInput', () => {
 
     it('should update hint when URL changes', () => {
       const envStore = useEnvironmentStore.getState();
-      const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com',
-        version: 'v1',
+      let envId: string;
+      act(() => {
+        envId = envStore.actions.createEnvironment('Development', {
+          base_url: 'https://dev.example.com',
+          version: 'v1',
+        });
+        envStore.actions.setActiveEnvironment(envId);
       });
-      envStore.actions.setActiveEnvironment(envId);
 
       const requestStore = useRequestStore.getState();
-      requestStore.actions.setUrl('{{base_url}}/{{version}}/users');
+      act(() => {
+        requestStore.actions.setUrl('{{base_url}}/{{version}}/users');
+      });
 
       const { rerender } = render(<UrlInput />);
 
       expect(screen.getByText(/https:\/\/dev\.example\.com\/v1\/users/i)).toBeInTheDocument();
 
       // Change URL
-      requestStore.actions.setUrl('{{base_url}}/{{version}}/products');
+      act(() => {
+        requestStore.actions.setUrl('{{base_url}}/{{version}}/products');
+      });
       rerender(<UrlInput />);
 
       expect(screen.getByText(/https:\/\/dev\.example\.com\/v1\/products/i)).toBeInTheDocument();
@@ -171,20 +178,27 @@ describe('UrlInput', () => {
 
     it('should clear hint when all variables are removed', () => {
       const envStore = useEnvironmentStore.getState();
-      const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com',
+      let envId: string;
+      act(() => {
+        envId = envStore.actions.createEnvironment('Development', {
+          base_url: 'https://dev.example.com',
+        });
+        envStore.actions.setActiveEnvironment(envId);
       });
-      envStore.actions.setActiveEnvironment(envId);
 
       const requestStore = useRequestStore.getState();
-      requestStore.actions.setUrl('{{base_url}}/users');
+      act(() => {
+        requestStore.actions.setUrl('{{base_url}}/users');
+      });
 
       const { rerender } = render(<UrlInput />);
 
       expect(screen.getByText(/resolved:/i)).toBeInTheDocument();
 
       // Remove variables
-      requestStore.actions.setUrl('https://api.example.com/users');
+      act(() => {
+        requestStore.actions.setUrl('https://api.example.com/users');
+      });
       rerender(<UrlInput />);
 
       expect(screen.queryByText(/resolved:/i)).not.toBeInTheDocument();
@@ -192,20 +206,27 @@ describe('UrlInput', () => {
 
     it('should clear hint when environment is deactivated', () => {
       const envStore = useEnvironmentStore.getState();
-      const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com',
+      let envId: string;
+      act(() => {
+        envId = envStore.actions.createEnvironment('Development', {
+          base_url: 'https://dev.example.com',
+        });
+        envStore.actions.setActiveEnvironment(envId);
       });
-      envStore.actions.setActiveEnvironment(envId);
 
       const requestStore = useRequestStore.getState();
-      requestStore.actions.setUrl('{{base_url}}/users');
+      act(() => {
+        requestStore.actions.setUrl('{{base_url}}/users');
+      });
 
       const { rerender } = render(<UrlInput />);
 
       expect(screen.getByText(/resolved:/i)).toBeInTheDocument();
 
       // Deactivate environment
-      envStore.actions.setActiveEnvironment(null);
+      act(() => {
+        envStore.actions.setActiveEnvironment(null);
+      });
       rerender(<UrlInput />);
 
       expect(screen.queryByText(/resolved:/i)).not.toBeInTheDocument();
