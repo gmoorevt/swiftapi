@@ -1,16 +1,15 @@
 /**
  * EnvironmentSelector Component
  *
- * Dropdown selector for switching active environments with "Manage Environments" button
+ * Simple dropdown selector for quickly switching active environments
+ * To manage environments (create/edit/delete), use the Environments section in the left sidebar
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useEnvironmentStore } from '../../store/environmentStore';
-import { EnvironmentDialog } from '../EnvironmentDialog/EnvironmentDialog';
 import { useTheme } from '../../hooks/useTheme';
 
 export function EnvironmentSelector(): React.ReactElement {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { theme } = useTheme();
 
   const environments = useEnvironmentStore((state) => state.environments);
@@ -22,111 +21,38 @@ export function EnvironmentSelector(): React.ReactElement {
     a.name.localeCompare(b.name)
   );
 
-  const environmentCount = sortedEnvironments.length;
-
   const handleEnvironmentChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setActiveEnvironment(value === '' ? null : value);
   };
 
-  const handleManageClick = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-  };
-
-  const handleCreateClick = () => {
-    setIsDialogOpen(true);
-  };
-
   return (
-    <div
+    <select
+      value={activeEnvironmentId ?? ''}
+      onChange={handleEnvironmentChange}
+      aria-label="Environment selector"
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
+        padding: '6px 10px',
+        fontSize: '13px',
+        border: activeEnvironmentId
+          ? `1px solid ${theme.colors.interactive.secondary}`
+          : `1px solid ${theme.colors.border.secondary}`,
+        borderRadius: '4px',
+        backgroundColor: activeEnvironmentId
+          ? theme.colors.background.tertiary
+          : theme.colors.background.primary,
+        color: theme.colors.text.primary,
+        cursor: 'pointer',
+        minWidth: '150px',
+        fontWeight: activeEnvironmentId ? 600 : 'normal',
       }}
     >
-      <select
-        value={activeEnvironmentId ?? ''}
-        onChange={handleEnvironmentChange}
-        aria-label="Environment selector"
-        style={{
-          padding: '6px 10px',
-          fontSize: '13px',
-          border: activeEnvironmentId ? `1px solid ${theme.colors.interactive.secondary}` : `1px solid ${theme.colors.border.secondary}`,
-          borderRadius: '4px',
-          backgroundColor: activeEnvironmentId ? theme.colors.background.tertiary : theme.colors.background.primary,
-          color: theme.colors.text.primary,
-          cursor: 'pointer',
-          minWidth: '150px',
-          fontWeight: activeEnvironmentId ? 600 : 'normal',
-        }}
-      >
-        <option value="">No Environment</option>
-        {sortedEnvironments.map((env) => (
-          <option key={env.id} value={env.id}>
-            {env.name}
-          </option>
-        ))}
-      </select>
-
-      {environmentCount === 0 ? (
-        <button
-          onClick={handleCreateClick}
-          aria-label="Create Environment"
-          style={{
-            padding: '6px 12px',
-            fontSize: '13px',
-            border: `1px solid ${theme.colors.interactive.secondary}`,
-            borderRadius: '4px',
-            backgroundColor: theme.colors.interactive.secondary,
-            color: 'white',
-            cursor: 'pointer',
-            fontWeight: 600,
-          }}
-        >
-          + Create Environment
-        </button>
-      ) : (
-        <button
-          onClick={handleManageClick}
-          aria-label="Manage Environments"
-          style={{
-            padding: '6px 12px',
-            fontSize: '13px',
-            border: `1px solid ${theme.colors.border.secondary}`,
-            borderRadius: '4px',
-            backgroundColor: theme.colors.background.primary,
-            color: theme.colors.text.primary,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
-        >
-          Manage
-          {environmentCount > 0 && (
-            <span
-              style={{
-                display: 'inline-block',
-                padding: '2px 6px',
-                fontSize: '11px',
-                fontWeight: 600,
-                borderRadius: '10px',
-                backgroundColor: theme.colors.background.secondary,
-                color: theme.colors.text.primary,
-              }}
-            >
-              {environmentCount}
-            </span>
-          )}
-        </button>
-      )}
-
-      <EnvironmentDialog open={isDialogOpen} onClose={handleDialogClose} />
-    </div>
+      <option value="">No Environment</option>
+      {sortedEnvironments.map((env) => (
+        <option key={env.id} value={env.id}>
+          {env.name}
+        </option>
+      ))}
+    </select>
   );
 }

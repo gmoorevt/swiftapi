@@ -15,7 +15,6 @@ const historyService = new HistoryService();
 
 export function HistoryPanel(): React.ReactElement {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
   const setUrl = useRequestStore((state) => state.actions.setUrl);
   const setMethod = useRequestStore((state) => state.actions.setMethod);
 
@@ -31,7 +30,6 @@ export function HistoryPanel(): React.ReactElement {
   const handleRestore = (entry: HistoryEntry): void => {
     setUrl(entry.url);
     setMethod(entry.method);
-    setIsOpen(false); // Close panel after restoring
   };
 
   const handleClear = (): void => {
@@ -42,43 +40,13 @@ export function HistoryPanel(): React.ReactElement {
     }
   };
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => {
-          loadHistory(); // Refresh history when opening
-          setIsOpen(true);
-        }}
-        style={{
-          padding: '6px 12px',
-          fontSize: '13px',
-          fontWeight: 500,
-          color: '#666',
-          backgroundColor: 'white',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}
-      >
-        📜 History ({history.length})
-      </button>
-    );
-  }
-
   return (
     <div
       style={{
-        position: 'fixed',
-        right: 0,
-        top: 0,
-        bottom: 0,
-        width: '350px',
-        backgroundColor: 'white',
-        borderLeft: '1px solid #ddd',
-        boxShadow: '-2px 0 8px rgba(0,0,0,0.1)',
         display: 'flex',
         flexDirection: 'column',
-        zIndex: 1000,
+        height: '100%',
+        width: '100%',
       }}
     >
       {/* Header */}
@@ -92,19 +60,6 @@ export function HistoryPanel(): React.ReactElement {
         }}
       >
         <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>Request History</h3>
-        <button
-          onClick={() => setIsOpen(false)}
-          style={{
-            padding: '4px 8px',
-            fontSize: '18px',
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-            color: '#666',
-          }}
-        >
-          ×
-        </button>
       </div>
 
       {/* History List */}

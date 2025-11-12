@@ -19,15 +19,22 @@ SwiftAPI is an open-source API testing client designed to replace Postman with a
 
 ## Key Features
 
-### ✅ Core Functionality (v0.1.0-alpha)
+### ✅ Core Functionality (v0.1.0-beta)
 - **HTTP Methods**: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
 - **Request Builder**: URL input, headers, query parameters, body (JSON, XML, Text)
 - **Collections**: Organize and save requests with folders
 - **Environments**: Manage multiple environments (Dev, Staging, Production)
 - **Variables**: Template syntax `{{variable}}` with nested resolution
 - **Request History**: Auto-save and replay previous requests
-- **Response Viewer**: Syntax highlighting, formatted JSON/XML
+- **Response Viewer**: Syntax highlighting, formatted JSON/XML, headers, cookies
 - **Authentication**: Basic, Bearer Token, API Key
+- **Mock Servers**: Built-in HTTP servers for testing and prototyping
+  - Create custom endpoints with configurable responses
+  - Path parameters support (`/users/:id`)
+  - Response delays for testing loading states
+  - Real-time request logging
+  - Auto CORS support
+  - [Full Documentation](docs/MOCK_SERVERS.md)
 
 ### 🎨 User Experience
 - **Tabbed Interface**: Organized tabs for Query Params, Headers, Body, Authentication

@@ -5,6 +5,8 @@
 
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
+import { registerMockServerIpc } from './ipc/mockServerIpc';
+import { mockServerService } from './mockServerService';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -38,6 +40,9 @@ function createWindow(): void {
     mainWindow?.show();
   });
 
+  // Set main window on mock server service for log events
+  mockServerService.setMainWindow(mainWindow);
+
   // Clean up on close
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -46,14 +51,27 @@ function createWindow(): void {
 
 // App lifecycle handlers
 app.on('ready', () => {
+  // Register IPC handlers
+  registerMockServerIpc();
+
   createWindow();
 });
 
 app.on('window-all-closed', () => {
+  // Stop all mock servers before quitting
+  void mockServerService.stopAllServers();
+
   // On macOS, keep app active until user explicitly quits
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+// Stop all servers on quit
+app.on('before-quit', async (event) => {
+  event.preventDefault();
+  await mockServerService.stopAllServers();
+  app.exit(0);
 });
 
 app.on('activate', () => {

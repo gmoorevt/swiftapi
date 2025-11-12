@@ -33,6 +33,10 @@ export function parseCookie(cookieString: string): Cookie | null {
 
   // First part should be name=value
   const nameValuePair = parts[0];
+  if (!nameValuePair) {
+    return null;
+  }
+
   const equalsIndex = nameValuePair.indexOf('=');
 
   if (equalsIndex === -1) {
@@ -47,6 +51,8 @@ export function parseCookie(cookieString: string): Cookie | null {
   // Parse remaining attributes
   for (let i = 1; i < parts.length; i++) {
     const part = parts[i];
+    if (!part) continue;
+
     const attrEqualsIndex = part.indexOf('=');
 
     if (attrEqualsIndex === -1) {

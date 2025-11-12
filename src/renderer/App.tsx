@@ -4,24 +4,29 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { UrlInput } from './components/RequestBuilder/UrlInput';
-import { MethodSelector } from './components/RequestBuilder/MethodSelector';
-import { SendButton } from './components/RequestBuilder/SendButton';
+import { RequestLine } from './components/RequestBuilder/RequestLine';
 import { RequestTabs } from './components/RequestBuilder/RequestTabs';
-import { StatusDisplay } from './components/ResponseViewer/StatusDisplay';
-import { ResponseTabs } from './components/ResponseViewer/ResponseTabs';
+import { ResponseStatusBar } from './components/ResponseViewer/ResponseStatusBar';
+import { BodyViewer } from './components/ResponseViewer/BodyViewer';
+import { ResponseHeadersViewer } from './components/ResponseViewer/ResponseHeadersViewer';
+import { ResponseCookiesViewer } from './components/ResponseViewer/ResponseCookiesViewer';
 import { HistoryPanel } from './components/HistoryPanel/HistoryPanel';
-import { EnvironmentSelector } from './components/EnvironmentSelector/EnvironmentSelector';
-import { CollectionSidebar } from './components/CollectionSidebar/CollectionSidebar';
+import { EnvironmentPanel } from './components/EnvironmentPanel/EnvironmentPanel';
 import { SaveRequestDialog } from './components/SaveRequestDialog/SaveRequestDialog';
+import { MockServerPanel } from './components/MockServerPanel/MockServerPanel';
+import { Sidebar } from './components/Sidebar/Sidebar';
+import { EnvironmentSelector } from './components/EnvironmentSelector/EnvironmentSelector';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
-import { Logo } from './components/Logo/Logo';
 import { useRequestStore } from './store/requestStore';
 import { useThemeStore } from './store/themeStore';
 
+type SidebarItem = 'collections' | 'history' | 'environments' | 'mock-servers';
+type ResponseTab = 'body' | 'cookies' | 'headers';
+
 function App(): React.ReactElement {
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
+  const [activeSidebarItem, setActiveSidebarItem] = useState<SidebarItem>('collections');
+  const [activeResponseTab, setActiveResponseTab] = useState<ResponseTab>('body');
   const sendRequest = useRequestStore((state) => state.actions.sendRequest);
   const isLoading = useRequestStore((state) => state.isLoading);
   const theme = useThemeStore((state) => state.theme);
@@ -44,196 +49,121 @@ function App(): React.ReactElement {
         event.preventDefault();
         setIsSaveDialogOpen(true);
       }
-
-      // Ctrl/Cmd + B: Toggle collections sidebar
-      if (isModifierPressed && event.key === 'b') {
-        event.preventDefault();
-        setIsCollectionsOpen(!isCollectionsOpen);
-      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [sendRequest, isLoading, isCollectionsOpen]);
+  }, [sendRequest, isLoading]);
   return (
     <div
       style={{
         display: 'flex',
         height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         backgroundColor: theme.colors.background.primary,
         color: theme.colors.text.primary,
       }}
     >
-      {/* Collections Sidebar */}
-      <CollectionSidebar isOpen={isCollectionsOpen} onClose={() => setIsCollectionsOpen(false)} />
+      {/* LEFT: Sidebar Navigation */}
+      <Sidebar activeItem={activeSidebarItem} onItemChange={setActiveSidebarItem} />
 
-      {/* Main Content */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          overflow: 'hidden',
-        }}
-      >
-        {/* Header */}
-        <header
+      {/* Main Content Area */}
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        {/* Top Bar - Logo and Global Functions */}
+        <div
           style={{
-            padding: '16px 24px',
-            borderBottom: `2px solid ${theme.colors.border.primary}`,
-            backgroundColor: theme.colors.background.secondary,
+            height: '56px',
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: `0 ${theme.spacing.lg}`,
+            backgroundColor: theme.colors.background.primary,
+            borderBottom: `1px solid ${theme.colors.border.primary}`,
           }}
         >
-          <Logo size={40} showText={true} />
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <button
-              onClick={() => setIsCollectionsOpen(!isCollectionsOpen)}
-              aria-label="Toggle Collections"
-              title={`Toggle Collections (${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}+B)`}
-              style={{
-                padding: '8px 12px',
-                fontSize: '13px',
-                fontWeight: 600,
-                border: `1px solid ${theme.colors.border.secondary}`,
-                borderRadius: '6px',
-                backgroundColor: theme.colors.background.primary,
-                color: theme.colors.text.primary,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              ☰ Collections
-            </button>
+          {/* Logo */}
+          <div
+            style={{
+              fontSize: '18px',
+              fontWeight: theme.typography.fontWeights.bold,
+              color: theme.colors.interactive.primary,
+            }}
+          >
+            SwiftAPI
+          </div>
+
+          {/* Global Functions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: theme.spacing.md }}>
+            {/* Environment Selector */}
             <EnvironmentSelector />
+
+            {/* Theme Toggle */}
             <ThemeToggle />
           </div>
-        </header>
+        </div>
 
-        {/* Request Builder Section */}
-        <section
-          style={{
-            padding: '24px',
-            borderBottom: `1px solid ${theme.colors.border.primary}`,
-            backgroundColor: theme.colors.background.primary,
-          }}
-        >
-          <h2
-            style={{
-              margin: '0 0 16px',
-              fontSize: '14px',
-              fontWeight: 600,
-              color: theme.colors.text.primary,
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-            }}
-          >
-            Request
-          </h2>
-
-          {/* URL and Method Row */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '12px',
-              alignItems: 'center',
-              marginBottom: '16px',
-            }}
-          >
-            <div style={{ width: '140px' }}>
-              <MethodSelector />
-            </div>
-            <div style={{ flex: 1 }}>
-              <UrlInput />
-            </div>
-            <button
-              onClick={() => setIsSaveDialogOpen(true)}
-              aria-label="Save Request"
-              title={`Save Request (${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}+S)`}
+        {/* Content based on sidebar selection */}
+        {activeSidebarItem === 'collections' && (
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+            {/* Request Panel - TOP */}
+            <div
               style={{
-                width: '100px',
-                padding: '10px 16px',
-                fontSize: '14px',
-                fontWeight: 600,
-                border: `1px solid ${theme.colors.status.success}`,
-                borderRadius: '6px',
-                backgroundColor: theme.colors.background.primary,
-                color: theme.colors.status.success,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = theme.colors.status.success;
-                e.currentTarget.style.color = theme.colors.background.primary;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = theme.colors.background.primary;
-                e.currentTarget.style.color = theme.colors.status.success;
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '300px',
+                maxHeight: '50%',
+                overflow: 'hidden',
+                borderBottom: `1px solid ${theme.colors.border.primary}`,
               }}
             >
-              Save
-            </button>
-            <div style={{ width: '120px' }}>
-              <SendButton />
+              <RequestLine />
+              <RequestTabs />
             </div>
-          </div>
 
-          {/* Tabbed interface for Query Params, Headers, Body, Auth */}
-          <RequestTabs />
-        </section>
-
-        {/* Response Viewer Section */}
-        <section
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            backgroundColor: theme.colors.background.primary,
-          }}
-        >
-          <div
-            style={{
-              padding: '16px 24px 0',
-            }}
-          >
-            <h2
+            {/* Response Panel - BOTTOM */}
+            <div
               style={{
-                margin: '0 0 16px',
-                fontSize: '14px',
-                fontWeight: 600,
-                color: theme.colors.text.primary,
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                overflow: 'hidden',
               }}
             >
-              Response
-            </h2>
+              <ResponseStatusBar activeTab={activeResponseTab} onTabChange={setActiveResponseTab} />
+              <div style={{ flex: 1, overflow: 'auto', padding: '24px' }}>
+                {activeResponseTab === 'body' && <BodyViewer />}
+                {activeResponseTab === 'headers' && <ResponseHeadersViewer />}
+                {activeResponseTab === 'cookies' && <ResponseCookiesViewer />}
+              </div>
+            </div>
           </div>
+        )}
 
-          <StatusDisplay />
-
-          <div
-            style={{
-              flex: 1,
-              overflow: 'auto',
-            }}
-          >
-            <ResponseTabs />
+        {activeSidebarItem === 'history' && (
+          <div style={{ flex: 1, overflow: 'hidden' }}>
+            <HistoryPanel />
           </div>
-        </section>
+        )}
 
-        {/* History Panel (overlay) */}
-        <HistoryPanel />
+        {activeSidebarItem === 'environments' && (
+          <div style={{ flex: 1, overflow: 'hidden' }}>
+            <EnvironmentPanel />
+          </div>
+        )}
 
-        {/* Save Request Dialog */}
-        <SaveRequestDialog open={isSaveDialogOpen} onClose={() => setIsSaveDialogOpen(false)} />
+        {activeSidebarItem === 'mock-servers' && (
+          <div style={{ flex: 1, overflow: 'hidden' }}>
+            <MockServerPanel />
+          </div>
+        )}
       </div>
+
+      {/* Overlays */}
+      <SaveRequestDialog open={isSaveDialogOpen} onClose={() => setIsSaveDialogOpen(false)} />
     </div>
   );
 }
