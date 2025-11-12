@@ -1,0 +1,42 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient from blue to green -->
+    <linearGradient id="birdGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4CAF50;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Bird body - geometric swift shape -->
+  <path d="M 160 80
+           C 160 80, 140 60, 120 70
+           C 100 80, 90 85, 80 80
+           L 60 90
+           L 70 100
+           C 80 95, 90 95, 100 100
+           L 90 110
+           C 95 108, 105 108, 110 110
+           L 100 120
+           L 110 115
+           C 120 120, 130 118, 140 115
+           C 150 110, 165 100, 170 90
+           Z"
+        fill="url(#birdGradient)"/>
+
+  <!-- Wing detail -->
+  <path d="M 120 70
+           C 110 75, 100 78, 90 75
+           L 100 85
+           C 110 88, 120 85, 125 80
+           Z"
+        fill="white"
+        opacity="0.3"/>
+
+  <!-- Eye -->
+  <circle cx="145" cy="85" r="3" fill="white"/>
+
+  <!-- Speed lines -->
+  <line x1="40" y1="95" x2="55" y2="95" stroke="#007bff" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <line x1="30" y1="105" x2="50" y2="105" stroke="#007bff" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  <line x1="35" y1="115" x2="55" y2="115" stroke="#007bff" stroke-width="3" stroke-linecap="round" opacity="0.2"/>
+</svg>

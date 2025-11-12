@@ -1,0 +1,61 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for flame -->
+    <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rocket body -->
+  <path d="M 100 40
+           L 115 80
+           L 115 120
+           L 100 130
+           L 85 120
+           L 85 80
+           Z"
+        fill="#007bff"/>
+
+  <!-- Rocket nose cone -->
+  <path d="M 100 20
+           L 115 50
+           L 100 40
+           L 85 50
+           Z"
+        fill="#0056b3"/>
+
+  <!-- Window -->
+  <circle cx="100" cy="70" r="12" fill="white" opacity="0.9"/>
+  <circle cx="100" cy="70" r="8" fill="#007bff" opacity="0.3"/>
+
+  <!-- Fins -->
+  <path d="M 85 100 L 70 130 L 85 120 Z" fill="#0056b3"/>
+  <path d="M 115 100 L 130 130 L 115 120 Z" fill="#0056b3"/>
+
+  <!-- Flame/exhaust -->
+  <path d="M 90 130
+           L 85 145
+           L 90 155
+           L 95 148
+           L 100 160
+           L 105 148
+           L 110 155
+           L 115 145
+           L 110 130
+           Z"
+        fill="url(#flameGradient)"/>
+
+  <!-- API endpoint dots -->
+  <circle cx="140" cy="60" r="5" fill="#4CAF50"/>
+  <circle cx="155" cy="70" r="5" fill="#4CAF50"/>
+  <circle cx="170" cy="80" r="5" fill="#4CAF50"/>
+
+  <!-- Connection lines -->
+  <line x1="140" y1="60" x2="155" y2="70" stroke="#4CAF50" stroke-width="2" opacity="0.5"/>
+  <line x1="155" y1="70" x2="170" y2="80" stroke="#4CAF50" stroke-width="2" opacity="0.5"/>
+
+  <!-- Speed effect -->
+  <path d="M 100 130 L 95 140" stroke="white" stroke-width="2" opacity="0.6"/>
+  <path d="M 100 130 L 105 140" stroke="white" stroke-width="2" opacity="0.6"/>
+</svg>

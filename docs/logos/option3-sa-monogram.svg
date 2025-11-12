@@ -1,0 +1,41 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="20" y="20" width="160" height="160" rx="20" fill="#007bff"/>
+
+  <!-- Letter S -->
+  <path d="M 60 70
+           C 60 60, 70 55, 80 55
+           C 90 55, 95 60, 95 65
+           C 95 70, 90 73, 80 75
+           L 70 78
+           C 60 80, 55 85, 55 93
+           C 55 100, 62 107, 75 107
+           C 88 107, 95 102, 95 95"
+        stroke="white"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- Letter A -->
+  <path d="M 110 107
+           L 125 55
+           L 140 107
+           M 117 85
+           L 133 85"
+        stroke="white"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- Speed lines - top right -->
+  <line x1="150" y1="60" x2="170" y2="55" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="150" y1="75" x2="175" y2="70" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="150" y1="90" x2="172" y2="85" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Speed lines - bottom right -->
+  <line x1="150" y1="110" x2="172" y2="115" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="150" y1="125" x2="175" y2="130" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="150" y1="140" x2="170" y2="145" stroke="#4CAF50" stroke-width="4" stroke-linecap="round"/>
+</svg>

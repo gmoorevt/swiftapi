@@ -1,0 +1,27 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#4d9fff" opacity="0.1"/>
+
+  <!-- Left bracket -->
+  <path d="M 50 60 L 40 60 L 40 140 L 50 140"
+        stroke="#4d9fff"
+        stroke-width="6"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Right bracket -->
+  <path d="M 150 60 L 160 60 L 160 140 L 150 140"
+        stroke="#4d9fff"
+        stroke-width="6"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Lightning bolt -->
+  <path d="M 110 50 L 85 100 L 105 100 L 90 150 L 130 90 L 105 90 Z"
+        fill="#4d9fff"/>
+
+  <!-- Inner glow effect -->
+  <path d="M 110 50 L 85 100 L 105 100 L 90 150 L 130 90 L 105 90 Z"
+        fill="white"
+        opacity="0.4"/>
+</svg>

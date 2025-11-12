@@ -15,6 +15,7 @@ import { EnvironmentSelector } from './components/EnvironmentSelector/Environmen
 import { CollectionSidebar } from './components/CollectionSidebar/CollectionSidebar';
 import { SaveRequestDialog } from './components/SaveRequestDialog/SaveRequestDialog';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
+import { Logo } from './components/Logo/Logo';
 import { useRequestStore } from './store/requestStore';
 import { useThemeStore } from './store/themeStore';
 
@@ -89,18 +90,7 @@ function App(): React.ReactElement {
             alignItems: 'center',
           }}
         >
-          <div>
-            <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 600, color: theme.colors.text.primary }}>SwiftAPI</h1>
-            <p
-              style={{
-                margin: '4px 0 0',
-                fontSize: '12px',
-                color: theme.colors.text.secondary,
-              }}
-            >
-              Fast, lightweight, privacy-focused API testing
-            </p>
-          </div>
+          <Logo size={40} showText={true} />
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
               onClick={() => setIsCollectionsOpen(!isCollectionsOpen)}

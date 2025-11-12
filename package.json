@@ -102,6 +102,7 @@
     "appId": "com.swiftapi.app",
     "productName": "SwiftAPI",
     "publish": null,
+    "icon": "build/icon.svg",
     "directories": {
       "output": "release"
     },
@@ -111,6 +112,7 @@
     ],
     "mac": {
       "category": "public.app-category.developer-tools",
+      "icon": "build/icon.svg",
       "target": [
         "dmg",
         "zip"
