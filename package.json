@@ -2,7 +2,7 @@
   "name": "swiftapi",
   "version": "0.2.0",
   "description": "A fast, lightweight, and privacy-focused API testing client",
-  "main": "dist/main/index.js",
+  "main": "dist/main/main/index.js",
   "author": {
     "name": "SwiftAPI Contributors",
     "email": "swiftapi@example.com"
