@@ -100,8 +100,8 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
     renameCollection: (id: string, newName: string): void => {
       const updated = collectionService.updateCollection(id, { name: newName });
       if (!updated) {
-return;
-}
+        return;
+      }
 
       set((state) => ({
         collections: {
@@ -184,8 +184,8 @@ return;
     updateRequest: (requestId: string, changes: { name?: string; url?: string }): void => {
       const updated = collectionService.updateRequest(requestId, changes);
       if (!updated) {
-return;
-}
+        return;
+      }
 
       set((state) => ({
         savedRequests: {

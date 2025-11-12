@@ -32,7 +32,13 @@ function resolveUrlVariables(
 }
 
 // Warning message component
-function WarningMessage({ needsEnvironment, missingVariables }: { needsEnvironment: boolean; missingVariables: string[] }): React.ReactElement {
+function WarningMessage({
+  needsEnvironment,
+  missingVariables,
+}: {
+  needsEnvironment: boolean;
+  missingVariables: string[];
+}): React.ReactElement {
   return (
     <div
       style={{
@@ -51,7 +57,8 @@ function WarningMessage({ needsEnvironment, missingVariables }: { needsEnvironme
         </div>
       ) : (
         <div>
-          <strong>Warning:</strong> Undefined variables: {missingVariables.map(v => `{{${v}}}`).join(', ')}
+          <strong>Warning:</strong> Undefined variables:{' '}
+          {missingVariables.map((v) => `{{${v}}}`).join(', ')}
         </div>
       )}
     </div>
@@ -59,7 +66,15 @@ function WarningMessage({ needsEnvironment, missingVariables }: { needsEnvironme
 }
 
 // Resolution hint component
-function ResolutionHint({ error, environmentName, resolvedUrl }: { error: string | null; environmentName: string; resolvedUrl: string | null }): React.ReactElement {
+function ResolutionHint({
+  error,
+  environmentName,
+  resolvedUrl,
+}: {
+  error: string | null;
+  environmentName: string;
+  resolvedUrl: string | null;
+}): React.ReactElement {
   return (
     <div
       style={{
@@ -91,7 +106,9 @@ export function UrlInput(): React.ReactElement {
 
   const activeEnvironment = useEnvironmentStore(selectActiveEnvironment);
   const resolveVariables = useEnvironmentStore((state) => state.actions.resolveVariables);
-  const validateVariables = useEnvironmentStore((state) => state.actions.validateVariablesForRequest);
+  const validateVariables = useEnvironmentStore(
+    (state) => state.actions.validateVariablesForRequest
+  );
 
   // Check if URL contains variables
   const hasVariables = useMemo(() => /\{\{[^}]+\}\}/.test(url), [url]);
@@ -134,7 +151,11 @@ export function UrlInput(): React.ReactElement {
       )}
 
       {shouldShowHint && activeEnvironment && (
-        <ResolutionHint error={error} environmentName={activeEnvironment.name} resolvedUrl={resolvedUrl} />
+        <ResolutionHint
+          error={error}
+          environmentName={activeEnvironment.name}
+          resolvedUrl={resolvedUrl}
+        />
       )}
     </div>
   );

@@ -57,7 +57,7 @@ export class EnvironmentService {
    */
   getAll(): Environment[] {
     const storage = this.getStorage();
-    return Object.values(storage.environments).map(data => this.dataToEnvironment(data));
+    return Object.values(storage.environments).map((data) => this.dataToEnvironment(data));
   }
 
   /**
@@ -158,7 +158,7 @@ export class EnvironmentService {
   clearAll(): void {
     this.saveStorage({
       activeEnvironmentId: null,
-      environments: {}
+      environments: {},
     });
   }
 
@@ -185,7 +185,7 @@ export class EnvironmentService {
   private getStorage(): EnvironmentsStorage {
     return this.store.get<EnvironmentsStorage>(this.STORAGE_KEY, {
       activeEnvironmentId: null,
-      environments: {}
+      environments: {},
     });
   }
 
@@ -205,7 +205,7 @@ export class EnvironmentService {
       name: env.name,
       variables: env.variables,
       createdAt: env.createdAt,
-      updatedAt: env.updatedAt
+      updatedAt: env.updatedAt,
     };
   }
 
@@ -213,12 +213,6 @@ export class EnvironmentService {
    * Convert storage data to Environment model
    */
   private dataToEnvironment(data: EnvironmentData): Environment {
-    return new Environment(
-      data.id,
-      data.name,
-      data.variables,
-      data.createdAt,
-      data.updatedAt
-    );
+    return new Environment(data.id, data.name, data.variables, data.createdAt, data.updatedAt);
   }
 }

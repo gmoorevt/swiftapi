@@ -14,7 +14,10 @@ interface SaveRequestDialogProps {
   onClose: () => void;
 }
 
-export function SaveRequestDialog({ open, onClose }: SaveRequestDialogProps): React.ReactElement | null {
+export function SaveRequestDialog({
+  open,
+  onClose,
+}: SaveRequestDialogProps): React.ReactElement | null {
   const [requestName, setRequestName] = useState('');
   const [selectedCollectionId, setSelectedCollectionId] = useState('');
   const [newCollectionName, setNewCollectionName] = useState('');
@@ -94,9 +97,7 @@ export function SaveRequestDialog({ open, onClose }: SaveRequestDialogProps): Re
     const existingRequests = Object.values(savedRequests).filter(
       (req) => req.collectionId === collectionId
     );
-    return existingRequests.some(
-      (req) => req.name.toLowerCase() === name.toLowerCase()
-    );
+    return existingRequests.some((req) => req.name.toLowerCase() === name.toLowerCase());
   };
 
   const handleSave = (): void => {
@@ -245,7 +246,9 @@ export function SaveRequestDialog({ open, onClose }: SaveRequestDialogProps): Re
             }}
           >
             <option value="">
-              {collections.length === 0 ? 'No collections yet - create one below' : 'Select a collection'}
+              {collections.length === 0
+                ? 'No collections yet - create one below'
+                : 'Select a collection'}
             </option>
             {collections.map((collection) => (
               <option key={collection.id} value={collection.id}>

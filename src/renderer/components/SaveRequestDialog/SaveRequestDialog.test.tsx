@@ -356,7 +356,9 @@ describe('SaveRequestDialog', () => {
       await user.click(saveButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/request saved successfully to "my collection"/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/request saved successfully to "my collection"/i)
+        ).toBeInTheDocument();
       });
     });
 
@@ -379,9 +381,12 @@ describe('SaveRequestDialog', () => {
       const saveButton = screen.getByRole('button', { name: /^save$/i });
       await user.click(saveButton);
 
-      await waitFor(() => {
-        expect(onClose).toHaveBeenCalled();
-      }, { timeout: 3000 });
+      await waitFor(
+        () => {
+          expect(onClose).toHaveBeenCalled();
+        },
+        { timeout: 3000 }
+      );
     });
 
     it('should show error for duplicate request names in same collection', async () => {
@@ -400,7 +405,14 @@ describe('SaveRequestDialog', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      useCollectionStore.getState().actions.saveRequest('Existing Request', collectionId, request, 'https://api.example.com/test');
+      useCollectionStore
+        .getState()
+        .actions.saveRequest(
+          'Existing Request',
+          collectionId,
+          request,
+          'https://api.example.com/test'
+        );
 
       render(<SaveRequestDialog open={true} onClose={() => {}} />);
 

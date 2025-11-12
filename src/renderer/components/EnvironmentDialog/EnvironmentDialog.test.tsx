@@ -79,7 +79,7 @@ describe('EnvironmentDialog', () => {
       const store = useEnvironmentStore.getState();
       store.actions.createEnvironment('Development', {
         base_url: 'http://dev.example.com',
-        api_key: 'dev-key'
+        api_key: 'dev-key',
       });
 
       render(<EnvironmentDialog open={true} onClose={() => {}} />);
@@ -96,7 +96,7 @@ describe('EnvironmentDialog', () => {
       render(<EnvironmentDialog open={true} onClose={() => {}} />);
 
       const envElements = screen.getAllByText(/Development|Production|Staging/);
-      const envNames = envElements.map(el => el.textContent);
+      const envNames = envElements.map((el) => el.textContent);
 
       expect(envNames[0]).toContain('Development');
       expect(envNames[1]).toContain('Production');
@@ -203,7 +203,7 @@ describe('EnvironmentDialog', () => {
       const store = useEnvironmentStore.getState();
       store.actions.createEnvironment('Development', {
         base_url: 'http://dev.example.com',
-        api_key: 'dev-key'
+        api_key: 'dev-key',
       });
 
       render(<EnvironmentDialog open={true} onClose={() => {}} />);
@@ -315,7 +315,9 @@ describe('EnvironmentDialog', () => {
       fireEvent.click(saveVarButton);
 
       const updatedStore = useEnvironmentStore.getState();
-      expect(updatedStore.environments[envId]!.variables['base_url']).toBe('http://dev.example.com');
+      expect(updatedStore.environments[envId]!.variables['base_url']).toBe(
+        'http://dev.example.com'
+      );
     });
 
     it('should show error for invalid variable name', async () => {
@@ -345,7 +347,7 @@ describe('EnvironmentDialog', () => {
     it('should edit existing variable when clicked', async () => {
       const store = useEnvironmentStore.getState();
       const envId = store.actions.createEnvironment('Development', {
-        base_url: 'http://dev.example.com'
+        base_url: 'http://dev.example.com',
       });
 
       render(<EnvironmentDialog open={true} onClose={() => {}} />);
@@ -371,7 +373,7 @@ describe('EnvironmentDialog', () => {
       const store = useEnvironmentStore.getState();
       const envId = store.actions.createEnvironment('Development', {
         base_url: 'http://dev.example.com',
-        api_key: 'dev-key'
+        api_key: 'dev-key',
       });
 
       render(<EnvironmentDialog open={true} onClose={() => {}} />);
@@ -394,7 +396,7 @@ describe('EnvironmentDialog', () => {
     it('should show confirmation dialog before deleting variable', async () => {
       const store = useEnvironmentStore.getState();
       store.actions.createEnvironment('Development', {
-        base_url: 'http://dev.example.com'
+        base_url: 'http://dev.example.com',
       });
 
       render(<EnvironmentDialog open={true} onClose={() => {}} />);

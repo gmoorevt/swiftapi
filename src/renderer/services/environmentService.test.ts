@@ -35,9 +35,9 @@ describe('EnvironmentService', () => {
 
       const all = service.getAll();
       expect(all).toHaveLength(3);
-      expect(all.map(e => e.name)).toContain('Dev');
-      expect(all.map(e => e.name)).toContain('Prod');
-      expect(all.map(e => e.name)).toContain('Staging');
+      expect(all.map((e) => e.name)).toContain('Dev');
+      expect(all.map((e) => e.name)).toContain('Prod');
+      expect(all.map((e) => e.name)).toContain('Staging');
     });
 
     it('should return empty array when no environments exist', () => {
@@ -153,18 +153,21 @@ describe('EnvironmentService', () => {
     it('should prevent duplicate names (case-sensitive match)', () => {
       service.create('Development');
 
-      expect(() => service.create('Development'))
-        .toThrow('Environment with name "Development" already exists');
+      expect(() => service.create('Development')).toThrow(
+        'Environment with name "Development" already exists'
+      );
     });
 
     it('should prevent duplicate names (case-insensitive)', () => {
       service.create('Development');
 
-      expect(() => service.create('development'))
-        .toThrow('Environment with name "development" already exists');
+      expect(() => service.create('development')).toThrow(
+        'Environment with name "development" already exists'
+      );
 
-      expect(() => service.create('DEVELOPMENT'))
-        .toThrow('Environment with name "DEVELOPMENT" already exists');
+      expect(() => service.create('DEVELOPMENT')).toThrow(
+        'Environment with name "DEVELOPMENT" already exists'
+      );
     });
 
     it('should allow similar names that differ', () => {
@@ -178,11 +181,13 @@ describe('EnvironmentService', () => {
       const env1 = service.create('Development');
       service.create('Production');
 
-      expect(() => service.update(env1.id, { name: 'Production' }))
-        .toThrow('Environment with name "Production" already exists');
+      expect(() => service.update(env1.id, { name: 'Production' })).toThrow(
+        'Environment with name "Production" already exists'
+      );
 
-      expect(() => service.update(env1.id, { name: 'production' }))
-        .toThrow('Environment with name "production" already exists');
+      expect(() => service.update(env1.id, { name: 'production' })).toThrow(
+        'Environment with name "production" already exists'
+      );
     });
 
     it('should allow updating environment to same name (no change)', () => {
@@ -292,11 +297,13 @@ describe('EnvironmentService', () => {
       const env1 = service.create('Development');
       service.create('Production');
 
-      expect(() => service.rename(env1.id, 'production'))
-        .toThrow('Environment with name "production" already exists');
+      expect(() => service.rename(env1.id, 'production')).toThrow(
+        'Environment with name "production" already exists'
+      );
 
-      expect(() => service.rename(env1.id, 'PRODUCTION'))
-        .toThrow('Environment with name "PRODUCTION" already exists');
+      expect(() => service.rename(env1.id, 'PRODUCTION')).toThrow(
+        'Environment with name "PRODUCTION" already exists'
+      );
     });
 
     it('should allow renaming to same name with different case', () => {
@@ -315,7 +322,7 @@ describe('EnvironmentService', () => {
       const env = service.create('Dev', {
         baseUrl: 'http://localhost',
         apiKey: 'test-key',
-        timeout: '5000'
+        timeout: '5000',
       });
 
       const renamed = service.rename(env.id, 'Development');
@@ -323,7 +330,7 @@ describe('EnvironmentService', () => {
       expect(renamed?.variables).toEqual({
         baseUrl: 'http://localhost',
         apiKey: 'test-key',
-        timeout: '5000'
+        timeout: '5000',
       });
     });
 
@@ -343,7 +350,7 @@ describe('EnvironmentService', () => {
       const originalUpdatedAt = env.updatedAt;
 
       // Small delay to ensure timestamp changes
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       const renamed = service.rename(env.id, 'Development');
 
       expect(renamed?.createdAt).toBe(env.createdAt);

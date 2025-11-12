@@ -7,7 +7,9 @@ describe('Environment', () => {
       const env = Environment.create('Development', { baseUrl: 'http://localhost' });
 
       expect(env.id).toBeDefined();
-      expect(env.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+      expect(env.id).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      );
       expect(env.name).toBe('Development');
       expect(env.variables).toEqual({ baseUrl: 'http://localhost' });
       expect(env.createdAt).toBeDefined();
@@ -33,19 +35,23 @@ describe('Environment', () => {
 
     it('should reject name over 100 characters', () => {
       const longName = 'a'.repeat(101);
-      expect(() => Environment.create(longName))
-        .toThrow('Environment name must be 1-100 characters');
+      expect(() => Environment.create(longName)).toThrow(
+        'Environment name must be 1-100 characters'
+      );
     });
 
     it('should reject name with invalid characters', () => {
-      expect(() => Environment.create('Dev@2025'))
-        .toThrow('Environment name contains invalid characters');
+      expect(() => Environment.create('Dev@2025')).toThrow(
+        'Environment name contains invalid characters'
+      );
 
-      expect(() => Environment.create('Dev#Test'))
-        .toThrow('Environment name contains invalid characters');
+      expect(() => Environment.create('Dev#Test')).toThrow(
+        'Environment name contains invalid characters'
+      );
 
-      expect(() => Environment.create('Dev$Prod'))
-        .toThrow('Environment name contains invalid characters');
+      expect(() => Environment.create('Dev$Prod')).toThrow(
+        'Environment name contains invalid characters'
+      );
     });
 
     it('should accept valid characters in name', () => {
@@ -56,27 +62,33 @@ describe('Environment', () => {
     });
 
     it('should reject invalid variable names', () => {
-      expect(() => Environment.create('Dev', { '123invalid': 'value' }))
-        .toThrow('Invalid variable name: 123invalid');
+      expect(() => Environment.create('Dev', { '123invalid': 'value' })).toThrow(
+        'Invalid variable name: 123invalid'
+      );
 
-      expect(() => Environment.create('Dev', { 'invalid-name': 'value' }))
-        .toThrow('Invalid variable name: invalid-name');
+      expect(() => Environment.create('Dev', { 'invalid-name': 'value' })).toThrow(
+        'Invalid variable name: invalid-name'
+      );
 
-      expect(() => Environment.create('Dev', { 'invalid.name': 'value' }))
-        .toThrow('Invalid variable name: invalid.name');
+      expect(() => Environment.create('Dev', { 'invalid.name': 'value' })).toThrow(
+        'Invalid variable name: invalid.name'
+      );
 
-      expect(() => Environment.create('Dev', { 'invalid name': 'value' }))
-        .toThrow('Invalid variable name: invalid name');
+      expect(() => Environment.create('Dev', { 'invalid name': 'value' })).toThrow(
+        'Invalid variable name: invalid name'
+      );
     });
 
     it('should accept valid variable names', () => {
-      expect(() => Environment.create('Dev', {
-        baseUrl: 'http://localhost',
-        _privateVar: 'value',
-        API_KEY: 'key123',
-        camelCase: 'value',
-        snake_case: 'value'
-      })).not.toThrow();
+      expect(() =>
+        Environment.create('Dev', {
+          baseUrl: 'http://localhost',
+          _privateVar: 'value',
+          API_KEY: 'key123',
+          camelCase: 'value',
+          snake_case: 'value',
+        })
+      ).not.toThrow();
     });
 
     it('should accept variables starting with underscore', () => {
@@ -89,14 +101,16 @@ describe('Environment', () => {
     it('should update name', async () => {
       const env = Environment.create('Dev');
       // Wait a bit to ensure timestamp difference
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       const updated = env.update({ name: 'Development' });
 
       expect(updated.name).toBe('Development');
       expect(updated.id).toBe(env.id);
       expect(updated.createdAt).toBe(env.createdAt);
       expect(updated.updatedAt).not.toBe(env.createdAt);
-      expect(new Date(updated.updatedAt).getTime()).toBeGreaterThan(new Date(env.createdAt).getTime());
+      expect(new Date(updated.updatedAt).getTime()).toBeGreaterThan(
+        new Date(env.createdAt).getTime()
+      );
     });
 
     it('should update variables', () => {
@@ -109,14 +123,15 @@ describe('Environment', () => {
 
     it('should validate on update', () => {
       const env = Environment.create('Dev');
-      expect(() => env.update({ name: '' }))
-        .toThrow('Environment name must be 1-100 characters');
+      expect(() => env.update({ name: '' })).toThrow('Environment name must be 1-100 characters');
 
-      expect(() => env.update({ name: 'Invalid@Name' }))
-        .toThrow('Environment name contains invalid characters');
+      expect(() => env.update({ name: 'Invalid@Name' })).toThrow(
+        'Environment name contains invalid characters'
+      );
 
-      expect(() => env.update({ variables: { '123bad': 'value' } }))
-        .toThrow('Invalid variable name: 123bad');
+      expect(() => env.update({ variables: { '123bad': 'value' } })).toThrow(
+        'Invalid variable name: 123bad'
+      );
     });
 
     it('should preserve unchanged fields on update', () => {
@@ -140,7 +155,7 @@ describe('Environment', () => {
     it('should get variable value by key', () => {
       const env = Environment.create('Dev', {
         baseUrl: 'http://localhost',
-        port: '3000'
+        port: '3000',
       });
 
       expect(env.getVariable('baseUrl')).toBe('http://localhost');
@@ -167,7 +182,7 @@ describe('Environment', () => {
     it('should delete variable and return new Environment', () => {
       const env = Environment.create('Dev', {
         keep: 'value',
-        remove: 'toBeRemoved'
+        remove: 'toBeRemoved',
       });
       const updated = env.deleteVariable('remove');
 

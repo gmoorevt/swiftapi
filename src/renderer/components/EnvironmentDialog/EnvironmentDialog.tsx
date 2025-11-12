@@ -21,13 +21,19 @@ interface VariableEdit {
   originalKey?: string;
 }
 
-export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): React.ReactElement | null {
+export function EnvironmentDialog({
+  open,
+  onClose,
+}: EnvironmentDialogProps): React.ReactElement | null {
   const [mode, setMode] = useState<DialogMode>('list');
   const [selectedEnvironmentId, setSelectedEnvironmentId] = useState<string | null>(null);
   const [environmentName, setEnvironmentName] = useState('');
   const [error, setError] = useState('');
   const [variableEdit, setVariableEdit] = useState<VariableEdit | null>(null);
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ type: 'env' | 'var'; target: string } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{
+    type: 'env' | 'var';
+    target: string;
+  } | null>(null);
   const [isRenaming, setIsRenaming] = useState(false);
 
   const environments = useEnvironmentStore((state) => state.environments);
@@ -90,8 +96,8 @@ export function EnvironmentDialog({ open, onClose }: EnvironmentDialogProps): Re
     setSelectedEnvironmentId(envId);
     const env = environments[envId];
     if (!env) {
-return;
-}
+      return;
+    }
     setEnvironmentName(env.name);
     setError('');
   };
@@ -222,7 +228,11 @@ return;
     const newVariables = { ...env.variables };
 
     // If editing and key changed, delete old key
-    if (!variableEdit.isNew && variableEdit.originalKey && variableEdit.originalKey !== variableEdit.key) {
+    if (
+      !variableEdit.isNew &&
+      variableEdit.originalKey &&
+      variableEdit.originalKey !== variableEdit.key
+    ) {
       delete newVariables[variableEdit.originalKey];
     }
 
@@ -247,8 +257,8 @@ return;
 
     const env = environments[selectedEnvironmentId];
     if (!env) {
-return;
-}
+      return;
+    }
     const newVariables = { ...env.variables };
     delete newVariables[deleteConfirmation.target];
 
@@ -296,16 +306,35 @@ return;
             <p style={{ margin: '0 0 8px', fontSize: '14px' }}>
               Are you sure you want to delete the environment &quot;{envName}&quot;?
             </p>
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#856404', backgroundColor: '#fff3cd', padding: '8px', borderRadius: '4px', border: '1px solid #ffeeba' }}>
-              <strong>Warning:</strong> This environment is currently active. After deletion, no environment will be selected.
+            <p
+              style={{
+                margin: '0 0 16px',
+                fontSize: '13px',
+                color: '#856404',
+                backgroundColor: '#fff3cd',
+                padding: '8px',
+                borderRadius: '4px',
+                border: '1px solid #ffeeba',
+              }}
+            >
+              <strong>Warning:</strong> This environment is currently active. After deletion, no
+              environment will be selected.
             </p>
           </>
         );
       } else {
-        message = <p style={{ margin: '0 0 16px', fontSize: '14px' }}>Are you sure you want to delete the environment &quot;{envName}&quot;?</p>;
+        message = (
+          <p style={{ margin: '0 0 16px', fontSize: '14px' }}>
+            Are you sure you want to delete the environment &quot;{envName}&quot;?
+          </p>
+        );
       }
     } else {
-      message = <p style={{ margin: '0 0 16px', fontSize: '14px' }}>Are you sure you want to delete the variable &quot;{deleteConfirmation.target}&quot;?</p>;
+      message = (
+        <p style={{ margin: '0 0 16px', fontSize: '14px' }}>
+          Are you sure you want to delete the variable &quot;{deleteConfirmation.target}&quot;?
+        </p>
+      );
     }
 
     return (
@@ -349,7 +378,11 @@ return;
               Cancel
             </button>
             <button
-              onClick={deleteConfirmation.type === 'env' ? handleConfirmDeleteEnvironment : handleConfirmDeleteVariable}
+              onClick={
+                deleteConfirmation.type === 'env'
+                  ? handleConfirmDeleteEnvironment
+                  : handleConfirmDeleteVariable
+              }
               aria-label="Confirm deletion"
               style={{
                 padding: '8px 16px',
@@ -379,8 +412,23 @@ return;
 
     return (
       <div style={{ marginTop: '16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', color: '#666' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '12px',
+          }}
+        >
+          <h3
+            style={{
+              margin: 0,
+              fontSize: '13px',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              color: '#666',
+            }}
+          >
             Variables
           </h3>
           <button
@@ -408,121 +456,129 @@ return;
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #e0e0e0' }}>
-                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600, color: '#333' }}>Name</th>
-                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600, color: '#333' }}>Value</th>
-                <th style={{ textAlign: 'right', padding: '8px', fontWeight: 600, color: '#333' }}>Actions</th>
+                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600, color: '#333' }}>
+                  Name
+                </th>
+                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600, color: '#333' }}>
+                  Value
+                </th>
+                <th style={{ textAlign: 'right', padding: '8px', fontWeight: 600, color: '#333' }}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-            {variables.map(([key, value]) => (
-              <tr key={key} style={{ borderBottom: '1px solid #e0e0e0' }}>
-                <td style={{ padding: '8px', fontFamily: 'monospace' }}>{key}</td>
-                <td style={{ padding: '8px', fontFamily: 'monospace', color: '#666' }}>{value}</td>
-                <td style={{ padding: '8px', textAlign: 'right' }}>
-                  <button
-                    onClick={() => handleEditVariable(key, value)}
-                    aria-label={`Edit ${key}`}
-                    style={{
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      border: '1px solid #ddd',
-                      borderRadius: '3px',
-                      backgroundColor: 'white',
-                      cursor: 'pointer',
-                      marginRight: '4px',
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteVariable(key)}
-                    aria-label={`Delete ${key}`}
-                    style={{
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      border: '1px solid #dc3545',
-                      borderRadius: '3px',
-                      backgroundColor: 'white',
-                      color: '#dc3545',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+              {variables.map(([key, value]) => (
+                <tr key={key} style={{ borderBottom: '1px solid #e0e0e0' }}>
+                  <td style={{ padding: '8px', fontFamily: 'monospace' }}>{key}</td>
+                  <td style={{ padding: '8px', fontFamily: 'monospace', color: '#666' }}>
+                    {value}
+                  </td>
+                  <td style={{ padding: '8px', textAlign: 'right' }}>
+                    <button
+                      onClick={() => handleEditVariable(key, value)}
+                      aria-label={`Edit ${key}`}
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        border: '1px solid #ddd',
+                        borderRadius: '3px',
+                        backgroundColor: 'white',
+                        cursor: 'pointer',
+                        marginRight: '4px',
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteVariable(key)}
+                      aria-label={`Delete ${key}`}
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        border: '1px solid #dc3545',
+                        borderRadius: '3px',
+                        backgroundColor: 'white',
+                        color: '#dc3545',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
 
-            {/* Variable edit row */}
-            {variableEdit && (
-              <tr style={{ borderBottom: '1px solid #e0e0e0', backgroundColor: '#f8f9fa' }}>
-                <td style={{ padding: '8px' }}>
-                  <input
-                    type="text"
-                    value={variableEdit.key}
-                    onChange={(e) => setVariableEdit({ ...variableEdit, key: e.target.value })}
-                    placeholder="Variable name"
-                    disabled={!variableEdit.isNew}
-                    style={{
-                      width: '100%',
-                      padding: '4px 8px',
-                      fontSize: '13px',
-                      border: '1px solid #ddd',
-                      borderRadius: '3px',
-                      fontFamily: 'monospace',
-                    }}
-                  />
-                </td>
-                <td style={{ padding: '8px' }}>
-                  <input
-                    type="text"
-                    value={variableEdit.value}
-                    onChange={(e) => setVariableEdit({ ...variableEdit, value: e.target.value })}
-                    placeholder="Variable value"
-                    style={{
-                      width: '100%',
-                      padding: '4px 8px',
-                      fontSize: '13px',
-                      border: '1px solid #ddd',
-                      borderRadius: '3px',
-                      fontFamily: 'monospace',
-                    }}
-                  />
-                </td>
-                <td style={{ padding: '8px', textAlign: 'right' }}>
-                  <button
-                    onClick={handleSaveVariable}
-                    aria-label="Save Variable"
-                    style={{
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      border: 'none',
-                      borderRadius: '3px',
-                      backgroundColor: '#28a745',
-                      color: 'white',
-                      cursor: 'pointer',
-                      marginRight: '4px',
-                    }}
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => setVariableEdit(null)}
-                    aria-label="Cancel"
-                    style={{
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      border: '1px solid #ddd',
-                      borderRadius: '3px',
-                      backgroundColor: 'white',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </td>
-              </tr>
-            )}
+              {/* Variable edit row */}
+              {variableEdit && (
+                <tr style={{ borderBottom: '1px solid #e0e0e0', backgroundColor: '#f8f9fa' }}>
+                  <td style={{ padding: '8px' }}>
+                    <input
+                      type="text"
+                      value={variableEdit.key}
+                      onChange={(e) => setVariableEdit({ ...variableEdit, key: e.target.value })}
+                      placeholder="Variable name"
+                      disabled={!variableEdit.isNew}
+                      style={{
+                        width: '100%',
+                        padding: '4px 8px',
+                        fontSize: '13px',
+                        border: '1px solid #ddd',
+                        borderRadius: '3px',
+                        fontFamily: 'monospace',
+                      }}
+                    />
+                  </td>
+                  <td style={{ padding: '8px' }}>
+                    <input
+                      type="text"
+                      value={variableEdit.value}
+                      onChange={(e) => setVariableEdit({ ...variableEdit, value: e.target.value })}
+                      placeholder="Variable value"
+                      style={{
+                        width: '100%',
+                        padding: '4px 8px',
+                        fontSize: '13px',
+                        border: '1px solid #ddd',
+                        borderRadius: '3px',
+                        fontFamily: 'monospace',
+                      }}
+                    />
+                  </td>
+                  <td style={{ padding: '8px', textAlign: 'right' }}>
+                    <button
+                      onClick={handleSaveVariable}
+                      aria-label="Save Variable"
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        border: 'none',
+                        borderRadius: '3px',
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        cursor: 'pointer',
+                        marginRight: '4px',
+                      }}
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => setVariableEdit(null)}
+                      aria-label="Cancel"
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        border: '1px solid #ddd',
+                        borderRadius: '3px',
+                        backgroundColor: 'white',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         )}
@@ -534,7 +590,14 @@ return;
   const renderList = () => {
     return (
       <>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px',
+          }}
+        >
           <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Manage Environments</h2>
           <button
             onClick={handleCreateNew}
@@ -554,7 +617,9 @@ return;
         </div>
 
         {sortedEnvironments.length === 0 ? (
-          <div style={{ padding: '48px 24px', textAlign: 'center', color: '#666', fontSize: '14px' }}>
+          <div
+            style={{ padding: '48px 24px', textAlign: 'center', color: '#666', fontSize: '14px' }}
+          >
             No environments yet. Create one to get started.
           </div>
         ) : (
@@ -578,7 +643,13 @@ return;
                     transition: 'all 0.2s',
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '14px', fontWeight: 600 }}>{env.name}</span>
@@ -616,7 +687,9 @@ return;
   const renderCreate = () => {
     return (
       <>
-        <h2 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>Create New Environment</h2>
+        <h2 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>
+          Create New Environment
+        </h2>
 
         <div style={{ marginBottom: '16px' }}>
           <label
@@ -699,11 +772,15 @@ return;
         <h2 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>Edit Environment</h2>
 
         <div style={{ marginBottom: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <label
-              htmlFor="env-name"
-              style={{ fontSize: '13px', fontWeight: 600 }}
-            >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '8px',
+            }}
+          >
+            <label htmlFor="env-name" style={{ fontSize: '13px', fontWeight: 600 }}>
               Environment Name
             </label>
             {!isRenaming && (
@@ -760,7 +837,14 @@ return;
 
         {renderVariableTable()}
 
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between', marginTop: '24px' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '8px',
+            justifyContent: 'space-between',
+            marginTop: '24px',
+          }}
+        >
           <button
             onClick={handleDeleteEnvironment}
             aria-label="Delete Environment"
@@ -849,7 +933,14 @@ return;
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginBottom: '16px',
+            }}
+          >
             <div style={{ flex: 1 }}>
               {mode === 'list' && renderList()}
               {mode === 'create' && renderCreate()}

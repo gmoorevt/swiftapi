@@ -20,13 +20,18 @@ export function CollectionSidebar(): React.ReactElement {
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ type: 'collection' | 'request'; id: string } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{
+    type: 'collection' | 'request';
+    id: string;
+  } | null>(null);
   const [creatingCollection, setCreatingCollection] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
   const [activeRequestId, setActiveRequestId] = useState<string | null>(null);
 
   const collections = useCollectionStore((state) => state.actions.getCollections());
-  const getRequestsInCollection = useCollectionStore((state) => state.actions.getRequestsInCollection);
+  const getRequestsInCollection = useCollectionStore(
+    (state) => state.actions.getRequestsInCollection
+  );
   const savedRequests = useCollectionStore((state) => state.savedRequests);
   const deleteCollection = useCollectionStore((state) => state.actions.deleteCollection);
   const deleteRequest = useCollectionStore((state) => state.actions.deleteRequest);
@@ -58,8 +63,8 @@ export function CollectionSidebar(): React.ReactElement {
   const handleRequestClick = (requestId: string) => {
     const request = loadRequest(requestId);
     if (!request) {
-return;
-}
+      return;
+    }
 
     // Load request into request builder using actions
     requestActions.setUrl(request.url);
@@ -108,8 +113,8 @@ return;
 
   const handleRenameSubmit = (type: 'collection' | 'request', id: string) => {
     if (!renameValue.trim()) {
-return;
-}
+      return;
+    }
 
     if (type === 'collection') {
       renameCollection(id, renameValue.trim());
@@ -133,8 +138,8 @@ return;
 
   const handleDeleteConfirm = () => {
     if (!deleteConfirmation) {
-return;
-}
+      return;
+    }
 
     if (deleteConfirmation.type === 'collection') {
       deleteCollection(deleteConfirmation.id);
@@ -148,16 +153,11 @@ return;
   const handleDuplicate = (requestId: string) => {
     const request = loadRequest(requestId);
     if (!request) {
-return;
-}
+      return;
+    }
 
     // Create duplicate with "(copy)" suffix
-    saveRequest(
-      `${request.name} (copy)`,
-      request.collectionId,
-      request.toRequest(),
-      request.url
-    );
+    saveRequest(`${request.name} (copy)`, request.collectionId, request.toRequest(), request.url);
 
     setContextMenu(null);
   };
@@ -169,8 +169,8 @@ return;
 
   const handleCreateCollectionSubmit = () => {
     if (!newCollectionName.trim()) {
-return;
-}
+      return;
+    }
 
     createCollection(newCollectionName.trim());
     setCreatingCollection(false);
@@ -236,8 +236,23 @@ return;
           overflow: 'auto',
         }}
       >
-        <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ margin: 0, fontSize: '14px', fontWeight: 600, textTransform: 'uppercase', color: '#666' }}>
+        <div
+          style={{
+            marginBottom: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h2
+            style={{
+              margin: 0,
+              fontSize: '14px',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              color: '#666',
+            }}
+          >
             Collections
           </h2>
           <button
@@ -259,18 +274,26 @@ return;
 
         {/* New collection input */}
         {creatingCollection && (
-          <div style={{ marginBottom: '12px', padding: '8px', backgroundColor: 'white', borderRadius: '4px', border: '1px solid #ddd' }}>
+          <div
+            style={{
+              marginBottom: '12px',
+              padding: '8px',
+              backgroundColor: 'white',
+              borderRadius: '4px',
+              border: '1px solid #ddd',
+            }}
+          >
             <input
               type="text"
               value={newCollectionName}
               onChange={(e) => setNewCollectionName(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-handleCreateCollectionSubmit();
-}
+                  handleCreateCollectionSubmit();
+                }
                 if (e.key === 'Escape') {
-handleCreateCollectionCancel();
-}
+                  handleCreateCollectionCancel();
+                }
               }}
               placeholder="Collection name"
               autoFocus
@@ -314,11 +337,11 @@ handleCreateCollectionCancel();
                     onChange={(e) => setRenameValue(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
-handleRenameSubmit('collection', collection.id);
-}
+                        handleRenameSubmit('collection', collection.id);
+                      }
                       if (e.key === 'Escape') {
-handleRenameCancel();
-}
+                        handleRenameCancel();
+                      }
                     }}
                     onBlur={() => handleRenameSubmit('collection', collection.id)}
                     autoFocus
@@ -369,11 +392,11 @@ handleRenameCancel();
                             onChange={(e) => setRenameValue(e.target.value)}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') {
-handleRenameSubmit('request', request.id);
-}
+                                handleRenameSubmit('request', request.id);
+                              }
                               if (e.key === 'Escape') {
-handleRenameCancel();
-}
+                                handleRenameCancel();
+                              }
                             }}
                             onBlur={() => handleRenameSubmit('request', request.id)}
                             autoFocus
@@ -423,9 +446,10 @@ handleRenameCancel();
           <button
             role="menuitem"
             onClick={() => {
-              const item = contextMenu.type === 'collection'
-                ? collections.find((c) => c.id === contextMenu.id)
-                : savedRequests[contextMenu.id];
+              const item =
+                contextMenu.type === 'collection'
+                  ? collections.find((c) => c.id === contextMenu.id)
+                  : savedRequests[contextMenu.id];
               if (item) {
                 handleRenameStart(contextMenu.id, item.name);
               }
@@ -505,7 +529,8 @@ handleRenameCancel();
           >
             <p style={{ margin: '0 0 16px', fontSize: '14px' }}>
               Are you sure you want to delete this {deleteConfirmation.type}?
-              {deleteConfirmation.type === 'collection' && ' All requests in this collection will also be deleted.'}
+              {deleteConfirmation.type === 'collection' &&
+                ' All requests in this collection will also be deleted.'}
             </p>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button

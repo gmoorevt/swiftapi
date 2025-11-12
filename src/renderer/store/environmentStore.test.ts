@@ -147,7 +147,7 @@ describe('environmentStore', () => {
       act(() => {
         const envId = result.current.actions.createEnvironment('Dev', {
           baseUrl: 'http://localhost',
-          port: '3000'
+          port: '3000',
         });
         result.current.actions.setActiveEnvironment(envId);
       });
@@ -163,7 +163,7 @@ describe('environmentStore', () => {
         const envId = result.current.actions.createEnvironment('Dev', {
           protocol: 'https',
           domain: 'api.example.com',
-          baseUrl: '{{protocol}}://{{domain}}'
+          baseUrl: '{{protocol}}://{{domain}}',
         });
         result.current.actions.setActiveEnvironment(envId);
       });
@@ -252,8 +252,8 @@ describe('environmentStore', () => {
 
       const envList = Object.values(result.current.environments);
       expect(envList).toHaveLength(2);
-      expect(envList.map(e => e.name)).toContain('Dev');
-      expect(envList.map(e => e.name)).toContain('Prod');
+      expect(envList.map((e) => e.name)).toContain('Dev');
+      expect(envList.map((e) => e.name)).toContain('Prod');
     });
 
     it('should provide active environment or null', () => {
@@ -336,7 +336,7 @@ describe('environmentStore', () => {
       act(() => {
         envId = result.current.actions.createEnvironment('Dev', {
           baseUrl: 'http://localhost',
-          apiKey: 'test-key'
+          apiKey: 'test-key',
         });
         result.current.actions.renameEnvironment(envId, 'Development');
       });
@@ -386,7 +386,7 @@ describe('environmentStore', () => {
 
       expect(result.current.environments[envId!]!.variables).toEqual({
         baseUrl: 'http://localhost',
-        apiKey: 'test-key'
+        apiKey: 'test-key',
       });
     });
 
@@ -438,7 +438,7 @@ describe('environmentStore', () => {
       act(() => {
         envId = result.current.actions.createEnvironment('Dev', {
           oldKey: 'value',
-          otherKey: 'other'
+          otherKey: 'other',
         });
         result.current.actions.updateVariable(envId, 'oldKey', 'newKey', 'value');
       });
@@ -485,7 +485,7 @@ describe('environmentStore', () => {
       act(() => {
         envId = result.current.actions.createEnvironment('Dev', {
           baseUrl: 'http://localhost',
-          apiKey: 'test-key'
+          apiKey: 'test-key',
         });
         result.current.actions.deleteVariable(envId, 'baseUrl');
       });
@@ -519,7 +519,7 @@ describe('environmentStore', () => {
         envId = result.current.actions.createEnvironment('Dev', {
           key1: 'value1',
           key2: 'value2',
-          key3: 'value3'
+          key3: 'value3',
         });
         result.current.actions.deleteVariable(envId, 'key1');
         result.current.actions.deleteVariable(envId, 'key2');

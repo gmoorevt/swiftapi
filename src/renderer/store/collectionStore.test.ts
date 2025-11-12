@@ -179,9 +179,24 @@ describe('Collection Store', () => {
 
     it('should reorder requests within collection', () => {
       const store = useCollectionStore.getState();
-      const req1Id = store.actions.saveRequest('First', collectionId, sampleRequest, sampleRequest.url);
-      const req2Id = store.actions.saveRequest('Second', collectionId, sampleRequest, sampleRequest.url);
-      const req3Id = store.actions.saveRequest('Third', collectionId, sampleRequest, sampleRequest.url);
+      const req1Id = store.actions.saveRequest(
+        'First',
+        collectionId,
+        sampleRequest,
+        sampleRequest.url
+      );
+      const req2Id = store.actions.saveRequest(
+        'Second',
+        collectionId,
+        sampleRequest,
+        sampleRequest.url
+      );
+      const req3Id = store.actions.saveRequest(
+        'Third',
+        collectionId,
+        sampleRequest,
+        sampleRequest.url
+      );
 
       // Reorder: 3, 1, 2
       store.actions.reorderRequests(collectionId, [req3Id, req1Id, req2Id]);
@@ -235,9 +250,24 @@ describe('Collection Store', () => {
       const collectionId = store.actions.createCollection('To Delete');
       const sampleRequest = new Request({ url: 'https://api.example.com' });
 
-      const req1Id = store.actions.saveRequest('Request 1', collectionId, sampleRequest, sampleRequest.url);
-      const req2Id = store.actions.saveRequest('Request 2', collectionId, sampleRequest, sampleRequest.url);
-      const req3Id = store.actions.saveRequest('Request 3', collectionId, sampleRequest, sampleRequest.url);
+      const req1Id = store.actions.saveRequest(
+        'Request 1',
+        collectionId,
+        sampleRequest,
+        sampleRequest.url
+      );
+      const req2Id = store.actions.saveRequest(
+        'Request 2',
+        collectionId,
+        sampleRequest,
+        sampleRequest.url
+      );
+      const req3Id = store.actions.saveRequest(
+        'Request 3',
+        collectionId,
+        sampleRequest,
+        sampleRequest.url
+      );
 
       expect(store.actions.getRequestsInCollection(collectionId)).toHaveLength(3);
 

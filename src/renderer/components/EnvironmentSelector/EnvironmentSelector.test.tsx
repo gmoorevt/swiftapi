@@ -58,7 +58,7 @@ describe('EnvironmentSelector', () => {
       render(<EnvironmentSelector />);
 
       const options = screen.getAllByRole('option');
-      const envNames = options.slice(1).map(opt => opt.textContent); // Skip "No Environment"
+      const envNames = options.slice(1).map((opt) => opt.textContent); // Skip "No Environment"
 
       expect(envNames).toEqual(['Development', 'Production', 'Staging']);
     });
@@ -172,7 +172,7 @@ describe('EnvironmentSelector', () => {
 
       expect(select.value).toBe(devId);
       // The selected option should be the active one
-      const selectedOption = Array.from(select.options).find(opt => opt.selected);
+      const selectedOption = Array.from(select.options).find((opt) => opt.selected);
       expect(selectedOption?.textContent).toBe('Development');
     });
 

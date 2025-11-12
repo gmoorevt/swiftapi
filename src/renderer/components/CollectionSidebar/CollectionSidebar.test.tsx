@@ -75,8 +75,18 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Request 1', collectionId, request, 'https://api.example.com/users');
-      collectionStore.actions.saveRequest('Request 2', collectionId, request, 'https://api.example.com/posts');
+      collectionStore.actions.saveRequest(
+        'Request 1',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
+      collectionStore.actions.saveRequest(
+        'Request 2',
+        collectionId,
+        request,
+        'https://api.example.com/posts'
+      );
 
       render(<CollectionSidebar />);
 
@@ -95,7 +105,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Test Request', collectionId, request, 'https://api.example.com/users');
+      collectionStore.actions.saveRequest(
+        'Test Request',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
 
       render(<CollectionSidebar />);
 
@@ -118,7 +133,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Test Request', collectionId, request, 'https://api.example.com/users');
+      collectionStore.actions.saveRequest(
+        'Test Request',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
 
       render(<CollectionSidebar />);
 
@@ -141,7 +161,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Test Request', collectionId, request, 'https://api.example.com/users');
+      collectionStore.actions.saveRequest(
+        'Test Request',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
 
       render(<CollectionSidebar />);
 
@@ -171,7 +196,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.JSON,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Create User', collectionId, request, 'https://api.example.com/{{endpoint}}');
+      collectionStore.actions.saveRequest(
+        'Create User',
+        collectionId,
+        request,
+        'https://api.example.com/{{endpoint}}'
+      );
 
       render(<CollectionSidebar />);
 
@@ -208,7 +238,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Get Users', collectionId, request, 'https://api.example.com/users');
+      collectionStore.actions.saveRequest(
+        'Get Users',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
 
       render(<CollectionSidebar />);
 
@@ -253,7 +288,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Get Users', collectionId, request, 'https://api.example.com/users');
+      collectionStore.actions.saveRequest(
+        'Get Users',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
 
       render(<CollectionSidebar />);
 
@@ -333,7 +373,12 @@ describe('CollectionSidebar', () => {
         bodyType: BodyType.NONE,
         timeout: 30000,
       });
-      collectionStore.actions.saveRequest('Get Users', collectionId, request, 'https://api.example.com/users');
+      collectionStore.actions.saveRequest(
+        'Get Users',
+        collectionId,
+        request,
+        'https://api.example.com/users'
+      );
 
       render(<CollectionSidebar />);
 

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { resolveVariables, VariableResolutionError, extractVariables, hasVariables } from './variableResolver';
+import {
+  resolveVariables,
+  VariableResolutionError,
+  extractVariables,
+  hasVariables,
+} from './variableResolver';
 
 describe('variableResolver', () => {
   describe('basic substitution', () => {
@@ -36,7 +41,7 @@ describe('variableResolver', () => {
       const variables = {
         baseUrl: '{{protocol}}://{{domain}}',
         protocol: 'https',
-        domain: 'api.dev.example.com'
+        domain: 'api.dev.example.com',
       };
       expect(resolveVariables(text, variables)).toBe('https://api.dev.example.com/users');
     });
@@ -52,7 +57,7 @@ describe('variableResolver', () => {
         g: '{{h}}',
         h: '{{i}}',
         i: '{{j}}',
-        j: 'final'
+        j: 'final',
       };
       expect(resolveVariables('{{a}}', variables)).toBe('final');
     });
@@ -63,7 +68,7 @@ describe('variableResolver', () => {
         baseUrl: '{{protocol}}://{{domain}}',
         protocol: 'https',
         domain: 'api.example.com',
-        path: 'users'
+        path: 'users',
       };
       expect(resolveVariables('{{url}}', variables)).toBe('https://api.example.com/users');
     });
@@ -71,25 +76,23 @@ describe('variableResolver', () => {
 
   describe('error handling', () => {
     it('should throw on undefined variable', () => {
-      expect(() => resolveVariables('{{missing}}', {}))
-        .toThrow(VariableResolutionError);
+      expect(() => resolveVariables('{{missing}}', {})).toThrow(VariableResolutionError);
     });
 
     it('should provide helpful error message for undefined variable', () => {
-      expect(() => resolveVariables('{{apiKey}}', {}))
-        .toThrow('Variable {{apiKey}} is not defined in current environment');
+      expect(() => resolveVariables('{{apiKey}}', {})).toThrow(
+        'Variable {{apiKey}} is not defined in current environment'
+      );
     });
 
     it('should throw on circular reference', () => {
       const variables = { a: '{{b}}', b: '{{a}}' };
-      expect(() => resolveVariables('{{a}}', variables))
-        .toThrow('Circular reference detected');
+      expect(() => resolveVariables('{{a}}', variables)).toThrow('Circular reference detected');
     });
 
     it('should show full circular reference path', () => {
       const variables = { a: '{{b}}', b: '{{c}}', c: '{{a}}' };
-      expect(() => resolveVariables('{{a}}', variables))
-        .toThrow('a → b → c → a');
+      expect(() => resolveVariables('{{a}}', variables)).toThrow('a → b → c → a');
     });
 
     it('should throw on max depth exceeded', () => {
@@ -99,8 +102,9 @@ describe('variableResolver', () => {
       }
       variables['v15'] = 'end';
 
-      expect(() => resolveVariables('{{v0}}', variables))
-        .toThrow('Maximum nesting depth (10) exceeded');
+      expect(() => resolveVariables('{{v0}}', variables)).toThrow(
+        'Maximum nesting depth (10) exceeded'
+      );
     });
 
     it('should handle partial variable syntax (not a variable)', () => {
@@ -184,8 +188,9 @@ describe('variableResolver', () => {
   describe('edge cases', () => {
     it('should handle variable names with underscores', () => {
       const variables = { base_url: 'https://api.example.com', api_key: 'secret' };
-      expect(resolveVariables('{{base_url}}/{{api_key}}', variables))
-        .toBe('https://api.example.com/secret');
+      expect(resolveVariables('{{base_url}}/{{api_key}}', variables)).toBe(
+        'https://api.example.com/secret'
+      );
     });
 
     it('should handle variable names starting with underscore', () => {
@@ -195,8 +200,9 @@ describe('variableResolver', () => {
 
     it('should handle UPPER_CASE variable names', () => {
       const variables = { API_KEY: 'secret', BASE_URL: 'https://api.example.com' };
-      expect(resolveVariables('{{BASE_URL}}/{{API_KEY}}', variables))
-        .toBe('https://api.example.com/secret');
+      expect(resolveVariables('{{BASE_URL}}/{{API_KEY}}', variables)).toBe(
+        'https://api.example.com/secret'
+      );
     });
 
     it('should handle variables with numeric suffixes', () => {

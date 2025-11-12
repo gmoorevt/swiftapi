@@ -23,13 +23,7 @@ export class Environment {
    */
   static create(name: string, variables: Record<string, string> = {}): Environment {
     const now = new Date().toISOString();
-    return new Environment(
-      generateUUID(),
-      name,
-      variables,
-      now,
-      now
-    );
+    return new Environment(generateUUID(), name, variables, now, now);
   }
 
   /**
@@ -64,7 +58,7 @@ export class Environment {
    */
   setVariable(key: string, value: string): Environment {
     return this.update({
-      variables: { ...this.variables, [key]: value }
+      variables: { ...this.variables, [key]: value },
     });
   }
 

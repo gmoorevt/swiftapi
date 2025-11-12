@@ -9,7 +9,11 @@
 import { create } from 'zustand';
 import { Environment } from '../../models/Environment';
 import { EnvironmentService } from '../services/environmentService';
-import { resolveVariables, VariableResolutionError, extractVariables } from '../../lib/variableResolver';
+import {
+  resolveVariables,
+  VariableResolutionError,
+  extractVariables,
+} from '../../lib/variableResolver';
 
 interface EnvironmentState {
   // State
@@ -20,7 +24,10 @@ interface EnvironmentState {
   actions: {
     // Environment management
     createEnvironment: (name: string, variables?: Record<string, string>) => string;
-    updateEnvironment: (id: string, changes: Partial<Pick<Environment, 'name' | 'variables'>>) => void;
+    updateEnvironment: (
+      id: string,
+      changes: Partial<Pick<Environment, 'name' | 'variables'>>
+    ) => void;
     deleteEnvironment: (id: string) => void;
     renameEnvironment: (id: string, newName: string) => void;
 
@@ -36,7 +43,10 @@ interface EnvironmentState {
     // Variable resolution
     resolveVariables: (text: string) => string;
     validateVariablesForRequest: (text: string) => string[];
-    getVariableDifferences: (env1Id: string, env2Id: string) => { only1: string[]; only2: string[]; both: string[] };
+    getVariableDifferences: (
+      env1Id: string,
+      env2Id: string
+    ) => { only1: string[]; only2: string[]; both: string[] };
 
     // Utility
     reset: () => void;
@@ -64,7 +74,7 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
   const loadEnvironments = (): Record<string, Environment> => {
     const envs = environmentService.getAll();
     const map: Record<string, Environment> = {};
-    envs.forEach(env => {
+    envs.forEach((env) => {
       map[env.id] = env;
     });
     return map;
@@ -90,11 +100,11 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
       createEnvironment: (name: string, variables: Record<string, string> = {}): string => {
         const env = environmentService.create(name, variables);
 
-        set(state => ({
+        set((state) => ({
           environments: {
             ...state.environments,
-            [env.id]: env
-          }
+            [env.id]: env,
+          },
         }));
 
         return env.id;
@@ -103,15 +113,18 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
       /**
        * Update an existing environment
        */
-      updateEnvironment: (id: string, changes: Partial<Pick<Environment, 'name' | 'variables'>>) => {
+      updateEnvironment: (
+        id: string,
+        changes: Partial<Pick<Environment, 'name' | 'variables'>>
+      ) => {
         const updated = environmentService.update(id, changes);
 
         if (updated) {
-          set(state => ({
+          set((state) => ({
             environments: {
               ...state.environments,
-              [id]: updated
-            }
+              [id]: updated,
+            },
           }));
         }
       },
@@ -123,11 +136,12 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
       deleteEnvironment: (id: string) => {
         environmentService.delete(id);
 
-        set(state => {
+        set((state) => {
           const { [id]: _, ...rest } = state.environments;
           return {
             environments: rest,
-            activeEnvironmentId: state.activeEnvironmentId === id ? null : state.activeEnvironmentId
+            activeEnvironmentId:
+              state.activeEnvironmentId === id ? null : state.activeEnvironmentId,
           };
         });
       },
@@ -195,7 +209,7 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         }
 
         // Check which variables are not defined
-        return uniqueVars.filter(varName => !(varName in activeEnv.variables));
+        return uniqueVars.filter((varName) => !(varName in activeEnv.variables));
       },
 
       /**
@@ -218,9 +232,9 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         const set2 = new Set(keys2);
         const set1 = new Set(keys1);
 
-        const only1 = keys1.filter(k => !set2.has(k));
-        const only2 = keys2.filter(k => !set1.has(k));
-        const both = keys1.filter(k => set2.has(k));
+        const only1 = keys1.filter((k) => !set2.has(k));
+        const only2 = keys2.filter((k) => !set1.has(k));
+        const both = keys1.filter((k) => set2.has(k));
 
         return { only1, only2, both };
       },
@@ -235,11 +249,11 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         const updated = environmentService.rename(id, newName);
 
         if (updated) {
-          set(state => ({
+          set((state) => ({
             environments: {
               ...state.environments,
-              [id]: updated
-            }
+              [id]: updated,
+            },
           }));
         }
       },
@@ -261,11 +275,11 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         const updated = environmentService.update(envId, { variables: newVariables });
 
         if (updated) {
-          set(state => ({
+          set((state) => ({
             environments: {
               ...state.environments,
-              [envId]: updated
-            }
+              [envId]: updated,
+            },
           }));
         }
       },
@@ -296,11 +310,11 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         const updated = environmentService.update(envId, { variables: newVariables });
 
         if (updated) {
-          set(state => ({
+          set((state) => ({
             environments: {
               ...state.environments,
-              [envId]: updated
-            }
+              [envId]: updated,
+            },
           }));
         }
       },
@@ -322,11 +336,11 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         const updated = environmentService.update(envId, { variables: newVariables });
 
         if (updated) {
-          set(state => ({
+          set((state) => ({
             environments: {
               ...state.environments,
-              [envId]: updated
-            }
+              [envId]: updated,
+            },
           }));
         }
       },
@@ -338,9 +352,9 @@ export const useEnvironmentStore = create<EnvironmentState>((set, get) => {
         environmentService.clearAll();
         set({
           environments: {},
-          activeEnvironmentId: null
+          activeEnvironmentId: null,
         });
-      }
-    }
+      },
+    },
   };
 });

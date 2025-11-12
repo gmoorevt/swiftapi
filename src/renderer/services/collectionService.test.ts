@@ -170,9 +170,24 @@ describe('CollectionService', () => {
     });
 
     it('should auto-assign order when adding requests', () => {
-      const req1 = SavedRequest.fromRequest(sampleRequest, collectionId, 'Request 1', sampleRequest.url);
-      const req2 = SavedRequest.fromRequest(sampleRequest, collectionId, 'Request 2', sampleRequest.url);
-      const req3 = SavedRequest.fromRequest(sampleRequest, collectionId, 'Request 3', sampleRequest.url);
+      const req1 = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Request 1',
+        sampleRequest.url
+      );
+      const req2 = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Request 2',
+        sampleRequest.url
+      );
+      const req3 = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Request 3',
+        sampleRequest.url
+      );
 
       const added1 = service.addRequest(req1);
       const added2 = service.addRequest(req2);
@@ -184,9 +199,24 @@ describe('CollectionService', () => {
     });
 
     it('should get all requests in collection sorted by order', () => {
-      const req1 = SavedRequest.fromRequest(sampleRequest, collectionId, 'First', sampleRequest.url);
-      const req2 = SavedRequest.fromRequest(sampleRequest, collectionId, 'Second', sampleRequest.url);
-      const req3 = SavedRequest.fromRequest(sampleRequest, collectionId, 'Third', sampleRequest.url);
+      const req1 = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'First',
+        sampleRequest.url
+      );
+      const req2 = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Second',
+        sampleRequest.url
+      );
+      const req3 = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Third',
+        sampleRequest.url
+      );
 
       service.addRequest(req1);
       service.addRequest(req2);
@@ -207,7 +237,12 @@ describe('CollectionService', () => {
     });
 
     it('should get request by ID', () => {
-      const savedRequest = SavedRequest.fromRequest(sampleRequest, collectionId, 'Test', sampleRequest.url);
+      const savedRequest = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Test',
+        sampleRequest.url
+      );
       service.addRequest(savedRequest);
 
       const retrieved = service.getRequestById(savedRequest.id);
@@ -224,7 +259,12 @@ describe('CollectionService', () => {
     });
 
     it('should update request', () => {
-      const savedRequest = SavedRequest.fromRequest(sampleRequest, collectionId, 'Original', sampleRequest.url);
+      const savedRequest = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'Original',
+        sampleRequest.url
+      );
       service.addRequest(savedRequest);
 
       const updated = service.updateRequest(savedRequest.id, { name: 'Updated' });
@@ -241,7 +281,12 @@ describe('CollectionService', () => {
     });
 
     it('should delete request', () => {
-      const savedRequest = SavedRequest.fromRequest(sampleRequest, collectionId, 'To Delete', sampleRequest.url);
+      const savedRequest = SavedRequest.fromRequest(
+        sampleRequest,
+        collectionId,
+        'To Delete',
+        sampleRequest.url
+      );
       service.addRequest(savedRequest);
 
       service.deleteRequest(savedRequest.id);
@@ -260,9 +305,24 @@ describe('CollectionService', () => {
       const collection = service.createCollection('To Delete');
       const sampleRequest = new Request({ url: 'https://api.example.com' });
 
-      const req1 = SavedRequest.fromRequest(sampleRequest, collection.id, 'Request 1', sampleRequest.url);
-      const req2 = SavedRequest.fromRequest(sampleRequest, collection.id, 'Request 2', sampleRequest.url);
-      const req3 = SavedRequest.fromRequest(sampleRequest, collection.id, 'Request 3', sampleRequest.url);
+      const req1 = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'Request 1',
+        sampleRequest.url
+      );
+      const req2 = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'Request 2',
+        sampleRequest.url
+      );
+      const req3 = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'Request 3',
+        sampleRequest.url
+      );
 
       service.addRequest(req1);
       service.addRequest(req2);
@@ -302,9 +362,24 @@ describe('CollectionService', () => {
       const collection = service.createCollection('Test');
       const sampleRequest = new Request({ url: 'https://api.example.com' });
 
-      const req1 = SavedRequest.fromRequest(sampleRequest, collection.id, 'First', sampleRequest.url);
-      const req2 = SavedRequest.fromRequest(sampleRequest, collection.id, 'Second', sampleRequest.url);
-      const req3 = SavedRequest.fromRequest(sampleRequest, collection.id, 'Third', sampleRequest.url);
+      const req1 = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'First',
+        sampleRequest.url
+      );
+      const req2 = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'Second',
+        sampleRequest.url
+      );
+      const req3 = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'Third',
+        sampleRequest.url
+      );
 
       service.addRequest(req1);
       service.addRequest(req2);
@@ -344,7 +419,12 @@ describe('CollectionService', () => {
       service1.clear();
       const collection = service1.createCollection('Test');
       const sampleRequest = new Request({ url: 'https://api.example.com' });
-      const savedRequest = SavedRequest.fromRequest(sampleRequest, collection.id, 'Persistent', sampleRequest.url);
+      const savedRequest = SavedRequest.fromRequest(
+        sampleRequest,
+        collection.id,
+        'Persistent',
+        sampleRequest.url
+      );
       service1.addRequest(savedRequest);
 
       const service2 = new CollectionService();

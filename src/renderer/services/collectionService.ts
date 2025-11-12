@@ -8,7 +8,11 @@
  */
 
 import { Collection, CollectionData, CollectionUpdateOptions } from '../../models/Collection';
-import { SavedRequest, SavedRequestData, SavedRequestUpdateOptions } from '../../models/SavedRequest';
+import {
+  SavedRequest,
+  SavedRequestData,
+  SavedRequestUpdateOptions,
+} from '../../models/SavedRequest';
 import { createStorageAdapter } from './storageAdapter';
 
 export class CollectionService {
@@ -113,9 +117,10 @@ export class CollectionService {
     // Auto-assign order if not set
     const existing = this.getRequestsInCollection(savedRequest.collectionId);
     const maxOrder = existing.length > 0 ? Math.max(...existing.map((r) => r.order)) : -1;
-    const requestWithOrder = savedRequest.order === 0 && existing.length > 0
-      ? savedRequest.update({ order: maxOrder + 1 })
-      : savedRequest;
+    const requestWithOrder =
+      savedRequest.order === 0 && existing.length > 0
+        ? savedRequest.update({ order: maxOrder + 1 })
+        : savedRequest;
 
     // Save to storage
     const requests = this.store.get<Record<string, SavedRequestData>>('requests', {});

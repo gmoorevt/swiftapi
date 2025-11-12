@@ -86,8 +86,18 @@ describe('SavedRequest Model', () => {
     });
 
     it('should generate unique ids for different saved requests', () => {
-      const saved1 = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Request 1', sampleRequest.url);
-      const saved2 = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Request 2', sampleRequest.url);
+      const saved1 = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Request 1',
+        sampleRequest.url
+      );
+      const saved2 = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Request 2',
+        sampleRequest.url
+      );
 
       expect(saved1.id).not.toBe(saved2.id);
     });
@@ -95,27 +105,29 @@ describe('SavedRequest Model', () => {
 
   describe('validation', () => {
     it('should throw error for empty name', () => {
-      expect(() => SavedRequest.fromRequest(sampleRequest, 'coll-1', '', sampleRequest.url)).toThrow(
-        'Request name cannot be empty'
-      );
+      expect(() =>
+        SavedRequest.fromRequest(sampleRequest, 'coll-1', '', sampleRequest.url)
+      ).toThrow('Request name cannot be empty');
     });
 
     it('should throw error for whitespace-only name', () => {
-      expect(() => SavedRequest.fromRequest(sampleRequest, 'coll-1', '   ', sampleRequest.url)).toThrow(
-        'Request name cannot be empty'
-      );
+      expect(() =>
+        SavedRequest.fromRequest(sampleRequest, 'coll-1', '   ', sampleRequest.url)
+      ).toThrow('Request name cannot be empty');
     });
 
     it('should throw error for name longer than 200 characters', () => {
       const longName = 'a'.repeat(201);
-      expect(() => SavedRequest.fromRequest(sampleRequest, 'coll-1', longName, sampleRequest.url)).toThrow(
-        'Request name must be 200 characters or less'
-      );
+      expect(() =>
+        SavedRequest.fromRequest(sampleRequest, 'coll-1', longName, sampleRequest.url)
+      ).toThrow('Request name must be 200 characters or less');
     });
 
     it('should accept name with exactly 200 characters', () => {
       const name = 'a'.repeat(200);
-      expect(() => SavedRequest.fromRequest(sampleRequest, 'coll-1', name, sampleRequest.url)).not.toThrow();
+      expect(() =>
+        SavedRequest.fromRequest(sampleRequest, 'coll-1', name, sampleRequest.url)
+      ).not.toThrow();
     });
 
     it('should throw error for empty collection ID', () => {
@@ -127,7 +139,12 @@ describe('SavedRequest Model', () => {
 
   describe('toRequest conversion', () => {
     it('should convert SavedRequest back to Request object', () => {
-      const saved = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Test Request', sampleRequest.url);
+      const saved = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Test Request',
+        sampleRequest.url
+      );
       const request = saved.toRequest();
 
       expect(request.url).toBe(saved.url);
@@ -164,7 +181,12 @@ describe('SavedRequest Model', () => {
     let savedRequest: SavedRequest;
 
     beforeEach(() => {
-      savedRequest = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Original Name', sampleRequest.url);
+      savedRequest = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Original Name',
+        sampleRequest.url
+      );
     });
 
     it('should update name and return new instance', () => {
@@ -228,7 +250,12 @@ describe('SavedRequest Model', () => {
 
   describe('immutability', () => {
     it('should not modify original when updating', () => {
-      const original = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Original', sampleRequest.url);
+      const original = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Original',
+        sampleRequest.url
+      );
       const originalName = original.name;
       const originalUrl = original.url;
 
@@ -241,7 +268,13 @@ describe('SavedRequest Model', () => {
 
   describe('serialization', () => {
     it('should convert to JSON for storage', () => {
-      const saved = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Test Request', sampleRequest.url, 3);
+      const saved = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Test Request',
+        sampleRequest.url,
+        3
+      );
       const json = saved.toJSON();
 
       expect(json).toEqual({
@@ -261,7 +294,13 @@ describe('SavedRequest Model', () => {
     });
 
     it('should restore from JSON', () => {
-      const original = SavedRequest.fromRequest(sampleRequest, 'coll-1', 'Test', sampleRequest.url, 5);
+      const original = SavedRequest.fromRequest(
+        sampleRequest,
+        'coll-1',
+        'Test',
+        sampleRequest.url,
+        5
+      );
       const json = original.toJSON();
       const restored = SavedRequest.fromJSON(json);
 

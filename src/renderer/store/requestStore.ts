@@ -216,7 +216,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         const resolvedUrl = resolveVariables(state.url);
 
         // Resolve variables in headers
-        const resolvedHeaders = state.headers.map(header => ({
+        const resolvedHeaders = state.headers.map((header) => ({
           ...header,
           name: resolveVariables(header.name),
           value: resolveVariables(header.value),

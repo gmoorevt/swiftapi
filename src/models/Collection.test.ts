@@ -13,7 +13,9 @@ describe('Collection Model', () => {
       const collection = Collection.create('My Collection');
 
       expect(collection.id).toBeDefined();
-      expect(collection.id).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/); // UUID format
+      expect(collection.id).toMatch(
+        /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/
+      ); // UUID format
       expect(collection.name).toBe('My Collection');
       expect(collection.order).toBe(0);
       expect(collection.createdAt).toBeInstanceOf(Date);

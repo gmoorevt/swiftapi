@@ -26,13 +26,7 @@ export class Collection {
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
-  constructor(
-    id: string,
-    name: string,
-    order: number,
-    createdAt: Date,
-    updatedAt: Date
-  ) {
+  constructor(id: string, name: string, order: number, createdAt: Date, updatedAt: Date) {
     this.id = id;
     this.name = name;
     this.order = order;

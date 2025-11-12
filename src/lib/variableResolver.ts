@@ -52,10 +52,7 @@ const MAX_DEPTH = 10;
  * // Returns: 'https://api.dev.com/users'
  * ```
  */
-export function resolveVariables(
-  text: string,
-  variables: Record<string, string>
-): string {
+export function resolveVariables(text: string, variables: Record<string, string>): string {
   let resolved = text;
   let depth = 0;
   const resolutionHistory: string[][] = []; // Track resolution path per iteration
@@ -64,9 +61,7 @@ export function resolveVariables(
   while (VARIABLE_PATTERN.test(resolved)) {
     // Check depth limit before processing
     if (depth >= MAX_DEPTH) {
-      throw new VariableResolutionError(
-        `Maximum nesting depth (${MAX_DEPTH}) exceeded`
-      );
+      throw new VariableResolutionError(`Maximum nesting depth (${MAX_DEPTH}) exceeded`);
     }
 
     // Reset regex state (global regex maintains lastIndex)
@@ -100,8 +95,8 @@ export function resolveVariables(
     });
 
     if (!hasChanges) {
-break;
-}
+      break;
+    }
 
     resolutionHistory.push(currentIterationVars);
     depth++;
@@ -127,7 +122,7 @@ break;
  */
 export function extractVariables(text: string): string[] {
   const matches = text.matchAll(VARIABLE_PATTERN);
-  return Array.from(matches, m => m[1]).filter((v): v is string => v !== undefined);
+  return Array.from(matches, (m) => m[1]).filter((v): v is string => v !== undefined);
 }
 
 /**

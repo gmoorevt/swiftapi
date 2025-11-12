@@ -86,7 +86,7 @@ describe('UrlInput', () => {
     it('should show resolved URL hint when variables are present', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com'
+        base_url: 'https://dev.example.com',
       });
       envStore.actions.setActiveEnvironment(envId);
 
@@ -102,7 +102,7 @@ describe('UrlInput', () => {
     it('should show environment name in hint', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Production', {
-        base_url: 'https://api.example.com'
+        base_url: 'https://api.example.com',
       });
       envStore.actions.setActiveEnvironment(envId);
 
@@ -118,7 +118,7 @@ describe('UrlInput', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Development', {
         base_url: 'https://dev.example.com',
-        version: 'v1'
+        version: 'v1',
       });
       envStore.actions.setActiveEnvironment(envId);
 
@@ -139,7 +139,7 @@ describe('UrlInput', () => {
     it('should show warning when variable is undefined', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com'
+        base_url: 'https://dev.example.com',
       });
       envStore.actions.setActiveEnvironment(envId);
 
@@ -157,7 +157,7 @@ describe('UrlInput', () => {
       const envId = envStore.actions.createEnvironment('Development', {
         protocol: 'https',
         domain: 'example.com',
-        base_url: '{{protocol}}://{{domain}}'
+        base_url: '{{protocol}}://{{domain}}',
       });
       envStore.actions.setActiveEnvironment(envId);
 
@@ -172,7 +172,7 @@ describe('UrlInput', () => {
     it('should clear hint when all variables are removed', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com'
+        base_url: 'https://dev.example.com',
       });
       envStore.actions.setActiveEnvironment(envId);
 
@@ -193,7 +193,7 @@ describe('UrlInput', () => {
     it('should clear hint when environment is deactivated', () => {
       const envStore = useEnvironmentStore.getState();
       const envId = envStore.actions.createEnvironment('Development', {
-        base_url: 'https://dev.example.com'
+        base_url: 'https://dev.example.com',
       });
       envStore.actions.setActiveEnvironment(envId);
 
