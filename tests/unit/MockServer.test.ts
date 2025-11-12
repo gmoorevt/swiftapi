@@ -57,7 +57,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '{"users": []}',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       expect(endpointId).toBeDefined();
@@ -77,6 +77,7 @@ describe('MockServer Model', () => {
           { name: 'Content-Type', value: 'application/json', enabled: true },
           { name: 'X-Custom', value: 'test', enabled: true },
         ],
+        enabled: true,
       });
 
       const endpoint = server.endpoints.find((e) => e.id === endpointId);
@@ -90,7 +91,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
         delay: 1000,
         description: 'Slow endpoint for testing',
       });
@@ -108,7 +109,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       server.updateEndpoint(endpointId, {
@@ -134,7 +135,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       server.updateEndpoint(endpointId, { id: 'new-id' } as Partial<MockEndpoint>);
@@ -151,7 +152,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       expect(server.endpoints).toHaveLength(1);
@@ -171,7 +172,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       const endpoint = server.endpoints.find((e) => e.id === endpointId);
@@ -261,7 +262,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       const json = server.toJSON();
@@ -276,7 +277,7 @@ describe('MockServer Model', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       const json = server.toJSON();

@@ -8,7 +8,6 @@ import { describe, it, expect } from 'vitest';
 import {
   classifyError,
   ErrorCategory,
-  ClassifiedError,
   getErrorMessage,
   getErrorSuggestion,
 } from './errorClassifier';

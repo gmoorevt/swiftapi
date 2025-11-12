@@ -4,7 +4,7 @@
  * This test captures screenshots of SwiftAPI's key features for user documentation.
  */
 
-import { test, expect, ElectronApplication, Page, _electron as electron } from '@playwright/test';
+import { test, ElectronApplication, Page, _electron as electron } from '@playwright/test';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 

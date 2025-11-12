@@ -137,13 +137,13 @@ describe('parseSetCookieHeaders', () => {
 
     const cookies = parseSetCookieHeaders(headers);
     expect(cookies).toHaveLength(2);
-    expect(cookies[0]).toEqual({
+    expect(cookies[0]!).toEqual({
       name: 'session',
       value: 'abc123',
       path: '/',
       secure: true,
     });
-    expect(cookies[1]).toEqual({
+    expect(cookies[1]!).toEqual({
       name: 'token',
       value: 'xyz789',
       httpOnly: true,
@@ -159,9 +159,9 @@ describe('parseSetCookieHeaders', () => {
 
     const cookies = parseSetCookieHeaders(headers);
     expect(cookies).toHaveLength(3);
-    expect(cookies[0].name).toBe('test1');
-    expect(cookies[1].name).toBe('test2');
-    expect(cookies[2].name).toBe('test3');
+    expect(cookies[0]!.name).toBe('test1');
+    expect(cookies[1]!.name).toBe('test2');
+    expect(cookies[2]!.name).toBe('test3');
   });
 
   it('should ignore non Set-Cookie headers', () => {
@@ -173,7 +173,7 @@ describe('parseSetCookieHeaders', () => {
 
     const cookies = parseSetCookieHeaders(headers);
     expect(cookies).toHaveLength(1);
-    expect(cookies[0].name).toBe('session');
+    expect(cookies[0]!.name).toBe('session');
   });
 
   it('should return empty array when no Set-Cookie headers present', () => {
@@ -196,8 +196,8 @@ describe('parseSetCookieHeaders', () => {
 
     const cookies = parseSetCookieHeaders(headers);
     expect(cookies).toHaveLength(2);
-    expect(cookies[0].name).toBe('valid');
-    expect(cookies[1].name).toBe('another');
+    expect(cookies[0]!.name).toBe('valid');
+    expect(cookies[1]!.name).toBe('another');
   });
 
   it('should return empty array for empty headers array', () => {

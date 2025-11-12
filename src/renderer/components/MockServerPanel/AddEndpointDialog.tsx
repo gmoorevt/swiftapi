@@ -93,8 +93,8 @@ export function AddEndpointDialog({
       statusCode: code,
       responseBody,
       responseHeaders: headers.filter((h) => h.name.trim() !== ''),
-      delay: delayMs,
-      description: description.trim() || undefined,
+      ...(delayMs !== undefined && { delay: delayMs }),
+      ...(description.trim() && { description: description.trim() }),
     });
   };
 

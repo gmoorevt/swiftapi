@@ -23,31 +23,31 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
   const getMethodColor = (method: string): string => {
     switch (method) {
       case 'GET':
-        return theme === 'dark' ? '#4ade80' : '#16a34a';
+        return theme.mode === 'dark' ? '#4ade80' : '#16a34a';
       case 'POST':
-        return theme === 'dark' ? '#60a5fa' : '#2563eb';
+        return theme.mode === 'dark' ? '#60a5fa' : '#2563eb';
       case 'PUT':
-        return theme === 'dark' ? '#fbbf24' : '#d97706';
+        return theme.mode === 'dark' ? '#fbbf24' : '#d97706';
       case 'DELETE':
-        return theme === 'dark' ? '#f87171' : '#dc2626';
+        return theme.mode === 'dark' ? '#f87171' : '#dc2626';
       case 'PATCH':
-        return theme === 'dark' ? '#a78bfa' : '#7c3aed';
+        return theme.mode === 'dark' ? '#a78bfa' : '#7c3aed';
       default:
-        return theme === 'dark' ? '#9ca3af' : '#6b7280';
+        return theme.mode === 'dark' ? '#9ca3af' : '#6b7280';
     }
   };
 
   const getStatusColor = (status: number): string => {
     if (status >= 200 && status < 300) {
-      return theme === 'dark' ? '#4ade80' : '#16a34a';
+      return theme.mode === 'dark' ? '#4ade80' : '#16a34a';
     } else if (status >= 300 && status < 400) {
-      return theme === 'dark' ? '#60a5fa' : '#2563eb';
+      return theme.mode === 'dark' ? '#60a5fa' : '#2563eb';
     } else if (status >= 400 && status < 500) {
-      return theme === 'dark' ? '#fbbf24' : '#d97706';
+      return theme.mode === 'dark' ? '#fbbf24' : '#d97706';
     } else if (status >= 500) {
-      return theme === 'dark' ? '#f87171' : '#dc2626';
+      return theme.mode === 'dark' ? '#f87171' : '#dc2626';
     }
-    return theme === 'dark' ? '#9ca3af' : '#6b7280';
+    return theme.mode === 'dark' ? '#9ca3af' : '#6b7280';
   };
 
   return (
@@ -56,8 +56,8 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
-        border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
+        backgroundColor: theme.mode === 'dark' ? '#1f2937' : '#ffffff',
+        border: `1px solid ${theme.mode === 'dark' ? '#374151' : '#e5e7eb'}`,
         borderRadius: '8px',
         overflow: 'hidden',
       }}
@@ -66,7 +66,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
       <div
         style={{
           padding: '12px 16px',
-          borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
+          borderBottom: `1px solid ${theme.mode === 'dark' ? '#374151' : '#e5e7eb'}`,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -77,7 +77,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
             margin: 0,
             fontSize: '14px',
             fontWeight: 600,
-            color: theme === 'dark' ? '#f3f4f6' : '#111827',
+            color: theme.mode === 'dark' ? '#f3f4f6' : '#111827',
           }}
         >
           Request Log ({logs.length})
@@ -89,9 +89,9 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
               padding: '4px 12px',
               fontSize: '13px',
               fontWeight: 500,
-              color: theme === 'dark' ? '#f87171' : '#dc2626',
+              color: theme.mode === 'dark' ? '#f87171' : '#dc2626',
               backgroundColor: 'transparent',
-              border: `1px solid ${theme === 'dark' ? '#f87171' : '#dc2626'}`,
+              border: `1px solid ${theme.mode === 'dark' ? '#f87171' : '#dc2626'}`,
               borderRadius: '4px',
               cursor: 'pointer',
             }}
@@ -113,7 +113,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
             style={{
               padding: '32px',
               textAlign: 'center',
-              color: theme === 'dark' ? '#9ca3af' : '#6b7280',
+              color: theme.mode === 'dark' ? '#9ca3af' : '#6b7280',
               fontSize: '14px',
             }}
           >
@@ -130,8 +130,8 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                   style={{
                     marginBottom: '8px',
                     padding: '12px',
-                    backgroundColor: theme === 'dark' ? '#111827' : '#f9fafb',
-                    border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
+                    backgroundColor: theme.mode === 'dark' ? '#111827' : '#f9fafb',
+                    border: `1px solid ${theme.mode === 'dark' ? '#374151' : '#e5e7eb'}`,
                     borderRadius: '6px',
                     fontSize: '13px',
                   }}
@@ -162,7 +162,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                       style={{
                         flex: 1,
                         fontFamily: 'monospace',
-                        color: theme === 'dark' ? '#f3f4f6' : '#111827',
+                        color: theme.mode === 'dark' ? '#f3f4f6' : '#111827',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -182,7 +182,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                     <span
                       style={{
                         fontSize: '11px',
-                        color: theme === 'dark' ? '#9ca3af' : '#6b7280',
+                        color: theme.mode === 'dark' ? '#9ca3af' : '#6b7280',
                       }}
                     >
                       {log.responseTime}ms
@@ -193,7 +193,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                   <div
                     style={{
                       fontSize: '11px',
-                      color: theme === 'dark' ? '#9ca3af' : '#6b7280',
+                      color: theme.mode === 'dark' ? '#9ca3af' : '#6b7280',
                       marginBottom: '8px',
                     }}
                   >
@@ -208,7 +208,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                           cursor: 'pointer',
                           fontSize: '12px',
                           fontWeight: 500,
-                          color: theme === 'dark' ? '#d1d5db' : '#374151',
+                          color: theme.mode === 'dark' ? '#d1d5db' : '#374151',
                           marginBottom: '4px',
                         }}
                       >
@@ -218,8 +218,8 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                         style={{
                           marginTop: '8px',
                           padding: '8px',
-                          backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
-                          border: `1px solid ${theme === 'dark' ? '#4b5563' : '#d1d5db'}`,
+                          backgroundColor: theme.mode === 'dark' ? '#1f2937' : '#ffffff',
+                          border: `1px solid ${theme.mode === 'dark' ? '#4b5563' : '#d1d5db'}`,
                           borderRadius: '4px',
                           fontSize: '12px',
                           fontFamily: 'monospace',
@@ -230,12 +230,12 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                             key={key}
                             style={{
                               marginBottom: '4px',
-                              color: theme === 'dark' ? '#e5e7eb' : '#1f2937',
+                              color: theme.mode === 'dark' ? '#e5e7eb' : '#1f2937',
                             }}
                           >
                             <span
                               style={{
-                                color: theme === 'dark' ? '#60a5fa' : '#2563eb',
+                                color: theme.mode === 'dark' ? '#60a5fa' : '#2563eb',
                                 fontWeight: 500,
                               }}
                             >
@@ -256,7 +256,7 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                           cursor: 'pointer',
                           fontSize: '12px',
                           fontWeight: 500,
-                          color: theme === 'dark' ? '#d1d5db' : '#374151',
+                          color: theme.mode === 'dark' ? '#d1d5db' : '#374151',
                           marginBottom: '4px',
                         }}
                       >
@@ -266,12 +266,12 @@ export function RequestLogViewer({ logs, onClear }: RequestLogViewerProps) {
                         style={{
                           marginTop: '8px',
                           padding: '8px',
-                          backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
-                          border: `1px solid ${theme === 'dark' ? '#4b5563' : '#d1d5db'}`,
+                          backgroundColor: theme.mode === 'dark' ? '#1f2937' : '#ffffff',
+                          border: `1px solid ${theme.mode === 'dark' ? '#4b5563' : '#d1d5db'}`,
                           borderRadius: '4px',
                           fontSize: '12px',
                           fontFamily: 'monospace',
-                          color: theme === 'dark' ? '#e5e7eb' : '#1f2937',
+                          color: theme.mode === 'dark' ? '#e5e7eb' : '#1f2937',
                           overflow: 'auto',
                           maxHeight: '200px',
                         }}

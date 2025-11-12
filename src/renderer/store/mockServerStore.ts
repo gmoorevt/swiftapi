@@ -14,13 +14,11 @@ const initialServers = mockServerStorageService.loadServers();
 
 // Helper to save after mutations
 const saveAndSet = (updater: (state: MockServerState) => Partial<MockServerState>) => {
-  return (set: any) => {
-    set((state: MockServerState) => {
-      const updates = updater(state);
-      const newServers = updates.servers || state.servers;
-      mockServerStorageService.saveServers(newServers);
-      return updates;
-    });
+  return (state: MockServerState): Partial<MockServerState> => {
+    const updates = updater(state);
+    const newServers = updates.servers || state.servers;
+    mockServerStorageService.saveServers(newServers);
+    return updates;
   };
 };
 

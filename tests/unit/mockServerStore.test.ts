@@ -149,7 +149,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       const server = useMockServerStore.getState().servers[serverId];
@@ -167,7 +167,7 @@ describe('Mock Server Store', () => {
           method: 'GET',
           statusCode: 200,
           responseBody: 'OK',
-          responseHeaders: [],
+          responseHeaders: [], enabled: true,
         })
       ).toThrow('Server invalid-id not found');
     });
@@ -182,7 +182,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       expect(mockServerStorageService.saveServers).toHaveBeenCalled();
@@ -198,7 +198,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       actions.updateEndpoint(serverId, endpointId, { statusCode: 404 });
@@ -216,7 +216,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
       vi.clearAllMocks();
 
@@ -234,7 +234,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: '[]',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       expect(useMockServerStore.getState().servers[serverId]?.endpoints).toHaveLength(1);
@@ -250,7 +250,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
       vi.clearAllMocks();
 
@@ -268,7 +268,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
 
       const getEndpoint = () =>
@@ -289,7 +289,7 @@ describe('Mock Server Store', () => {
         method: 'GET',
         statusCode: 200,
         responseBody: 'OK',
-        responseHeaders: [],
+        responseHeaders: [], enabled: true,
       });
       vi.clearAllMocks();
 

@@ -30,7 +30,7 @@ export function ResponseStatusBar({
       return theme.colors.text.secondary;
     }
 
-    const status = response.status;
+    const status = response.statusCode;
     if (status >= 200 && status < 300) {
       return theme.colors.status.success;
     }
@@ -117,7 +117,7 @@ export function ResponseStatusBar({
               borderRadius: theme.borderRadius.md,
             }}
           >
-            {response.status} {response.statusText}
+            {response.statusCode} {response.statusText}
           </span>
 
           {/* Time */}
@@ -126,7 +126,7 @@ export function ResponseStatusBar({
               fontWeight: theme.typography.fontWeights.medium,
             }}
           >
-            {response.time}ms
+            {response.responseTime}ms
           </span>
 
           {/* Size */}
@@ -135,7 +135,7 @@ export function ResponseStatusBar({
               fontWeight: theme.typography.fontWeights.medium,
             }}
           >
-            {response.size}
+            {response.formattedSize}
           </span>
         </div>
       )}
