@@ -55,7 +55,9 @@ function parseKeyValueAttribute(
       break;
     }
     case 'samesite':
-      cookie.sameSite = attrValue as Cookie['sameSite'];
+      if (attrValue === 'Strict' || attrValue === 'Lax' || attrValue === 'None') {
+        cookie.sameSite = attrValue;
+      }
       break;
   }
 }

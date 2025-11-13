@@ -168,13 +168,16 @@ export class HttpService {
    * Parse timeout error
    */
   private parseTimeoutError(axiosError: AxiosError): HttpError {
-    return {
+    const error: HttpError = {
       message: axiosError.message || 'Request timed out',
-      code: axiosError.code,
       isNetworkError: false,
       isTimeout: true,
       isCancelled: false,
     };
+    if (axiosError.code !== undefined) {
+      error.code = axiosError.code;
+    }
+    return error;
   }
 
   /**
