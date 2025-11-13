@@ -72,7 +72,17 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p release
-          find artifacts -type f -exec cp {} release/ \;
+          # Only copy packaged distribution files, not unpacked Electron frameworks
+          find artifacts -type f \( \
+            -name "*.dmg" -o \
+            -name "*.zip" -o \
+            -name "*.exe" -o \
+            -name "*.AppImage" -o \
+            -name "*.deb" -o \
+            -name "*.rpm" -o \
+            -name "*.blockmap" -o \
+            -name "latest*.yml" \
+          \) -exec cp {} release/ \;
           echo "Release files:"
           ls -lh release/
 
