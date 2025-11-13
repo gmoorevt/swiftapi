@@ -212,7 +212,14 @@ export function CollectionSidebar({ isOpen, onClose }: CollectionSidebarProps): 
           justifyContent: 'center',
         }}
       >
-        <p style={{ margin: '0 0 16px', fontSize: '14px', color: theme.colors.text.secondary, textAlign: 'center' }}>
+        <p
+          style={{
+            margin: '0 0 16px',
+            fontSize: '14px',
+            color: theme.colors.text.secondary,
+            textAlign: 'center',
+          }}
+        >
           No collections yet. Create one to organize your requests.
         </p>
         <button

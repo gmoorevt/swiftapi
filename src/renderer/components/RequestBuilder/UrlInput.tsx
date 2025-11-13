@@ -164,7 +164,11 @@ export function UrlInput(): React.ReactElement {
       />
 
       {shouldShowWarning && (
-        <WarningMessage needsEnvironment={needsEnvironment} missingVariables={missingVariables} theme={theme} />
+        <WarningMessage
+          needsEnvironment={needsEnvironment}
+          missingVariables={missingVariables}
+          theme={theme}
+        />
       )}
 
       {shouldShowHint && activeEnvironment && (

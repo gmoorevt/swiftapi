@@ -171,7 +171,8 @@ export function ErrorDisplay({ error, onRetry }: ErrorDisplayProps): React.React
             transition: 'background-color 0.2s',
           }}
           onMouseOver={(e) => {
-            (e.target as HTMLButtonElement).style.backgroundColor = theme.colors.background.secondary;
+            (e.target as HTMLButtonElement).style.backgroundColor =
+              theme.colors.background.secondary;
           }}
           onMouseOut={(e) => {
             (e.target as HTMLButtonElement).style.backgroundColor = theme.colors.background.primary;
@@ -188,7 +189,8 @@ export function ErrorDisplay({ error, onRetry }: ErrorDisplayProps): React.React
           style={{
             marginTop: '16px',
             padding: '12px',
-            backgroundColor: theme.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+            backgroundColor:
+              theme.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
             borderRadius: '4px',
             fontFamily: 'monospace',
             fontSize: '13px',

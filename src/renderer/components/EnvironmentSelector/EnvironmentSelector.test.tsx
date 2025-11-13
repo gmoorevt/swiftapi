@@ -119,7 +119,6 @@ describe('EnvironmentSelector', () => {
     });
   });
 
-
   describe('Visual styling', () => {
     it('should highlight active environment option', () => {
       const store = useEnvironmentStore.getState();

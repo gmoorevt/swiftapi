@@ -145,10 +145,7 @@ export class MockServerService {
   /**
    * Emit request log to renderer
    */
-  private emitRequestLog(
-    serverId: string,
-    log: Omit<MockRequestLog, 'id' | 'timestamp'>
-  ): void {
+  private emitRequestLog(serverId: string, log: Omit<MockRequestLog, 'id' | 'timestamp'>): void {
     if (this.mainWindow && !this.mainWindow.isDestroyed()) {
       this.mainWindow.webContents.send('mock-server:request-log', serverId, log);
     }

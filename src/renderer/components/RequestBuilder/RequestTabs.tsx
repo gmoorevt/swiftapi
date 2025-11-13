@@ -55,10 +55,16 @@ export function RequestTabs(): React.ReactElement {
               padding: '10px 20px',
               fontSize: '13px',
               fontWeight: activeTab === tab.id ? 600 : 500,
-              color: activeTab === tab.id ? theme.colors.interactive.primary : theme.colors.text.secondary,
+              color:
+                activeTab === tab.id
+                  ? theme.colors.interactive.primary
+                  : theme.colors.text.secondary,
               backgroundColor: 'transparent',
               border: 'none',
-              borderBottom: activeTab === tab.id ? `2px solid ${theme.colors.interactive.primary}` : '2px solid transparent',
+              borderBottom:
+                activeTab === tab.id
+                  ? `2px solid ${theme.colors.interactive.primary}`
+                  : '2px solid transparent',
               cursor: 'pointer',
               transition: 'all 0.2s',
               marginBottom: '-2px',

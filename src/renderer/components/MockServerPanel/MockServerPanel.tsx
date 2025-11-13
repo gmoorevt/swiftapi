@@ -164,9 +164,7 @@ export function MockServerPanel(): React.ReactElement {
                       ? theme.colors.interactive.primary + '20'
                       : 'transparent',
                   border: `1px solid ${
-                    activeServerId === server.id
-                      ? theme.colors.interactive.primary
-                      : 'transparent'
+                    activeServerId === server.id ? theme.colors.interactive.primary : 'transparent'
                   }`,
                   transition: 'all 0.2s',
                 }}
@@ -484,7 +482,9 @@ export function MockServerPanel(): React.ReactElement {
                         marginBottom: '12px',
                         border: `1px solid ${endpoint.enabled ? theme.colors.border.secondary : theme.colors.border.primary}`,
                         borderRadius: '8px',
-                        backgroundColor: endpoint.enabled ? theme.colors.background.secondary : theme.colors.background.tertiary,
+                        backgroundColor: endpoint.enabled
+                          ? theme.colors.background.secondary
+                          : theme.colors.background.tertiary,
                         opacity: endpoint.enabled ? 1 : 0.6,
                       }}
                     >

@@ -141,18 +141,9 @@ function isSSLError(error: HttpError): boolean {
     return true;
   }
 
-  const sslKeywords = [
-    'certificate',
-    'cert',
-    'ssl',
-    'tls',
-    'self signed',
-    'unable to verify',
-  ];
+  const sslKeywords = ['certificate', 'cert', 'ssl', 'tls', 'self signed', 'unable to verify'];
 
-  return sslKeywords.some((keyword) =>
-    error.message.toLowerCase().includes(keyword)
-  );
+  return sslKeywords.some((keyword) => error.message.toLowerCase().includes(keyword));
 }
 
 /**

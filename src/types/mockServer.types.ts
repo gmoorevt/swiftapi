@@ -52,7 +52,10 @@ export interface MockServerState {
     updateServer: (serverId: string, updates: Partial<MockServer>) => void;
     setActiveServer: (serverId: string | null) => void;
 
-    addEndpoint: (serverId: string, endpoint: Omit<MockEndpoint, 'id' | 'createdAt' | 'updatedAt'>) => string;
+    addEndpoint: (
+      serverId: string,
+      endpoint: Omit<MockEndpoint, 'id' | 'createdAt' | 'updatedAt'>
+    ) => string;
     updateEndpoint: (serverId: string, endpointId: string, updates: Partial<MockEndpoint>) => void;
     deleteEndpoint: (serverId: string, endpointId: string) => void;
     toggleEndpoint: (serverId: string, endpointId: string) => void;

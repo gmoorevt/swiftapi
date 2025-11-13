@@ -47,7 +47,8 @@ export function ResponseStatusBar({
   };
 
   // Count cookies and headers
-  const cookieCount = response?.headers.filter((h) => h.name.toLowerCase() === 'set-cookie').length || 0;
+  const cookieCount =
+    response?.headers.filter((h) => h.name.toLowerCase() === 'set-cookie').length || 0;
   const headerCount = response?.headers.length || 0;
 
   const tabs: { id: ResponseTab; label: string; count?: number }[] = [

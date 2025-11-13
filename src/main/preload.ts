@@ -19,7 +19,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onRequestLog: (
       callback: (serverId: string, log: Omit<MockRequestLog, 'id' | 'timestamp'>) => void
     ): (() => void) => {
-      const listener = (_: unknown, serverId: string, log: Omit<MockRequestLog, 'id' | 'timestamp'>) => {
+      const listener = (
+        _: unknown,
+        serverId: string,
+        log: Omit<MockRequestLog, 'id' | 'timestamp'>
+      ) => {
         callback(serverId, log);
       };
       ipcRenderer.on('mock-server:request-log', listener);

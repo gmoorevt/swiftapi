@@ -32,11 +32,7 @@ function parseBooleanAttribute(attrName: string, cookie: Cookie): void {
 /**
  * Parse key-value cookie attributes (Domain, Path, etc.)
  */
-function parseKeyValueAttribute(
-  attrName: string,
-  attrValue: string,
-  cookie: Cookie
-): void {
+function parseKeyValueAttribute(attrName: string, attrValue: string, cookie: Cookie): void {
   switch (attrName) {
     case 'domain':
       cookie.domain = attrValue;

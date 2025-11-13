@@ -82,9 +82,7 @@ describe('ResponseCookiesViewer', () => {
     const response = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'Set-Cookie', value: 'secure=cookie; Secure', enabled: true },
-      ],
+      headers: [{ name: 'Set-Cookie', value: 'secure=cookie; Secure', enabled: true }],
       body: '',
       responseTime: 100,
       size: 0,
@@ -103,9 +101,7 @@ describe('ResponseCookiesViewer', () => {
     const response = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'Set-Cookie', value: 'httponly=cookie; HttpOnly', enabled: true },
-      ],
+      headers: [{ name: 'Set-Cookie', value: 'httponly=cookie; HttpOnly', enabled: true }],
       body: '',
       responseTime: 100,
       size: 0,
@@ -124,9 +120,7 @@ describe('ResponseCookiesViewer', () => {
     const response = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'Set-Cookie', value: 'simple=cookie', enabled: true },
-      ],
+      headers: [{ name: 'Set-Cookie', value: 'simple=cookie', enabled: true }],
       body: '',
       responseTime: 100,
       size: 0,
@@ -149,7 +143,8 @@ describe('ResponseCookiesViewer', () => {
       headers: [
         {
           name: 'Set-Cookie',
-          value: 'full=cookie; Domain=example.com; Path=/api; Expires=Wed, 21 Oct 2025 07:28:00 GMT; Secure; HttpOnly; SameSite=Strict',
+          value:
+            'full=cookie; Domain=example.com; Path=/api; Expires=Wed, 21 Oct 2025 07:28:00 GMT; Secure; HttpOnly; SameSite=Strict',
           enabled: true,
         },
       ],

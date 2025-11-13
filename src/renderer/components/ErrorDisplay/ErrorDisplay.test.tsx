@@ -49,9 +49,7 @@ describe('ErrorDisplay', () => {
 
   it('should render suggestion text', () => {
     render(<ErrorDisplay error={mockNetworkError} />);
-    expect(
-      screen.getByText(/Check your internet connection/)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Check your internet connection/)).toBeInTheDocument();
   });
 
   it('should not show technical details by default', () => {

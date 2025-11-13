@@ -5,7 +5,12 @@
  */
 
 import { create } from 'zustand';
-import { MockServerState, MockServer, MockEndpoint, MockRequestLog } from '../../types/mockServer.types';
+import {
+  MockServerState,
+  MockServer,
+  MockEndpoint,
+  MockRequestLog,
+} from '../../types/mockServer.types';
 import { MockServerModel } from '../../models/MockServer';
 import { mockServerStorageService } from '../services/mockServerStorageService';
 
@@ -46,34 +51,38 @@ export const useMockServerStore = create<MockServerState>((set, get) => ({
     },
 
     deleteServer: (serverId: string): void => {
-      set(saveAndSet((state) => {
-        const { [serverId]: _deleted, ...remaining } = state.servers;
-        return {
-          servers: remaining,
-          activeServerId: state.activeServerId === serverId ? null : state.activeServerId,
-        };
-      }));
+      set(
+        saveAndSet((state) => {
+          const { [serverId]: _deleted, ...remaining } = state.servers;
+          return {
+            servers: remaining,
+            activeServerId: state.activeServerId === serverId ? null : state.activeServerId,
+          };
+        })
+      );
     },
 
     updateServer: (serverId: string, updates: Partial<MockServer>): void => {
-      set(saveAndSet((state) => {
-        const server = state.servers[serverId];
-        if (!server) {
-return state;
-}
+      set(
+        saveAndSet((state) => {
+          const server = state.servers[serverId];
+          if (!server) {
+            return state;
+          }
 
-        return {
-          servers: {
-            ...state.servers,
-            [serverId]: {
-              ...server,
-              ...updates,
-              id: serverId, // Don't allow ID changes
-              updatedAt: new Date().toISOString(),
+          return {
+            servers: {
+              ...state.servers,
+              [serverId]: {
+                ...server,
+                ...updates,
+                id: serverId, // Don't allow ID changes
+                updatedAt: new Date().toISOString(),
+              },
             },
-          },
-        };
-      }));
+          };
+        })
+      );
     },
 
     setActiveServer: (serverId: string | null): void => {
@@ -92,17 +101,23 @@ return state;
       const serverModel = MockServerModel.fromJSON(server);
       const endpointId = serverModel.addEndpoint(endpoint);
 
-      set(saveAndSet((state) => ({
-        servers: {
-          ...state.servers,
-          [serverId]: serverModel.toJSON(),
-        },
-      })));
+      set(
+        saveAndSet((state) => ({
+          servers: {
+            ...state.servers,
+            [serverId]: serverModel.toJSON(),
+          },
+        }))
+      );
 
       return endpointId;
     },
 
-    updateEndpoint: (serverId: string, endpointId: string, updates: Partial<MockEndpoint>): void => {
+    updateEndpoint: (
+      serverId: string,
+      endpointId: string,
+      updates: Partial<MockEndpoint>
+    ): void => {
       const server = get().servers[serverId];
       if (!server) {
         throw new Error(`Server ${serverId} not found`);
@@ -111,12 +126,14 @@ return state;
       const serverModel = MockServerModel.fromJSON(server);
       serverModel.updateEndpoint(endpointId, updates);
 
-      set(saveAndSet((state) => ({
-        servers: {
-          ...state.servers,
-          [serverId]: serverModel.toJSON(),
-        },
-      })));
+      set(
+        saveAndSet((state) => ({
+          servers: {
+            ...state.servers,
+            [serverId]: serverModel.toJSON(),
+          },
+        }))
+      );
     },
 
     deleteEndpoint: (serverId: string, endpointId: string): void => {
@@ -128,12 +145,14 @@ return state;
       const serverModel = MockServerModel.fromJSON(server);
       serverModel.deleteEndpoint(endpointId);
 
-      set(saveAndSet((state) => ({
-        servers: {
-          ...state.servers,
-          [serverId]: serverModel.toJSON(),
-        },
-      })));
+      set(
+        saveAndSet((state) => ({
+          servers: {
+            ...state.servers,
+            [serverId]: serverModel.toJSON(),
+          },
+        }))
+      );
     },
 
     toggleEndpoint: (serverId: string, endpointId: string): void => {
@@ -145,12 +164,14 @@ return state;
       const serverModel = MockServerModel.fromJSON(server);
       serverModel.toggleEndpoint(endpointId);
 
-      set(saveAndSet((state) => ({
-        servers: {
-          ...state.servers,
-          [serverId]: serverModel.toJSON(),
-        },
-      })));
+      set(
+        saveAndSet((state) => ({
+          servers: {
+            ...state.servers,
+            [serverId]: serverModel.toJSON(),
+          },
+        }))
+      );
     },
 
     logRequest: (serverId: string, log: Omit<MockRequestLog, 'id' | 'timestamp'>): void => {
@@ -179,12 +200,14 @@ return state;
       const serverModel = MockServerModel.fromJSON(server);
       serverModel.clearLogs();
 
-      set(saveAndSet((state) => ({
-        servers: {
-          ...state.servers,
-          [serverId]: serverModel.toJSON(),
-        },
-      })));
+      set(
+        saveAndSet((state) => ({
+          servers: {
+            ...state.servers,
+            [serverId]: serverModel.toJSON(),
+          },
+        }))
+      );
     },
 
     startServer: async (serverId: string): Promise<void> => {

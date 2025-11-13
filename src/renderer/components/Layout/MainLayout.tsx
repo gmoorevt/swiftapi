@@ -12,9 +12,5 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ children }: MainLayoutProps): React.ReactElement {
-  return (
-    <div style={mainLayoutStyles.mainContent()}>
-      {children}
-    </div>
-  );
+  return <div style={mainLayoutStyles.mainContent()}>{children}</div>;
 }

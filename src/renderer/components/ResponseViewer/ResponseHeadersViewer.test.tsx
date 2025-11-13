@@ -134,9 +134,7 @@ describe('ResponseHeadersViewer', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'content-type', value: 'application/json', enabled: true },
-      ],
+      headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
       body: '{}',
       responseTime: 100,
       size: 2,
@@ -158,9 +156,7 @@ describe('ResponseHeadersViewer', () => {
     const mockResponse = new Response({
       statusCode: 200,
       statusText: 'OK',
-      headers: [
-        { name: 'content-type', value: 'application/json', enabled: true },
-      ],
+      headers: [{ name: 'content-type', value: 'application/json', enabled: true }],
       body: '{}',
       responseTime: 100,
       size: 2,

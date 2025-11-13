@@ -39,7 +39,9 @@ export function AddEndpointDialog({
 }: AddEndpointDialogProps): React.ReactElement | null {
   const { theme } = useTheme();
   const [path, setPath] = useState('');
-  const [method, setMethod] = useState<'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD'>('GET');
+  const [method, setMethod] = useState<
+    'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD'
+  >('GET');
   const [statusCode, setStatusCode] = useState('200');
   const [responseBody, setResponseBody] = useState('');
   const [delay, setDelay] = useState('');
@@ -68,8 +70,8 @@ export function AddEndpointDialog({
   }, [open, initialData]);
 
   if (!open) {
-return null;
-}
+    return null;
+  }
 
   const validatePath = (): boolean => {
     if (!path.trim()) {
@@ -318,7 +320,14 @@ return null;
 
         {/* Response Headers */}
         <div style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '8px',
+            }}
+          >
             <label
               style={{
                 fontSize: '13px',
@@ -346,7 +355,10 @@ return null;
           </div>
 
           {headers.map((header, index) => (
-            <div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+            <div
+              key={index}
+              style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}
+            >
               <input
                 type="text"
                 value={header.name}

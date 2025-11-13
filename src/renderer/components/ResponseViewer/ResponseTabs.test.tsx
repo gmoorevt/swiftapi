@@ -17,9 +17,7 @@ vi.mock('./BodyViewer', () => ({
 }));
 
 vi.mock('./ResponseHeadersViewer', () => ({
-  ResponseHeadersViewer: () => (
-    <div data-testid="headers-viewer">Headers Viewer Content</div>
-  ),
+  ResponseHeadersViewer: () => <div data-testid="headers-viewer">Headers Viewer Content</div>,
 }));
 
 describe('ResponseTabs', () => {
@@ -45,7 +43,7 @@ describe('ResponseTabs', () => {
     // Body tab should be active (has specific styles)
     expect(bodyButton).toHaveStyle({
       borderBottom: '2px solid #007bff',
-      color: '#007bff'
+      color: '#007bff',
     });
     expect(headersButton).toHaveStyle({ color: '#666666' });
   });
@@ -96,7 +94,7 @@ describe('ResponseTabs', () => {
     // Initially Body is active
     expect(bodyButton).toHaveStyle({
       borderBottom: '2px solid #007bff',
-      color: '#007bff'
+      color: '#007bff',
     });
 
     // Click Headers
@@ -105,7 +103,7 @@ describe('ResponseTabs', () => {
     // Headers should now be active
     expect(headersButton).toHaveStyle({
       borderBottom: '2px solid #007bff',
-      color: '#007bff'
+      color: '#007bff',
     });
     expect(bodyButton).toHaveStyle({ color: '#666666' });
   });

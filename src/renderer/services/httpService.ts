@@ -201,7 +201,8 @@ export class HttpService {
    */
   private parseHttpError(axiosError: AxiosError): HttpError {
     return {
-      message: axiosError.message || `Request failed with status code ${axiosError.response!.status}`,
+      message:
+        axiosError.message || `Request failed with status code ${axiosError.response!.status}`,
       ...(axiosError.code ? { code: axiosError.code } : {}),
       statusCode: axiosError.response!.status,
       isNetworkError: false,

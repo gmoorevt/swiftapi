@@ -50,9 +50,7 @@ export function Sidebar({ activeItem, onItemChange }: SidebarProps): React.React
               height: '48px',
               border: 'none',
               borderRadius: theme.borderRadius.md,
-              backgroundColor: isActive
-                ? theme.colors.interactive.primary + '20'
-                : 'transparent',
+              backgroundColor: isActive ? theme.colors.interactive.primary + '20' : 'transparent',
               color: isActive ? theme.colors.interactive.primary : theme.colors.text.secondary,
               fontSize: '20px',
               cursor: 'pointer',

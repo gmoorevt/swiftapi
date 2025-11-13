@@ -139,9 +139,7 @@ export function TopNavigationBar({
             fontWeight: theme.typography.fontWeights.medium,
             border: `1px solid ${theme.colors.border.primary}`,
             borderRadius: theme.borderRadius.md,
-            backgroundColor: isCollectionsOpen
-              ? theme.colors.background.secondary
-              : 'transparent',
+            backgroundColor: isCollectionsOpen ? theme.colors.background.secondary : 'transparent',
             color: theme.colors.text.primary,
             cursor: 'pointer',
             transition: theme.transitions.normal,

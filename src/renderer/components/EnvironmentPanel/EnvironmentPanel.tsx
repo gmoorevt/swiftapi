@@ -459,7 +459,10 @@ export function EnvironmentPanel(): React.ReactElement {
               </thead>
               <tbody>
                 {variables.map(([key, value]) => (
-                  <tr key={key} style={{ borderBottom: `1px solid ${theme.colors.border.primary}` }}>
+                  <tr
+                    key={key}
+                    style={{ borderBottom: `1px solid ${theme.colors.border.primary}` }}
+                  >
                     <td style={{ padding: theme.spacing.sm, fontFamily: 'monospace' }}>{key}</td>
                     <td
                       style={{
@@ -537,7 +540,9 @@ export function EnvironmentPanel(): React.ReactElement {
                       <input
                         type="text"
                         value={variableEdit.value}
-                        onChange={(e) => setVariableEdit({ ...variableEdit, value: e.target.value })}
+                        onChange={(e) =>
+                          setVariableEdit({ ...variableEdit, value: e.target.value })
+                        }
                         placeholder="Variable value"
                         style={{
                           width: '100%',

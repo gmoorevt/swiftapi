@@ -34,7 +34,8 @@ export function ResponseTabs(): React.ReactElement {
     backgroundColor: 'transparent',
     cursor: 'pointer',
     color: activeTab === tab ? theme.colors.interactive.primary : theme.colors.text.secondary,
-    borderBottom: activeTab === tab ? `2px solid ${theme.colors.interactive.primary}` : '2px solid transparent',
+    borderBottom:
+      activeTab === tab ? `2px solid ${theme.colors.interactive.primary}` : '2px solid transparent',
     transition: 'all 0.2s',
   });
 
@@ -86,7 +87,10 @@ export function ResponseTabs(): React.ReactElement {
                 padding: '2px 8px',
                 fontSize: '12px',
                 fontWeight: 600,
-                backgroundColor: activeTab === 'headers' ? theme.colors.interactive.primary : theme.colors.text.tertiary,
+                backgroundColor:
+                  activeTab === 'headers'
+                    ? theme.colors.interactive.primary
+                    : theme.colors.text.tertiary,
                 color: 'white',
                 borderRadius: '10px',
               }}
@@ -117,7 +121,10 @@ export function ResponseTabs(): React.ReactElement {
                 padding: '2px 8px',
                 fontSize: '12px',
                 fontWeight: 600,
-                backgroundColor: activeTab === 'cookies' ? theme.colors.interactive.primary : theme.colors.status.success,
+                backgroundColor:
+                  activeTab === 'cookies'
+                    ? theme.colors.interactive.primary
+                    : theme.colors.status.success,
                 color: 'white',
                 borderRadius: '10px',
               }}

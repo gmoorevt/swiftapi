@@ -264,7 +264,11 @@ describe('Response Model', () => {
         statusCode: 200,
         statusText: 'OK',
         headers: [
-          { name: 'Set-Cookie', value: 'sessionId=abc123; Path=/; Secure; HttpOnly', enabled: true },
+          {
+            name: 'Set-Cookie',
+            value: 'sessionId=abc123; Path=/; Secure; HttpOnly',
+            enabled: true,
+          },
           { name: 'Set-Cookie', value: 'token=xyz789; Domain=example.com', enabled: true },
         ],
         body: '',
@@ -306,9 +310,7 @@ describe('Response Model', () => {
       const response = new Response({
         statusCode: 200,
         statusText: 'OK',
-        headers: [
-          { name: 'Set-Cookie', value: 'test=value', enabled: true },
-        ],
+        headers: [{ name: 'Set-Cookie', value: 'test=value', enabled: true }],
         body: '',
         responseTime: 100,
         size: 0,
