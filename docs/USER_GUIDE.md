@@ -11,8 +11,10 @@ Welcome to SwiftAPI - a fast, lightweight, and privacy-focused API testing clien
 5. [Request Configuration](#request-configuration)
 6. [Viewing Responses](#viewing-responses)
 7. [Request History](#request-history)
-8. [Keyboard Shortcuts](#keyboard-shortcuts)
-9. [Tips and Best Practices](#tips-and-best-practices)
+8. [Mock Servers](#mock-servers)
+9. [Dark Mode](#dark-mode)
+10. [Keyboard Shortcuts](#keyboard-shortcuts)
+11. [Tips and Best Practices](#tips-and-best-practices)
 
 ---
 
@@ -29,12 +31,13 @@ SwiftAPI is a desktop application built for API developers who value:
 
 ### Main Interface Overview
 
-The SwiftAPI interface consists of four main areas:
+The SwiftAPI interface consists of five main areas:
 
-1. **Collections Sidebar** (left): Organize requests into collections
-2. **Request Builder** (top): Configure your HTTP requests
-3. **Response Viewer** (bottom): View API responses
+1. **Sidebar** (left): Switch between Collections, History, and Mock Servers
+2. **Request Builder** (center/top): Configure your HTTP requests
+3. **Response Viewer** (center/bottom): View API responses
 4. **Environment Selector** (top right): Switch between environments
+5. **Theme Toggle** (top right): Switch between light and dark mode
 
 ---
 
@@ -215,13 +218,105 @@ SwiftAPI automatically tracks your request history.
 
 ### Viewing History
 
-1. Click the **History** icon in the toolbar
+1. Click the **History** tab in the left sidebar
 2. Browse your recent requests
 3. Click any request to load it into the Request Builder
 
 ### Clearing History
 
 Right-click in the History panel and select **Clear History** to remove all entries.
+
+---
+
+## Mock Servers
+
+**New in v0.2.0**: SwiftAPI includes built-in mock HTTP servers for testing and prototyping APIs without backend infrastructure.
+
+### Creating a Mock Server
+
+1. Click the **Mock Servers** tab in the left sidebar
+2. Click **Create Mock Server**
+3. Enter a name (e.g., "Development API Mock")
+4. Choose a port number (e.g., 3000)
+5. Click **Create**
+
+### Adding Endpoints
+
+1. Select your mock server from the list
+2. Click **Add Endpoint**
+3. Configure the endpoint:
+   - **Method**: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
+   - **Path**: Endpoint path (e.g., `/users`, `/users/:id`)
+   - **Status Code**: HTTP status code to return (e.g., 200, 404, 500)
+   - **Response Body**: JSON or text response
+   - **Headers**: Custom response headers
+   - **Delay**: Optional delay in milliseconds (simulate slow responses)
+
+### Path Parameters
+
+Mock servers support path parameters using colon syntax:
+
+```
+/users/:id
+/products/:productId/reviews/:reviewId
+```
+
+A request to `/users/123` will match the `/users/:id` endpoint.
+
+### Starting and Stopping
+
+1. Click **Start Server** to begin listening on the configured port
+2. The server status will show "Running" with a green indicator
+3. Click **Stop Server** to stop the mock server
+4. View real-time request logs in the Logs section
+
+### Testing with Mock Servers
+
+Once your mock server is running, you can:
+
+1. Send requests to `http://localhost:PORT/path` from SwiftAPI
+2. Test your frontend application against the mock API
+3. Simulate different response scenarios (errors, delays, etc.)
+4. View all incoming requests in the request log
+
+### Use Cases
+
+- **Frontend Development**: Build UI without waiting for backend
+- **Testing Error Handling**: Simulate 4xx and 5xx errors
+- **Performance Testing**: Add delays to test loading states
+- **Prototyping**: Quickly mock API responses for demos
+- **Offline Development**: Work without network connectivity
+
+For detailed information, see the [Mock Servers Documentation](MOCK_SERVERS.md).
+
+---
+
+## Dark Mode
+
+**New in v0.2.0**: SwiftAPI supports both light and dark themes.
+
+### Switching Themes
+
+1. Click the **Theme Toggle** button in the top-right corner (sun/moon icon)
+2. The interface will immediately switch between light and dark mode
+3. Your preference is automatically saved
+
+### System Preference Detection
+
+SwiftAPI automatically detects your system's theme preference:
+
+- **macOS**: Follows System Preferences > General > Appearance
+- **Windows**: Follows Settings > Personalization > Colors > Choose your color
+- **Linux**: Follows GTK theme preference
+
+The app will use your system theme on first launch, then remember your manual selection.
+
+### Benefits of Dark Mode
+
+- **Reduced Eye Strain**: Easier on the eyes in low-light environments
+- **Battery Savings**: OLED displays use less power with dark backgrounds
+- **Focus**: Reduces glare and distractions
+- **Aesthetics**: Modern, professional appearance
 
 ---
 
@@ -371,14 +466,18 @@ Need assistance? Here's how to get help:
 
 SwiftAPI is under active development. Upcoming features include:
 
-- GraphQL support
-- WebSocket testing
-- Mock servers
-- Request chaining and scripting
-- Response validation and testing
-- Import/Export (Postman, Insomnia, OpenAPI)
-- Team collaboration features
-- Custom themes
+- **GraphQL Support**: Query and mutation testing for GraphQL APIs
+- **WebSocket Testing**: Real-time WebSocket connection testing
+- **Request Chaining and Scripting**: Pre-request and post-response scripts
+- **Collection Runner**: Automated test execution for entire collections
+- **Response Validation**: Assertions and test cases for API responses
+- **Import/Export**: Support for Postman, Insomnia, OpenAPI, and cURL formats
+- **CLI Tool**: Command-line interface for CI/CD integration
+- **Team Collaboration**: Shared workspaces and team features (optional)
+
+**Recently Added (v0.2.0)**:
+- Mock HTTP servers for local API testing
+- Dark mode with system preference detection
 
 ---
 

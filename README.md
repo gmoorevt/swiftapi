@@ -19,7 +19,7 @@ SwiftAPI is an open-source API testing client designed to replace Postman with a
 
 ## Key Features
 
-### ✅ Core Functionality (v0.1.0-beta)
+### ✅ Core Functionality (v0.2.0)
 - **HTTP Methods**: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
 - **Request Builder**: URL input, headers, query parameters, body (JSON, XML, Text)
 - **Collections**: Organize and save requests with folders
@@ -28,13 +28,14 @@ SwiftAPI is an open-source API testing client designed to replace Postman with a
 - **Request History**: Auto-save and replay previous requests
 - **Response Viewer**: Syntax highlighting, formatted JSON/XML, headers, cookies
 - **Authentication**: Basic, Bearer Token, API Key
-- **Mock Servers**: Built-in HTTP servers for testing and prototyping
+- **Mock Servers**: Built-in HTTP servers for testing and prototyping (NEW in v0.2.0!)
   - Create custom endpoints with configurable responses
   - Path parameters support (`/users/:id`)
   - Response delays for testing loading states
   - Real-time request logging
   - Auto CORS support
   - [Full Documentation](docs/MOCK_SERVERS.md)
+- **Dark Mode**: Light/dark theme toggle with system preference detection (NEW in v0.2.0!)
 
 ### 🎨 User Experience
 - **Tabbed Interface**: Organized tabs for Query Params, Headers, Body, Authentication
@@ -242,12 +243,13 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for det
 - [x] **Phase 2**: Environment Management - Variables, environments, template resolution
 - [x] **Phase 6**: Collections & Organization - Save requests, organize in collections
 - [x] **Phase 9**: Performance & UX Polish - Tabs, keyboard shortcuts, loading states
+- [x] **Phase 7**: Mock Servers - Built-in HTTP mock servers for testing
 - [ ] **Phase 3**: Testing & Validation - Scripts, collection runner, assertions
 - [ ] **Phase 4**: CLI & Automation - Command-line interface, CI/CD integration
 - [ ] **Phase 5**: Import/Export - Postman collections, OpenAPI, cURL
-- [ ] **Phase 7**: Advanced Features - WebSocket, gRPC, mock servers
+- [ ] **Advanced Features**: WebSocket, gRPC testing
 
-**Current Status**: v0.1.0-alpha - Core features complete, ready for testing and feedback!
+**Current Status**: v0.2.0 - Mock servers and dark mode added!
 
 ## Community
 
@@ -276,4 +278,4 @@ SwiftAPI is inspired by the need for a fast, privacy-focused, and truly open-sou
 
 ---
 
-**Status**: 🚧 In Development | **Version**: 0.1.0-alpha | **Constitution**: v1.1.0
+**Status**: 🚧 In Development | **Version**: 0.2.0 | **Constitution**: v1.1.0

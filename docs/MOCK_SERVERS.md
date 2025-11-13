@@ -15,10 +15,10 @@ Mock servers allow you to:
 
 ### Creating a Mock Server
 
-1. Click the **"Mock Servers"** tab in the main toolbar
-2. Click **"+ New Server"**
+1. Click the **"Mock Servers"** tab in the left sidebar
+2. Click **"+ New Server"** or **"Create Mock Server"**
 3. Enter a name and port number (e.g., `3001`)
-4. Click **"Create Server"**
+4. Click **"Create"** or **"Create Server"**
 
 ### Adding Endpoints
 
@@ -339,5 +339,5 @@ Found a bug or have a feature request? Please open an issue on GitHub!
 
 ---
 
-**Last Updated**: 2025-11-12
-**Version**: 0.1.0-beta
+**Last Updated**: 2025-11-13
+**Version**: 0.2.0
