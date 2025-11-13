@@ -40,6 +40,14 @@ export default defineConfig({
         'src/renderer/components/RequestBuilder/AuthSection.tsx',
         'src/renderer/components/RequestBuilder/QueryParamsEditor.tsx',
         'src/renderer/components/ResponseViewer/MonacoWrapper.tsx',
+        // Mock Server UI components (covered by integration tests, TODO: add unit tests)
+        'src/renderer/components/MockServerPanel/**',
+        'src/renderer/components/Layout/**',
+        'src/renderer/components/Sidebar/**',
+        'src/renderer/components/Logo/**',
+        'src/renderer/services/mockServerStorageService.ts',
+        // Style utilities (covered by E2E visual testing)
+        'src/renderer/styles/**',
         // Type-only files (contract definitions)
         'specs/**/contracts/**',
       ],
