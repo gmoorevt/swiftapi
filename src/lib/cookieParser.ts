@@ -54,11 +54,13 @@ function parseKeyValueAttribute(
       }
       break;
     }
-    case 'samesite':
-      if (attrValue === 'Strict' || attrValue === 'Lax' || attrValue === 'None') {
-        cookie.sameSite = attrValue;
+    case 'samesite': {
+      const normalized = attrValue.charAt(0).toUpperCase() + attrValue.slice(1).toLowerCase();
+      if (normalized === 'Strict' || normalized === 'Lax' || normalized === 'None') {
+        cookie.sameSite = normalized;
       }
       break;
+    }
   }
 }
 
