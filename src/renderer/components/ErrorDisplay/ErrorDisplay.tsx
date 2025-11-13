@@ -15,80 +15,64 @@ interface ErrorDisplayProps {
   onRetry?: () => void;
 }
 
+// Lookup maps for error styling
+const ERROR_COLORS: Record<ErrorCategory, string> = {
+  [ErrorCategory.NETWORK]: '#e74c3c',
+  [ErrorCategory.DNS]: '#e74c3c',
+  [ErrorCategory.CONNECTION_REFUSED]: '#e74c3c',
+  [ErrorCategory.TIMEOUT]: '#f39c12',
+  [ErrorCategory.SSL_ERROR]: '#e67e22',
+  [ErrorCategory.CLIENT_ERROR]: '#f39c12',
+  [ErrorCategory.SERVER_ERROR]: '#e74c3c',
+  [ErrorCategory.CANCELLED]: '#95a5a6',
+  [ErrorCategory.INVALID_URL]: '#e74c3c',
+  [ErrorCategory.VARIABLE_ERROR]: '#f39c12',
+  [ErrorCategory.UNKNOWN]: '#e74c3c',
+};
+
+const BACKGROUND_COLORS: Record<ErrorCategory, { light: string; dark: string }> = {
+  [ErrorCategory.NETWORK]: { light: '#fadbd8', dark: '#3a1f1f' },
+  [ErrorCategory.DNS]: { light: '#fadbd8', dark: '#3a1f1f' },
+  [ErrorCategory.CONNECTION_REFUSED]: { light: '#fadbd8', dark: '#3a1f1f' },
+  [ErrorCategory.TIMEOUT]: { light: '#fdebd0', dark: '#3a311f' },
+  [ErrorCategory.SSL_ERROR]: { light: '#fce5d3', dark: '#3a2b1f' },
+  [ErrorCategory.CLIENT_ERROR]: { light: '#fdebd0', dark: '#3a311f' },
+  [ErrorCategory.SERVER_ERROR]: { light: '#fadbd8', dark: '#3a1f1f' },
+  [ErrorCategory.CANCELLED]: { light: '#ecf0f1', dark: '#2a2a2a' },
+  [ErrorCategory.INVALID_URL]: { light: '#fadbd8', dark: '#3a1f1f' },
+  [ErrorCategory.VARIABLE_ERROR]: { light: '#fdebd0', dark: '#3a311f' },
+  [ErrorCategory.UNKNOWN]: { light: '#fadbd8', dark: '#3a1f1f' },
+};
+
+const ERROR_ICONS: Record<ErrorCategory, string> = {
+  [ErrorCategory.NETWORK]: '🔌',
+  [ErrorCategory.DNS]: '🔌',
+  [ErrorCategory.CONNECTION_REFUSED]: '🔌',
+  [ErrorCategory.TIMEOUT]: '⏱️',
+  [ErrorCategory.SSL_ERROR]: '🔒',
+  [ErrorCategory.CLIENT_ERROR]: '⚠️',
+  [ErrorCategory.SERVER_ERROR]: '💥',
+  [ErrorCategory.CANCELLED]: '🛑',
+  [ErrorCategory.INVALID_URL]: '🔗',
+  [ErrorCategory.VARIABLE_ERROR]: '⚠️',
+  [ErrorCategory.UNKNOWN]: '❌',
+};
+
 export function ErrorDisplay({ error, onRetry }: ErrorDisplayProps): React.ReactElement {
   const [showDetails, setShowDetails] = useState(false);
   const { theme } = useTheme();
 
   const getErrorColor = (): string => {
-    switch (error.category) {
-      case ErrorCategory.NETWORK:
-      case ErrorCategory.DNS:
-      case ErrorCategory.CONNECTION_REFUSED:
-        return '#e74c3c'; // Red
-      case ErrorCategory.TIMEOUT:
-        return '#f39c12'; // Orange
-      case ErrorCategory.SSL_ERROR:
-        return '#e67e22'; // Dark orange
-      case ErrorCategory.CLIENT_ERROR:
-        return '#f39c12'; // Orange
-      case ErrorCategory.SERVER_ERROR:
-        return '#e74c3c'; // Red
-      case ErrorCategory.CANCELLED:
-        return '#95a5a6'; // Gray
-      case ErrorCategory.VARIABLE_ERROR:
-        return '#f39c12'; // Orange
-      default:
-        return '#e74c3c'; // Red
-    }
+    return ERROR_COLORS[error.category] || ERROR_COLORS[ErrorCategory.UNKNOWN];
   };
 
   const getBackgroundColor = (): string => {
-    const isDark = theme.mode === 'dark';
-    switch (error.category) {
-      case ErrorCategory.NETWORK:
-      case ErrorCategory.DNS:
-      case ErrorCategory.CONNECTION_REFUSED:
-        return isDark ? '#3a1f1f' : '#fadbd8'; // Light/dark red
-      case ErrorCategory.TIMEOUT:
-        return isDark ? '#3a311f' : '#fdebd0'; // Light/dark orange
-      case ErrorCategory.SSL_ERROR:
-        return isDark ? '#3a2b1f' : '#fce5d3'; // Light/dark orange
-      case ErrorCategory.CLIENT_ERROR:
-        return isDark ? '#3a311f' : '#fdebd0'; // Light/dark orange
-      case ErrorCategory.SERVER_ERROR:
-        return isDark ? '#3a1f1f' : '#fadbd8'; // Light/dark red
-      case ErrorCategory.CANCELLED:
-        return isDark ? '#2a2a2a' : '#ecf0f1'; // Light/dark gray
-      case ErrorCategory.VARIABLE_ERROR:
-        return isDark ? '#3a311f' : '#fdebd0'; // Light/dark orange
-      default:
-        return isDark ? '#3a1f1f' : '#fadbd8'; // Light/dark red
-    }
+    const colors = BACKGROUND_COLORS[error.category] || BACKGROUND_COLORS[ErrorCategory.UNKNOWN];
+    return theme.mode === 'dark' ? colors.dark : colors.light;
   };
 
   const getErrorIcon = (): string => {
-    switch (error.category) {
-      case ErrorCategory.NETWORK:
-      case ErrorCategory.DNS:
-      case ErrorCategory.CONNECTION_REFUSED:
-        return '🔌';
-      case ErrorCategory.TIMEOUT:
-        return '⏱️';
-      case ErrorCategory.SSL_ERROR:
-        return '🔒';
-      case ErrorCategory.CLIENT_ERROR:
-        return '⚠️';
-      case ErrorCategory.SERVER_ERROR:
-        return '💥';
-      case ErrorCategory.CANCELLED:
-        return '🛑';
-      case ErrorCategory.INVALID_URL:
-        return '🔗';
-      case ErrorCategory.VARIABLE_ERROR:
-        return '⚠️';
-      default:
-        return '❌';
-    }
+    return ERROR_ICONS[error.category] || ERROR_ICONS[ErrorCategory.UNKNOWN];
   };
 
   return (

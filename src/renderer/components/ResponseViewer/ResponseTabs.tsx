@@ -17,6 +17,7 @@ import { useTheme } from '../../hooks/useTheme';
 
 type TabType = 'body' | 'headers' | 'cookies';
 
+// eslint-disable-next-line complexity
 export function ResponseTabs(): React.ReactElement {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<TabType>('body');

@@ -43,7 +43,7 @@ export const useMockServerStore = create<MockServerState>((set, get) => ({
 
     deleteServer: (serverId: string): void => {
       set(saveAndSet((state) => {
-        const { [serverId]: deleted, ...remaining } = state.servers;
+        const { [serverId]: _deleted, ...remaining } = state.servers;
         return {
           servers: remaining,
           activeServerId: state.activeServerId === serverId ? null : state.activeServerId,
@@ -54,7 +54,9 @@ export const useMockServerStore = create<MockServerState>((set, get) => ({
     updateServer: (serverId: string, updates: Partial<MockServer>): void => {
       set(saveAndSet((state) => {
         const server = state.servers[serverId];
-        if (!server) return state;
+        if (!server) {
+return state;
+}
 
         return {
           servers: {

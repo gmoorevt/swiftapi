@@ -32,7 +32,7 @@ export function registerMockServerIpc(): void {
   });
 
   // Check if server is running
-  ipcMain.handle('mock-server:is-running', async (_, serverId: string) => {
+  ipcMain.handle('mock-server:is-running', (_, serverId: string) => {
     return mockServerService.isRunning(serverId);
   });
 

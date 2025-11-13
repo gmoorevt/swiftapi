@@ -15,7 +15,49 @@ export interface Cookie {
   maxAge?: number;
   secure?: boolean;
   httpOnly?: boolean;
-  sameSite?: 'Strict' | 'Lax' | 'None' | string;
+  sameSite?: 'Strict' | 'Lax' | 'None';
+}
+
+/**
+ * Parse boolean cookie attributes (Secure, HttpOnly)
+ */
+function parseBooleanAttribute(attrName: string, cookie: Cookie): void {
+  if (attrName === 'secure') {
+    cookie.secure = true;
+  } else if (attrName === 'httponly') {
+    cookie.httpOnly = true;
+  }
+}
+
+/**
+ * Parse key-value cookie attributes (Domain, Path, etc.)
+ */
+function parseKeyValueAttribute(
+  attrName: string,
+  attrValue: string,
+  cookie: Cookie
+): void {
+  switch (attrName) {
+    case 'domain':
+      cookie.domain = attrValue;
+      break;
+    case 'path':
+      cookie.path = attrValue;
+      break;
+    case 'expires':
+      cookie.expires = attrValue;
+      break;
+    case 'max-age': {
+      const maxAge = parseInt(attrValue, 10);
+      if (!isNaN(maxAge)) {
+        cookie.maxAge = maxAge;
+      }
+      break;
+    }
+    case 'samesite':
+      cookie.sameSite = attrValue as Cookie['sameSite'];
+      break;
+  }
 }
 
 /**
@@ -51,43 +93,21 @@ export function parseCookie(cookieString: string): Cookie | null {
   // Parse remaining attributes
   for (let i = 1; i < parts.length; i++) {
     const part = parts[i];
-    if (!part) continue;
+    if (!part) {
+      continue;
+    }
 
     const attrEqualsIndex = part.indexOf('=');
 
     if (attrEqualsIndex === -1) {
       // Boolean attribute (Secure, HttpOnly)
       const attrName = part.toLowerCase();
-      if (attrName === 'secure') {
-        cookie.secure = true;
-      } else if (attrName === 'httponly') {
-        cookie.httpOnly = true;
-      }
+      parseBooleanAttribute(attrName, cookie);
     } else {
       // Key-value attribute
       const attrName = part.substring(0, attrEqualsIndex).trim().toLowerCase();
       const attrValue = part.substring(attrEqualsIndex + 1).trim();
-
-      switch (attrName) {
-        case 'domain':
-          cookie.domain = attrValue;
-          break;
-        case 'path':
-          cookie.path = attrValue;
-          break;
-        case 'expires':
-          cookie.expires = attrValue;
-          break;
-        case 'max-age':
-          const maxAge = parseInt(attrValue, 10);
-          if (!isNaN(maxAge)) {
-            cookie.maxAge = maxAge;
-          }
-          break;
-        case 'samesite':
-          cookie.sameSite = attrValue;
-          break;
-      }
+      parseKeyValueAttribute(attrName, attrValue, cookie);
     }
   }
 

@@ -68,10 +68,11 @@ app.on('window-all-closed', () => {
 });
 
 // Stop all servers on quit
-app.on('before-quit', async (event) => {
+app.on('before-quit', (event) => {
   event.preventDefault();
-  await mockServerService.stopAllServers();
-  app.exit(0);
+  void mockServerService.stopAllServers().then(() => {
+    app.exit(0);
+  });
 });
 
 app.on('activate', () => {

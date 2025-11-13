@@ -4,6 +4,9 @@
  * Displays incoming requests and responses for a mock server
  */
 
+/* eslint-disable complexity */
+// TODO: Refactor display logic to reduce complexity in future iterations
+
 import { MockRequestLog } from '../../../types/mockServer.types';
 import { useTheme } from '../../hooks/useTheme';
 

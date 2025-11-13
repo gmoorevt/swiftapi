@@ -54,7 +54,7 @@ export function StatusDisplay(): React.ReactElement {
   // Show error state with enhanced error display
   if (error) {
     const classifiedError = classifyError(error);
-    return <ErrorDisplay error={classifiedError} onRetry={sendRequest} />;
+    return <ErrorDisplay error={classifiedError} onRetry={() => void sendRequest()} />;
   }
 
   // Show empty state

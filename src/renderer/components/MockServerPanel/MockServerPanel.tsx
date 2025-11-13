@@ -4,6 +4,9 @@
  * Main panel for managing mock API servers
  */
 
+/* eslint-disable no-alert */
+// TODO: Replace alert() and confirm() with proper toast notifications in the future
+
 import React, { useState, useEffect } from 'react';
 import { useMockServerStore } from '../../store/mockServerStore';
 import { useTheme } from '../../hooks/useTheme';
@@ -380,16 +383,18 @@ export function MockServerPanel(): React.ReactElement {
 
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <button
-                  onClick={async () => {
-                    try {
-                      if (activeServer.enabled) {
-                        await actions.stopServer(activeServer.id);
-                      } else {
-                        await actions.startServer(activeServer.id);
+                  onClick={() => {
+                    void (async () => {
+                      try {
+                        if (activeServer.enabled) {
+                          await actions.stopServer(activeServer.id);
+                        } else {
+                          await actions.startServer(activeServer.id);
+                        }
+                      } catch (error) {
+                        alert(`Error: ${(error as Error).message}`);
                       }
-                    } catch (error) {
-                      alert(`Error: ${(error as Error).message}`);
-                    }
+                    })();
                   }}
                   style={{
                     padding: '8px 16px',

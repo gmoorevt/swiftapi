@@ -67,23 +67,54 @@ export function AddEndpointDialog({
     }
   }, [open, initialData]);
 
-  if (!open) return null;
+  if (!open) {
+return null;
+}
 
-  const handleSave = (): void => {
+  const validatePath = (): boolean => {
     if (!path.trim()) {
+      // eslint-disable-next-line no-alert
       alert('Path is required');
-      return;
+      return false;
     }
+    return true;
+  };
 
+  const validateStatusCode = (): number | null => {
     const code = parseInt(statusCode, 10);
     if (isNaN(code) || code < 100 || code > 599) {
+      // eslint-disable-next-line no-alert
       alert('Status code must be between 100 and 599');
+      return null;
+    }
+    return code;
+  };
+
+  const validateDelay = (): number | undefined | null => {
+    if (!delay) {
+      return undefined;
+    }
+    const delayMs = parseInt(delay, 10);
+    if (isNaN(delayMs) || delayMs < 0) {
+      // eslint-disable-next-line no-alert
+      alert('Delay must be a positive number');
+      return null;
+    }
+    return delayMs;
+  };
+
+  const handleSave = (): void => {
+    if (!validatePath()) {
       return;
     }
 
-    const delayMs = delay ? parseInt(delay, 10) : undefined;
-    if (delay && (isNaN(delayMs as number) || (delayMs as number) < 0)) {
-      alert('Delay must be a positive number');
+    const code = validateStatusCode();
+    if (code === null) {
+      return;
+    }
+
+    const delayMs = validateDelay();
+    if (delayMs === null) {
       return;
     }
 
@@ -201,7 +232,7 @@ export function AddEndpointDialog({
             </label>
             <select
               value={method}
-              onChange={(e) => setMethod(e.target.value as any)}
+              onChange={(e) => setMethod(e.target.value as typeof method)}
               style={{
                 width: '100%',
                 padding: '10px 12px',

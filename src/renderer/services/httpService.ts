@@ -152,17 +152,67 @@ export class HttpService {
   }
 
   /**
+   * Parse cancelled request error
+   */
+  private parseCancelledError(): HttpError {
+    return {
+      message: 'Request was cancelled',
+      code: 'ERR_CANCELED',
+      isNetworkError: false,
+      isTimeout: false,
+      isCancelled: true,
+    };
+  }
+
+  /**
+   * Parse timeout error
+   */
+  private parseTimeoutError(axiosError: AxiosError): HttpError {
+    return {
+      message: axiosError.message || 'Request timed out',
+      code: axiosError.code,
+      isNetworkError: false,
+      isTimeout: true,
+      isCancelled: false,
+    };
+  }
+
+  /**
+   * Parse network error (no response from server)
+   */
+  private parseNetworkError(axiosError: AxiosError): HttpError {
+    const message = axiosError.message || 'Network error occurred';
+    const code = axiosError.code;
+
+    return {
+      message,
+      ...(code ? { code } : {}),
+      isNetworkError: true,
+      isTimeout: false,
+      isCancelled: false,
+    };
+  }
+
+  /**
+   * Parse HTTP error with response (4xx, 5xx, etc.)
+   */
+  private parseHttpError(axiosError: AxiosError): HttpError {
+    return {
+      message: axiosError.message || `Request failed with status code ${axiosError.response!.status}`,
+      ...(axiosError.code ? { code: axiosError.code } : {}),
+      statusCode: axiosError.response!.status,
+      isNetworkError: false,
+      isTimeout: false,
+      isCancelled: false,
+    };
+  }
+
+  /**
    * Parse axios error into our HttpError format with enhanced error details
    */
   private parseError(error: unknown): HttpError {
     if (axios.isCancel(error)) {
-      return {
-        message: 'Request was cancelled',
-        code: 'ERR_CANCELED',
-        isNetworkError: false,
-        isTimeout: false,
-        isCancelled: true,
-      };
+      return this.parseCancelledError();
     }
 
     if (axios.isAxiosError(error)) {
@@ -170,38 +220,16 @@ export class HttpService {
 
       // Check for timeout errors
       if (axiosError.code === 'ECONNABORTED' || axiosError.code === 'ETIMEDOUT') {
-        return {
-          message: axiosError.message || 'Request timed out',
-          code: axiosError.code,
-          isNetworkError: false,
-          isTimeout: true,
-          isCancelled: false,
-        };
+        return this.parseTimeoutError(axiosError);
       }
 
       // Check for network errors (no response from server)
       if (!axiosError.response) {
-        const message = axiosError.message || 'Network error occurred';
-        const code = axiosError.code;
-
-        return {
-          message,
-          ...(code ? { code } : {}),
-          isNetworkError: true,
-          isTimeout: false,
-          isCancelled: false,
-        };
+        return this.parseNetworkError(axiosError);
       }
 
       // HTTP error with response (4xx, 5xx, etc.)
-      return {
-        message: axiosError.message || `Request failed with status code ${axiosError.response.status}`,
-        ...(axiosError.code ? { code: axiosError.code } : {}),
-        statusCode: axiosError.response.status,
-        isNetworkError: false,
-        isTimeout: false,
-        isCancelled: false,
-      };
+      return this.parseHttpError(axiosError);
     }
 
     // Unknown error (not from axios)

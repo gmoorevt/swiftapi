@@ -47,7 +47,6 @@ export class MockServerService {
       });
 
       server.listen(config.port, () => {
-        console.log(`Mock server "${config.name}" started on port ${config.port}`);
         this.runningServers.set(config.id, { server, config });
         resolve();
       });
@@ -68,7 +67,6 @@ export class MockServerService {
         if (err) {
           reject(err);
         } else {
-          console.log(`Mock server "${runningServer.config.name}" stopped`);
           this.runningServers.delete(serverId);
           resolve();
         }
@@ -81,8 +79,8 @@ export class MockServerService {
    */
   public async stopAllServers(): Promise<void> {
     const stopPromises = Array.from(this.runningServers.keys()).map((serverId) =>
-      this.stopServer(serverId).catch((err) => {
-        console.error(`Error stopping server ${serverId}:`, err);
+      this.stopServer(serverId).catch(() => {
+        // Silently ignore errors when stopping servers during cleanup
       })
     );
 
@@ -110,8 +108,8 @@ export class MockServerService {
 
     // Parse request body
     let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
+    req.on('data', (chunk: Buffer) => {
+      body += chunk.toString('utf-8');
     });
 
     req.on('end', () => {
@@ -245,10 +243,6 @@ export class MockServerService {
         ...logData,
         responseStatus: endpoint.statusCode,
       });
-
-      console.log(
-        `[Mock Server] ${logData.method} ${logData.path} -> ${endpoint.statusCode} (${Date.now() - (Date.now() - logData.responseTime)}ms)`
-      );
     }, delay);
   }
 
@@ -282,10 +276,6 @@ export class MockServerService {
       ...logData,
       responseStatus: 404,
     });
-
-    console.log(
-      `[Mock Server] ${logData.method} ${logData.path} -> 404 (${Date.now() - (Date.now() - logData.responseTime)}ms)`
-    );
   }
 }
 

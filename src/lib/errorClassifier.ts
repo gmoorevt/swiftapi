@@ -57,57 +57,67 @@ export function classifyError(error: HttpError): ClassifiedError {
 }
 
 /**
+ * Check if error is a variable resolution error
+ */
+function isVariableError(error: HttpError): boolean {
+  return error.message.includes('Variable') && error.message.includes('not defined');
+}
+
+/**
+ * Check if error is a DNS error
+ */
+function isDNSError(error: HttpError): boolean {
+  return error.code === 'ENOTFOUND' || error.message.includes('getaddrinfo');
+}
+
+/**
+ * Categorize error by HTTP status code
+ */
+function categorizeByStatusCode(statusCode?: number): ErrorCategory | null {
+  if (!statusCode) {
+    return null;
+  }
+  if (statusCode >= 400 && statusCode < 500) {
+    return ErrorCategory.CLIENT_ERROR;
+  }
+  if (statusCode >= 500) {
+    return ErrorCategory.SERVER_ERROR;
+  }
+  return null;
+}
+
+/**
  * Determine the error category from an HTTP error
  */
 function determineErrorCategory(error: HttpError): ErrorCategory {
-  // Check for variable resolution errors
-  if (error.message.includes('Variable') && error.message.includes('not defined')) {
+  if (isVariableError(error)) {
     return ErrorCategory.VARIABLE_ERROR;
   }
-
-  // Check for cancelled request
   if (error.isCancelled) {
     return ErrorCategory.CANCELLED;
   }
-
-  // Check for timeout
   if (error.isTimeout) {
     return ErrorCategory.TIMEOUT;
   }
-
-  // Check for invalid URL
   if (error.code === 'ERR_INVALID_URL') {
     return ErrorCategory.INVALID_URL;
   }
-
-  // Check for SSL/TLS errors
   if (isSSLError(error)) {
     return ErrorCategory.SSL_ERROR;
   }
-
-  // Check for DNS errors
-  if (error.code === 'ENOTFOUND' || error.message.includes('getaddrinfo')) {
+  if (isDNSError(error)) {
     return ErrorCategory.DNS;
   }
-
-  // Check for connection refused
   if (error.code === 'ECONNREFUSED') {
     return ErrorCategory.CONNECTION_REFUSED;
   }
-
-  // Check for network errors
   if (error.isNetworkError) {
     return ErrorCategory.NETWORK;
   }
 
-  // Check for HTTP status code errors
-  if (error.statusCode) {
-    if (error.statusCode >= 400 && error.statusCode < 500) {
-      return ErrorCategory.CLIENT_ERROR;
-    }
-    if (error.statusCode >= 500) {
-      return ErrorCategory.SERVER_ERROR;
-    }
+  const statusCategory = categorizeByStatusCode(error.statusCode);
+  if (statusCategory) {
+    return statusCategory;
   }
 
   return ErrorCategory.UNKNOWN;
@@ -146,67 +156,67 @@ function isSSLError(error: HttpError): boolean {
 }
 
 /**
+ * Error message lookup map
+ */
+const ERROR_MESSAGES: Record<ErrorCategory, string> = {
+  [ErrorCategory.NETWORK]: 'Cannot connect to server',
+  [ErrorCategory.DNS]: 'Could not resolve hostname',
+  [ErrorCategory.CONNECTION_REFUSED]: 'Connection refused by server',
+  [ErrorCategory.TIMEOUT]: 'Request timed out',
+  [ErrorCategory.SSL_ERROR]: 'SSL certificate verification failed',
+  [ErrorCategory.INVALID_URL]: 'Invalid URL format',
+  [ErrorCategory.CANCELLED]: 'Request was cancelled',
+  [ErrorCategory.CLIENT_ERROR]: 'Client error - Check your request',
+  [ErrorCategory.SERVER_ERROR]: 'Server error - Try again later',
+  [ErrorCategory.VARIABLE_ERROR]: 'Variable not defined',
+  [ErrorCategory.UNKNOWN]: 'An unexpected error occurred',
+};
+
+/**
  * Get user-friendly error message based on category
  */
 export function getErrorMessage(category: ErrorCategory, statusCode?: number): string {
-  switch (category) {
-    case ErrorCategory.NETWORK:
-      return 'Cannot connect to server';
-    case ErrorCategory.DNS:
-      return 'Could not resolve hostname';
-    case ErrorCategory.CONNECTION_REFUSED:
-      return 'Connection refused by server';
-    case ErrorCategory.TIMEOUT:
-      return 'Request timed out';
-    case ErrorCategory.SSL_ERROR:
-      return 'SSL certificate verification failed';
-    case ErrorCategory.INVALID_URL:
-      return 'Invalid URL format';
-    case ErrorCategory.CANCELLED:
-      return 'Request was cancelled';
-    case ErrorCategory.CLIENT_ERROR:
-      return `Client error (${statusCode || '4xx'}) - Check your request`;
-    case ErrorCategory.SERVER_ERROR:
-      return `Server error (${statusCode || '5xx'}) - Try again later`;
-    case ErrorCategory.VARIABLE_ERROR:
-      return 'Variable not defined';
-    case ErrorCategory.UNKNOWN:
-      return 'An unexpected error occurred';
-    default:
-      return 'An error occurred';
+  const baseMessage = ERROR_MESSAGES[category] || 'An error occurred';
+
+  if (category === ErrorCategory.CLIENT_ERROR && statusCode) {
+    return `Client error (${statusCode}) - Check your request`;
   }
+  if (category === ErrorCategory.SERVER_ERROR && statusCode) {
+    return `Server error (${statusCode}) - Try again later`;
+  }
+
+  return baseMessage;
 }
+
+/**
+ * Error suggestion lookup map
+ */
+const ERROR_SUGGESTIONS: Record<ErrorCategory, string> = {
+  [ErrorCategory.NETWORK]: 'Check your internet connection and verify the server is accessible.',
+  [ErrorCategory.DNS]: 'Verify the URL is correct and the domain exists.',
+  [ErrorCategory.CONNECTION_REFUSED]: 'Ensure the server is running and the port is correct.',
+  [ErrorCategory.TIMEOUT]: 'Try again or increase the timeout value in your request settings.',
+  [ErrorCategory.SSL_ERROR]:
+    'The server has an invalid or expired SSL certificate. Contact the server administrator.',
+  [ErrorCategory.INVALID_URL]: 'Enter a valid URL starting with http:// or https://',
+  [ErrorCategory.CANCELLED]: '',
+  [ErrorCategory.CLIENT_ERROR]: 'Review your request parameters, headers, and body.',
+  [ErrorCategory.SERVER_ERROR]:
+    'Try again later or contact the API administrator if the problem persists.',
+  [ErrorCategory.VARIABLE_ERROR]:
+    'Define the variable in your active environment or remove it from your request.',
+  [ErrorCategory.UNKNOWN]: 'Review the technical details below for more information.',
+};
 
 /**
  * Get suggested action based on error category
  */
 export function getErrorSuggestion(category: ErrorCategory, statusCode?: number): string {
-  switch (category) {
-    case ErrorCategory.NETWORK:
-      return 'Check your internet connection and verify the server is accessible.';
-    case ErrorCategory.DNS:
-      return 'Verify the URL is correct and the domain exists.';
-    case ErrorCategory.CONNECTION_REFUSED:
-      return 'Ensure the server is running and the port is correct.';
-    case ErrorCategory.TIMEOUT:
-      return 'Try again or increase the timeout value in your request settings.';
-    case ErrorCategory.SSL_ERROR:
-      return 'The server has an invalid or expired SSL certificate. Contact the server administrator.';
-    case ErrorCategory.INVALID_URL:
-      return 'Enter a valid URL starting with http:// or https://';
-    case ErrorCategory.CANCELLED:
-      return '';
-    case ErrorCategory.CLIENT_ERROR:
-      return getClientErrorSuggestion(statusCode);
-    case ErrorCategory.SERVER_ERROR:
-      return 'Try again later or contact the API administrator if the problem persists.';
-    case ErrorCategory.VARIABLE_ERROR:
-      return 'Define the variable in your active environment or remove it from your request.';
-    case ErrorCategory.UNKNOWN:
-      return 'Review the technical details below for more information.';
-    default:
-      return '';
+  if (category === ErrorCategory.CLIENT_ERROR && statusCode) {
+    return getClientErrorSuggestion(statusCode);
   }
+
+  return ERROR_SUGGESTIONS[category] || '';
 }
 
 /**
