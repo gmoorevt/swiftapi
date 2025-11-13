@@ -113,6 +113,16 @@ export class MockServerService {
     });
 
     req.on('end', () => {
+      // Handle OPTIONS preflight globally
+      if (method === 'OPTIONS') {
+        res.statusCode = 204;
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', '*');
+        res.end();
+        return;
+      }
+
       // Find matching endpoint
       const endpoint = this.findMatchingEndpoint(config.endpoints, method, path);
 
@@ -198,7 +208,7 @@ export class MockServerService {
    */
   private respondWithEndpoint(
     endpoint: MockEndpoint,
-    req: http.IncomingMessage,
+    _req: http.IncomingMessage,
     res: http.ServerResponse,
     logData: {
       method: string;
@@ -227,13 +237,6 @@ export class MockServerService {
           res.setHeader(header.name, header.value);
         }
       });
-
-      // Handle OPTIONS preflight
-      if (req.method === 'OPTIONS') {
-        res.statusCode = 204;
-        res.end();
-        return;
-      }
 
       // Send response
       res.end(endpoint.responseBody);

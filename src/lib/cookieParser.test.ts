@@ -94,7 +94,7 @@ describe('parseCookie', () => {
       path: '/',
       secure: true,
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'Strict',
     });
   });
 

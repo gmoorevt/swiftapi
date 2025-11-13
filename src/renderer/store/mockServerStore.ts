@@ -31,12 +31,16 @@ export const useMockServerStore = create<MockServerState>((set, get) => ({
       const server = new MockServerModel({ name, port });
       const serverData = server.toJSON();
 
-      set(saveAndSet((state) => ({
-        servers: {
-          ...state.servers,
-          [server.id]: serverData,
-        },
-      })));
+      const newServers = {
+        ...get().servers,
+        [server.id]: serverData,
+      };
+
+      mockServerStorageService.saveServers(newServers);
+
+      set({
+        servers: newServers,
+      });
 
       return server.id;
     },

@@ -45,13 +45,13 @@ export class MockServerModel {
     }
 
     if (!this.port || this.port < 1 || this.port > 65535) {
-      throw new Error('Mock server port must be between 1 and 65535');
+      throw new Error('Port must be between 1 and 65535');
     }
 
-    // Check for common reserved ports
-    const reservedPorts = [22, 25, 80, 443, 3306, 5432, 27017];
+    // Check for reserved ports
+    const reservedPorts = [80, 443, 3000];
     if (reservedPorts.includes(this.port)) {
-      console.warn(`Warning: Port ${this.port} is commonly reserved. Consider using a different port.`);
+      throw new Error(`Port ${this.port} is reserved`);
     }
   }
 
@@ -146,11 +146,11 @@ export class MockServerModel {
       timestamp: new Date().toISOString(),
     };
 
-    this.requestLog.unshift(requestLog); // Add to beginning
+    this.requestLog.push(requestLog);
 
-    // Keep only last 1000 requests
-    if (this.requestLog.length > 1000) {
-      this.requestLog = this.requestLog.slice(0, 1000);
+    // Keep only last 100 requests
+    if (this.requestLog.length > 100) {
+      this.requestLog = this.requestLog.slice(-100);
     }
   }
 

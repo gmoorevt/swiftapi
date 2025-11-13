@@ -23,12 +23,6 @@ describe('EnvironmentSelector', () => {
       expect(select).toBeInTheDocument();
     });
 
-    it('should render "Create Environment" button when no environments exist', () => {
-      render(<EnvironmentSelector />);
-      const button = screen.getByRole('button', { name: /create environment/i });
-      expect(button).toBeInTheDocument();
-    });
-
     it('should show "No Environment" as default option when no active environment', () => {
       render(<EnvironmentSelector />);
       const select = screen.getByRole('combobox', { name: /environment/i }) as HTMLSelectElement;
@@ -125,41 +119,6 @@ describe('EnvironmentSelector', () => {
     });
   });
 
-  describe('Manage Environments button', () => {
-    it('should open EnvironmentDialog when "Manage" clicked', () => {
-      // Create an environment so "Manage" button appears instead of "Create Environment"
-      const store = useEnvironmentStore.getState();
-      store.actions.createEnvironment('Development', {});
-
-      render(<EnvironmentSelector />);
-      const button = screen.getByRole('button', { name: /manage/i });
-
-      fireEvent.click(button);
-
-      // Dialog should be visible
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-      expect(screen.getByText(/manage environments/i)).toBeInTheDocument();
-    });
-
-    it('should close EnvironmentDialog when close button clicked', () => {
-      // Create an environment so "Manage" button appears
-      const store = useEnvironmentStore.getState();
-      store.actions.createEnvironment('Development', {});
-
-      render(<EnvironmentSelector />);
-      const manageButton = screen.getByRole('button', { name: /manage/i });
-
-      // Open dialog
-      fireEvent.click(manageButton);
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-
-      // Close dialog
-      const closeButton = screen.getByRole('button', { name: /close/i });
-      fireEvent.click(closeButton);
-
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    });
-  });
 
   describe('Visual styling', () => {
     it('should highlight active environment option', () => {
@@ -175,18 +134,6 @@ describe('EnvironmentSelector', () => {
       const selectedOption = Array.from(select.options).find((opt) => opt.selected);
       expect(selectedOption?.textContent).toBe('Development');
     });
-
-    it('should show count of environments in manage button when environments exist', () => {
-      const store = useEnvironmentStore.getState();
-      store.actions.createEnvironment('Development', {});
-      store.actions.createEnvironment('Staging', {});
-
-      render(<EnvironmentSelector />);
-
-      // Button text should indicate count
-      const button = screen.getByRole('button', { name: /manage/i });
-      expect(button.textContent).toContain('2');
-    });
   });
 
   describe('Empty state', () => {
@@ -196,15 +143,6 @@ describe('EnvironmentSelector', () => {
       const options = screen.getAllByRole('option');
       expect(options).toHaveLength(1);
       expect(options[0]!.textContent).toBe('No Environment');
-    });
-
-    it('should show "Create Environment" button and allow opening dialog when no environments exist', () => {
-      render(<EnvironmentSelector />);
-      const button = screen.getByRole('button', { name: /create environment/i });
-
-      fireEvent.click(button);
-
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
   });
 });

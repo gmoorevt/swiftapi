@@ -27,9 +27,10 @@ describe('Mock Server Store', () => {
 
   describe('createServer', () => {
     it('should create a new server', () => {
-      const { actions, servers } = useMockServerStore.getState();
+      const { actions } = useMockServerStore.getState();
       const serverId = actions.createServer('Test Server', 3001);
 
+      const servers = useMockServerStore.getState().servers;
       expect(serverId).toBeDefined();
       expect(servers[serverId]).toBeDefined();
       expect(servers[serverId]?.name).toBe('Test Server');
