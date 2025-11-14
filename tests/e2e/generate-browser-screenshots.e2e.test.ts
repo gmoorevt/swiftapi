@@ -4,7 +4,7 @@
  * This test captures screenshots of SwiftAPI's key features using the browser dev server.
  */
 
-import { test, Page, expect } from '@playwright/test';
+import { test, Page } from '@playwright/test';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 

@@ -5,7 +5,7 @@
  * Covers: Basic Requests, Collections, Environments, and Mock Servers
  */
 
-import { test, Page, expect } from '@playwright/test';
+import { test, Page } from '@playwright/test';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
